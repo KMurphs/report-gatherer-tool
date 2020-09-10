@@ -77,5 +77,5 @@ REM Create bat file
 	ECHO.REM Or Pass it as argument
 )>%project%\run_report_gatherer.bat
 
-copy setup.bat utils\setup.bat
-erase setup.bat
+COPY setup.bat utils\setup.bat
+ERASE setup.bat
