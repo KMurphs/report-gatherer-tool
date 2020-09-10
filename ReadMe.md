@@ -1,5 +1,7 @@
 # Report Gatherer Utility
 
+A tool used to gather and zip html reports
+
 ## Setup
 
 The Setup is extremely simple: The **```setup.bat```** file will generate all the files necessary to setup the Laptop/PC. 
