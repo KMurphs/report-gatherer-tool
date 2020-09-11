@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 directories_to_look_for_reports = [	
   "c:\\reports\\folder_a",		
@@ -10,39 +11,55 @@ directory_to_copy_reports_to = "C:\\PersonalProjects\\report-gatherer\\dist\\tmp
 
 serial_numbers = ["serial_number_1", "serial_number_2", "serial_number_3", "serial_number_4", "serial_number_5", "serial_number_6", "serial_number_7", "serial_number_8", "serial_number_9", "serial_number_10", "serial_number_N"]
 
+regex_template = "(report_file).*(\[!xxserial_numberxx!\]).*(.html)$"
+# regex_template = "(report_file).*([xxserial_numberxx]).*(.html)$"
+regex_template_placeholder = "!xxserial_numberxx!"
 
 
-
-if __name__ == "__main__":
+def find_files_by_regex(sn_regex, dir_locations):
   
-  serial_numbers.sort()
-  result = {}
-  reg = "(report_file).*([xxserial_numberxx]).*(.html)$"
+  result = []
+  
+  for dir_location in dir_locations:
 
-  for dir_location in directories_to_look_for_reports:
     print(f"Processing Location '{dir_location}'")
+
     files = [
       { "name": f, "last_modified": os.path.getmtime(os.path.join(dir_location, f))} 
       for f in os.listdir(dir_location) 
       if os.path.isfile(os.path.join(dir_location, f))
     ]
-    # files.sort(key=lambda f: f[1])
-    [print(f) for f in files]
 
+    for f in files:
+      if sn_reg.search(f["name"]):
+        f["path"] = os.path.join(dir_location, f["name"])
+        result.append(f)
     
-    for sn in serial_numbers:
 
-      if not sn in result.keys():
-        result[sn] = []
+  result.sort(key=lambda f: f["last_modified"])
+  return result
 
-      sn_reg = re.compile(reg.replace("[xxserial_numberxx]", sn))
-      
-      for f in files:
-        if sn_reg.search(f["name"]):
-          f["name"] = os.path.join(dir_location, f["name"])
-          result[sn].append(f)
-      result[sn].sort(key=lambda f: f["last_modified"])
+  
+def copy_files(file_paths, target_directory):
 
-  for key in result.keys():
-    print(key)
-    [print(f"\t{f}") for f in result[key]]
+
+
+  dest = os.path.join(target_directory, "tmp")
+  if(os.path.isdir(dest)):
+    shutil.rmtree(dest)
+  os.mkdir(dest)
+
+
+  for f in file_paths:
+    try: shutil.copy(f, dest)
+    except Exception: raise
+
+if __name__ == "__main__":
+  sn = "serial_number_1"
+  sn_reg = re.compile(regex_template.replace(regex_template_placeholder, sn))
+  res = find_files_by_regex(sn_reg, directories_to_look_for_reports)
+  [print(f) for f in res]
+
+  copy_files([f["path"] for f in res], directory_to_copy_reports_to)
+  
+
