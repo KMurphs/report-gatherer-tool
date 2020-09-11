@@ -1,0 +1,26 @@
+{
+	"project_name": "tmp_project",
+	"order_number": "123",
+	"serial_numbers": ["serial_number_1", "serial_number_2", "serial_number_3", "serial_number_4", "serial_number_5", "serial_number_6", "serial_number_7", "serial_number_8", "serial_number_9", "serial_number_10", "...", "serial_number_N"],
+	"places_to_look_for_reports": [	
+		"c:\reports\folder_a",		
+		"c:\reports\folder_b"		
+	],								
+	"tests_to_validate_reports": [	
+		{ 
+			"test_friendly_name": "test 1",
+			"test_token_html_path": "some/path/to/destination/word/token/in/html/report/file", 
+			"test_token_expected_value": "some_awesome_value" 
+		}, 
+		{ 
+			"test_friendly_name": "test 1",
+			"test_token_html_path": "some/path/to/destination/word/token/in/html/report/file", 
+			"test_token_expected_value": "some_awesome_value" 
+		}, 
+		{ 
+			"test_friendly_name": "test 1",
+			"test_token_html_path": "some/path/to/destination/word/token/in/html/report/file", 
+			"test_token_expected_value": "some_awesome_value" 
+		}
+	]								
+}
