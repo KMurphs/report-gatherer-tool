@@ -23,3 +23,9 @@ The top level directory list projects that are configured and available.
     * ***Note that there must be 1 serial number per line***
 
 3.  Double Click on the **```run_report_gatherer.bat```** file to launch the utility
+
+
+
+# References
+
+1. https://websockets.readthedocs.io/en/stable/intro.html

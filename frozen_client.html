@@ -1,0 +1,32 @@
+<head>
+        <title>WebSocket demo</title>
+    </head>
+
+<body>
+        <button id="save-btn">save file</button>
+        <script>
+            document.getElementById("save-btn").addEventListener('click', ()=>{
+              console.log("Saving HTML file")
+              var ws = new WebSocket("ws://127.0.0.1:5678/save")
+              
+              ws.onopen = function(evt) {
+                let html = `${document.head.outerHTML}\n\n${document.body.outerHTML}`
+                ws.send(html)
+              };
+            })
+
+            var ws = new WebSocket("ws://127.0.0.1:5678/"),
+                messages = document.createElement('ul');
+
+            ws.onmessage = function (event) {
+                var messages = document.getElementsByTagName('ul')[0],
+                    message = document.createElement('li'),
+                    content = document.createTextNode(event.data);
+                message.appendChild(content);
+                messages.appendChild(message);
+            };
+
+            document.body.appendChild(messages);
+        </script><ul><li>2020-09-11T07:29:36.841089Z</li><li>2020-09-11T07:29:39.643270Z</li><li>2020-09-11T07:29:40.244257Z</li><li>2020-09-11T07:29:40.892267Z</li><li>2020-09-11T07:29:43.211252Z</li><li>2020-09-11T07:29:44.864125Z</li><li>2020-09-11T07:29:45.701119Z</li><li>2020-09-11T07:29:46.464124Z</li><li>2020-09-11T07:29:47.173090Z</li><li>2020-09-11T07:29:49.819273Z</li></ul>
+    
+</body>
