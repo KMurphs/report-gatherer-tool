@@ -31,7 +31,11 @@ def gather_report(q: Queue, notifier: Queue):
         print(f"({threadName}) Notify Processing Complete for Serial Number {sn}")
         notifier.put(sn)
 
-
+def freeze_html_file(html_filename, html_content):
+    html_content = html_content.replace('disable-on-frozen','disable-on-frozen--active')
+    html_content = html_content.replace('<script src="client.js"></script>', '<!-- <script src="client.js"></script> -->')
+    with open(html_filename, "w") as f:
+        f.writelines(html_content)
 
 
 
@@ -39,21 +43,7 @@ async def handle_connections(websocket, path):
     print("Serving Client at: ", path)
 
     if path == "/":
-        while True:
-            now = datetime.datetime.utcnow().isoformat() + "Z"
-            await websocket.send(now)
-            await asyncio.sleep(random.random() * 3)
-
-    elif path == "/save":
-        msg = await websocket.recv()
-        msg = msg.replace('disable-on-frozen','disable-on-frozen--active')
-        msg = msg.replace('<script src="client.js"></script>', '<!-- <script src="client.js"></script> -->')
-        with open("frozen_client.html", "w") as f:
-            f.writelines(msg)
-
-    elif path == "/monitor":
-        my_sns = await websocket.recv()
-        print(my_sns)
+        global config
 
         notifications_q = Queue()
         data_q = Queue() 
@@ -68,7 +58,7 @@ async def handle_connections(websocket, path):
 
 
         # enqueue my sns
-        sns = [1,2,3,4,5,6,7,8,9,10]
+        sns = config["serial_numbers"]
         for sn in sns:
             data_q.put(sn)
             print(f"(Producer) Serial Number '{sn}': Scheduled")
@@ -79,13 +69,42 @@ async def handle_connections(websocket, path):
         while len(sns) > 0:
             notification = notifications_q.get()
             sns.remove(notification)
-            print(f"(Producer) Serial Number '{notification}': Complete - ({len(sns)} remaining)")
+            msg = f"(Producer) Serial Number '{notification}': Complete - ({len(sns)} remaining)"
+            print(msg)
+            # await websocket.send("hello")
+            await websocket.send(json.dumps({
+                "command": "status",
+                "data": msg
+            }))
             
 
         # Wait for producers to finish
         for c in consumers:
             c.join()
+
+        await websocket.send(json.dumps({
+            "command": "get_html_file",
+            "data": ""
+        }))
+        msg = await websocket.recv()
+        print(msg)
+        freeze_html_file("frozen_client.html", msg)
+
+        # stop.set_result(0)
         
+        
+
+
+        
+    elif path == "/save":
+        msg = await websocket.recv()
+        freeze_html_file("frozen_client.html", msg)
+
+
+
+
+    elif path == "/ping":
+        await websocket.send("[Server]: PONG")
 
     elif path == "/stop":
         print("Stopping Server")
@@ -95,34 +114,27 @@ async def handle_connections(websocket, path):
         print("Unsupported Path")
 
 def get_config_data():
-    config_file = os.environ['REPORT_GATHERER_CONFIG_FILE_PATH']
+    # config_file = os.environ['REPORT_GATHERER_CONFIG_FILE_PATH']
     if len(sys.argv) > 1:
         config_file = sys.argv[1]
     print("Configuration File Being Processed is at: ", config_file)
 
     with open(config_file, 'r') as f:
         config = json.load(f)
+
     print("Configuration Data Being Processed is: ", config)
-
-
-# get_config_data()
-# start_server = websockets.serve(handle_connections, "127.0.0.1", 5678)
-
-# stop_server = asyncio.get_event_loop().create_future()
-
-# asyncio.get_event_loop().run_until_complete(start_server)
-# asyncio.get_event_loop().run_forever()
-
-
+    return config
 
 
 
 
 async def report_gatherer_server(stop):
-    async with websockets.serve(handle_connections, "127.0.0.1", 5678):
+    global config
+    async with websockets.serve(handle_connections, config["server_host"], config["server_port"]):
         await stop
 
 
+config = get_config_data()
 
 loop = asyncio.get_event_loop()
 
