@@ -29,3 +29,6 @@ The top level directory list projects that are configured and available.
 # References
 
 1. https://websockets.readthedocs.io/en/stable/intro.html
+1. https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
+1. https://stackoverflow.com/questions/48825332/python-3-websockets-how-to-properly-close-socket
+1. https://www.bogotobogo.com/python/Multithread/python_multithreading_Event_Objects_between_Threads.php
