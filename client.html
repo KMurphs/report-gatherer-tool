@@ -2,32 +2,10 @@
 <html>
     <head>
         <title>WebSocket demo</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <button id="save-btn">save file</button>
-        <script>
-            document.getElementById("save-btn").addEventListener('click', ()=>{
-              console.log("Saving HTML file")
-              var ws = new WebSocket("ws://127.0.0.1:5678/save")
-              
-              ws.onopen = function(evt) {
-                let html = `${document.head.outerHTML}\n\n${document.body.outerHTML}`
-                ws.send(html)
-              };
-            })
-
-            var ws = new WebSocket("ws://127.0.0.1:5678/"),
-                messages = document.createElement('ul');
-
-            ws.onmessage = function (event) {
-                var messages = document.getElementsByTagName('ul')[0],
-                    message = document.createElement('li'),
-                    content = document.createTextNode(event.data);
-                message.appendChild(content);
-                messages.appendChild(message);
-            };
-
-            document.body.appendChild(messages);
-        </script>
+        <button id="save-btn" class="disable-on-frozen">save file</button>
+        <script src="client.js"></script>
     </body>
 </html>
