@@ -1,4 +1,2 @@
-cd ..
-venv/scripts/activate
-python --version
-python server.py ""
+@echo off
+for /f "tokens=*" %G in ('dir /b /s /a:d "*"') do echo Found %G

@@ -106,23 +106,42 @@ for /f "tokens=2 delims==" %%a in ('wmic OS Get localdatetime /value') do set "d
 SET "YY=%dt:~2,2%" & set "YYYY=%dt:~0,4%" & set "MM=%dt:~4,2%" & set "DD=%dt:~6,2%"
 SET "HH=%dt:~8,2%" & set "Min=%dt:~10,2%" & set "Sec=%dt:~12,2%"
 SET "fullstamp=[%YYYY%-%MM%-%DD%][%HH%-%Min%-%Sec%]"
-echo %fullstamp%
+REM ECHO %fullstamp%
+
+
+
 
 REM Creating Folder To Copy Reports to
 ECHO [Destination Folders for Zip File]: 
 ECHO.
+
 SET copy_to=%~dp0
 CALL MKDIR %%copy_to:%project%=dist%%
 CALL MKDIR %%copy_to:%project%=dist\%project%%%
+CALL MKDIR %%copy_to:%project%=dist\%project%\archives%%
+
+CALL SET tmp=%%copy_to:%project%=dist\%project%%%
+CALL MOVE /Y %tmp%\*.zip %tmp%\archives >nul 2>&1
+FOR /f "tokens=*" %%G in ('dir "%tmp%" /b') do (
+	if %tmp%%%G NEQ %tmp%archives (
+		REM ECHO Deleting %tmp%%%G
+		(rmdir %tmp%%%G /S /Q | erase %tmp%%%G /F) >nul 2>&1
+	)
+)
+
 CALL MKDIR %%copy_to:%project%=dist\%project%\OrderNo_[%order%]_%fullstamp%[%project%]%%
 CALL MKDIR %%copy_to:%project%=dist\%project%\OrderNo_[%order%]_%fullstamp%[%project%]\reports%%
 CALL SET copy_to=%%copy_to:%project%\=dist\%project%\OrderNo_[%order%]_%fullstamp%[%project%]\reports%% 
+
 SET copy_to=%copy_to:\=\\%
 SET overview_file=%copy_to:reports=overview.html%
 SET zip_file=%copy_to:\\reports=.zip%
 ECHO.
-ECHO 	Zip file will be at: "%zip_file%"
-ECHO 	Overview file will be at: "%overview_file%"
+ECHO 	Zip file will be at:
+ECHO		"%zip_file%"
+ECHO.
+ECHO 	Overview file will be at: 
+ECHO		"%overview_file%"
 
 
 
@@ -161,7 +180,7 @@ REM Create config.json file for later processing
 	ECHO.	]								
 	ECHO.}
 )>config.json
-COPY config.json config.backup.json /y
+COPY config.json config.backup.json /y >nul
 
 REM Get Config file path
 SET config_file_path=%~dp0config.json
@@ -174,18 +193,17 @@ ECHO.
 ECHO.
 ECHO.
 
-
+cd
 REM Start HTML Client for websocket server
 SET html_client=%~dp0client.html
-CALL SET html_client=%%html_client:%project%\=%%
 SET html_client=%html_client:\=/%
 START "" "file:///%html_client%"
 
 REM Start websocket server
-CD ..
+CD ..\common
 CALL venv/scripts/activate
 python server.py "%config_file_path%"
-
+CD ..\%project%
 
 
 
