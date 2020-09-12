@@ -1,13 +1,13 @@
 {
 	"project_name": "tmp_project",
-	"order_number": "123456",
+	"order_number": "321",
 	"serial_numbers": ["serial_number_1", "serial_number_2", "serial_number_3", "serial_number_4", "serial_number_5", "serial_number_6", "serial_number_7", "serial_number_8", "serial_number_9", "serial_number_10", "...", "serial_number_N"],
 	"server_host": "127.0.0.1",
 	"server_port": 5678,
 	"directories_to_look_for_reports": ["c:\\reports\\folder_a", "c:\\reports\\folder_b"],						
-	"directory_to_copy_reports_to": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[123456]_[2020-09-12][22-12-57][tmp_project]\\reports",
-	"archive_file_path": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[123456]_[2020-09-12][22-12-57][tmp_project].zip",
-	"overview_file_path": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[123456]_[2020-09-12][22-12-57][tmp_project]\\overview.html",
+	"directory_to_copy_reports_to": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[321]_[2020-09-12][22-22-50][tmp_project]\\reports",
+	"archive_file_path": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[321]_[2020-09-12][22-22-50][tmp_project].zip",
+	"overview_file_path": "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\OrderNo_[321]_[2020-09-12][22-22-50][tmp_project]\\overview.html",
 	"tests_to_validate_reports": [	
 		{ 
 			"test_friendly_name": "test 1",
