@@ -200,11 +200,15 @@ REM CREATE html client file
 	ECHO.^<html^>
 	ECHO.    ^<head^>
 	ECHO.        ^<title^>[%order%] Serial Number Status^</title^>
-	ECHO.        ^<link rel="stylesheet" href="html_utils/styles/style.css"^>
+	ECHO.        ^<link rel="stylesheet" href="assets/styles/style.css"^>
+	ECHO.        ^<link rel="stylesheet" href="assets/styles/bootstrap.min.css"^>
 	ECHO.    ^</head^>
 	ECHO.    ^<body^>
  	ECHO.        ^<div id="app-root"^>^</div^>
- 	ECHO.        ^<script src="html_utils/scripts/client.js"^>^</script^>
+ 	ECHO.        ^<script src="assets/scripts/jquery.js"^>^</script^>
+ 	ECHO.        ^<script src="assets/scripts/bootstrap.min.js"^>^</script^>
+ 	ECHO.        ^<script src="assets/scripts/dom.js"^>^</script^>
+ 	ECHO.        ^<script src="assets/scripts/websocket-client.js"^>^</script^>
  	ECHO.    ^</body^>
  	ECHO.^</html^>
 )>..\common\client\client2.html
@@ -237,7 +241,7 @@ TIMEOUT /t 2 /nobreak > NUL
 
 
 REM Start overview.html
-ROBOCOPY "client\html_utils" "%tmp%\html_utils" /E /NFL /NDL /NJH /NJS /nc /ns /np 
+ROBOCOPY "client\assets" "%tmp%\assets" /E /NFL /NDL /NJH /NJS /nc /ns /np 
 
 SET tmp=%zip_file:.zip=%
 SET tmp=%tmp:\\=\%
