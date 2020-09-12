@@ -37,7 +37,7 @@ def gather_report(q: Queue, notifier: Queue):
 
 def freeze_html_file(html_filename, html_content):
     html_content = html_content.replace('disable-on-frozen','disable-on-frozen--active')
-    html_content = html_content.replace('<script src="html_utils/scripts/client.js"></script>', '<!-- <script src="client.js"></script> -->')
+    html_content = html_content.replace('<script src="assets/scripts/websocket-client.js"></script>', '<!-- <script src="client.js"></script> -->')
     with open(html_filename, "w") as f:
         f.writelines(html_content)
 
@@ -91,7 +91,7 @@ async def handle_connections(websocket, path):
             "data": ""
         }))
         msg = await websocket.recv()
-        print(msg)
+        # print(msg)
         freeze_html_file(config["overview_file_path"], msg)
 
         # stop.set_result(0)
