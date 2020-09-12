@@ -133,6 +133,7 @@ CALL MKDIR %%copy_to:%project%=dist\%project%\OrderNo_[%order%]_%fullstamp%[%pro
 CALL MKDIR %%copy_to:%project%=dist\%project%\OrderNo_[%order%]_%fullstamp%[%project%]\reports%%
 CALL SET copy_to=%%copy_to:%project%\=dist\%project%\OrderNo_[%order%]_%fullstamp%[%project%]\reports%% 
 
+SET copy_to=%copy_to:~0,-1%
 SET copy_to=%copy_to:\=\\%
 SET overview_file=%copy_to:reports=overview.html%
 SET zip_file=%copy_to:\\reports=.zip%
@@ -193,9 +194,10 @@ ECHO.
 ECHO.
 ECHO.
 
-cd
+
 REM Start HTML Client for websocket server
-SET html_client=%~dp0client.html
+SET html_client=%~dp0
+CALL SET html_client=%%html_client:%project%=common\client\client.html%%
 SET html_client=%html_client:\=/%
 START "" "file:///%html_client%"
 
@@ -203,15 +205,26 @@ REM Start websocket server
 CD ..\common
 CALL venv/scripts/activate
 python server.py "%config_file_path%"
+
+
+
+ECHO.
+ECHO.
+ECHO.
+ECHO.
+
+SET tmp=%zip_file:.zip=%
+SET tmp=%tmp:\\=\%
+CALL explorer "%tmp%"
+
+
+
+ROBOCOPY "client\html_utils" "%tmp%\html_utils" /E /NFL /NDL /NJH /NJS /nc /ns /np 
+
+SET tmp=%tmp%\overview.html
+SET tmp=%tmp:\=/%
+START "" "file:///%tmp%"
+
+
+
 CD ..\%project%
-
-
-
-ECHO.
-ECHO.
-ECHO.
-ECHO.
-
-
-call explorer "%copy_to%"
-

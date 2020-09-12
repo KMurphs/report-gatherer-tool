@@ -32,3 +32,6 @@ The top level directory list projects that are configured and available.
 1. https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/
 1. https://stackoverflow.com/questions/48825332/python-3-websockets-how-to-properly-close-socket
 1. https://www.bogotobogo.com/python/Multithread/python_multithreading_Event_Objects_between_Threads.php
+1. https://stackoverflow.com/a/2773504/9034699
+1. https://www.tutorialspoint.com/batch_script/batch_script_arrays.htm
+1. https://www.robvanderwoude.com/escapechars.php

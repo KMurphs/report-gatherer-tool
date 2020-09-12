@@ -13,6 +13,10 @@ import threading
 import time
 from queue import Queue
 
+import gatherer
+
+
+
 def gather_report(q: Queue, notifier: Queue):
     print(threading.current_thread().name)
     print(threading.get_ident())
@@ -33,7 +37,7 @@ def gather_report(q: Queue, notifier: Queue):
 
 def freeze_html_file(html_filename, html_content):
     html_content = html_content.replace('disable-on-frozen','disable-on-frozen--active')
-    html_content = html_content.replace('<script src="client.js"></script>', '<!-- <script src="client.js"></script> -->')
+    html_content = html_content.replace('<script src="html_utils/scripts/client.js"></script>', '<!-- <script src="client.js"></script> -->')
     with open(html_filename, "w") as f:
         f.writelines(html_content)
 
@@ -88,7 +92,7 @@ async def handle_connections(websocket, path):
         }))
         msg = await websocket.recv()
         print(msg)
-        freeze_html_file("frozen_client.html", msg)
+        freeze_html_file(config["overview_file_path"], msg)
 
         # stop.set_result(0)
         
@@ -98,13 +102,19 @@ async def handle_connections(websocket, path):
         
     elif path == "/save":
         msg = await websocket.recv()
-        freeze_html_file("frozen_client.html", msg)
+        freeze_html_file(config["overview_file_path"], msg)
 
 
 
 
     elif path == "/ping":
         await websocket.send("[Server]: PONG")
+
+    elif path == "/zip_and_stop":
+        print("Archiving reports")
+        gatherer.make_archive(str(config["archive_file_path"]).replace(".zip", ""), config["archive_file_path"])
+        print("Stopping Server")
+        stop.set_result(0)
 
     elif path == "/stop":
         print("Stopping Server")
@@ -117,12 +127,12 @@ def get_config_data():
     # config_file = os.environ['REPORT_GATHERER_CONFIG_FILE_PATH']
     if len(sys.argv) > 1:
         config_file = sys.argv[1]
-    print("Configuration File Being Processed is at: ", config_file)
+    print("Configuration File at: ", config_file)
 
     with open(config_file, 'r') as f:
         config = json.load(f)
 
-    print("Configuration Data Being Processed is: ", config)
+    # print("Configuration Data Being Processed is: ", config)
     return config
 
 
@@ -130,10 +140,13 @@ def get_config_data():
 
 async def report_gatherer_server(stop):
     global config
+    
     async with websockets.serve(handle_connections, config["server_host"], config["server_port"]):
         await stop
 
 
+
+print("Starting server")
 config = get_config_data()
 
 loop = asyncio.get_event_loop()

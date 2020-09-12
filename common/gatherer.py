@@ -183,34 +183,44 @@ def test_html_file_content(report_path: str, tests_object) -> List[SNReportTest]
   return tests_results
 
 
-
+# make_archive('/path/to/folder', '/path/to/folder.zip')
+def make_archive(source, destination):
+    base_name = '.'.join(destination.split('.')[:-1])
+    format = destination.split('.')[-1]
+    root_dir = os.path.dirname(source)
+    base_dir = os.path.basename(source.strip(os.sep))
+    shutil.make_archive(base_name, format, root_dir, base_dir)
 
 
 
 
 if __name__ == "__main__":
-  sn = "serial_number_1"
+  # sn = "serial_number_1"
 
 
-  sn_regex =regex_template.replace(regex_template_placeholder, sn)
-  sn_regex = re.compile(sn_regex)
-  sn_reports = find_files_by_regex(sn_regex, directories_to_look_for_reports)
+  # sn_regex =regex_template.replace(regex_template_placeholder, sn)
+  # sn_regex = re.compile(sn_regex)
+  # sn_reports = find_files_by_regex(sn_regex, directories_to_look_for_reports)
 
-  sn_tested_reports = []
-  for report in sn_reports:
-    test_results = test_html_file_content(report.path, tests_to_validate_reports)
-    sn_tested_reports.append(SNTestedReport(report, test_results))
-    # notify client
-  [print(f) for f in sn_tested_reports]
+  # sn_tested_reports = []
+  # for report in sn_reports:
+  #   test_results = test_html_file_content(report.path, tests_to_validate_reports)
+  #   sn_tested_reports.append(SNTestedReport(report, test_results))
+  #   # notify client
+  # [print(f) for f in sn_tested_reports]
 
-  print("\n\n")
+  # print("\n\n")
 
-  sn_latest_report = max(sn_reports, key=attrgetter('last_modified'))
-  latest_report_test_result = test_html_file_content(sn_latest_report.path, tests_to_validate_reports)
-  sn_tested_latest_report = SNTestedReport(sn_latest_report, latest_report_test_result)
-  print(sn_tested_latest_report)
+  # sn_latest_report = max(sn_reports, key=attrgetter('last_modified'))
+  # latest_report_test_result = test_html_file_content(sn_latest_report.path, tests_to_validate_reports)
+  # sn_tested_latest_report = SNTestedReport(sn_latest_report, latest_report_test_result)
+  # print(sn_tested_latest_report)
 
+
+  # copy_files([sn_tested_latest_report.file.path], directory_to_copy_reports_to)
   
-  copy_files([sn_tested_latest_report.file.path], directory_to_copy_reports_to)
-  
 
+  make_archive(
+    "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\order_number",
+    "C:\\PersonalProjects\\report-gatherer\\dist\\tmp_project\\order_number.zip",
+  )
