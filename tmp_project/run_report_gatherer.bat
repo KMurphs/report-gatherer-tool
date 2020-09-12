@@ -228,14 +228,19 @@ ECHO.
 ECHO.
 ECHO.
 
+
+REM Open reports folder
 SET tmp=%zip_file:.zip=%
 SET tmp=%tmp:\\=\%
 CALL explorer "%tmp%"
+TIMEOUT /t 2 /nobreak > NUL
 
 
-
+REM Start overview.html
 ROBOCOPY "client\html_utils" "%tmp%\html_utils" /E /NFL /NDL /NJH /NJS /nc /ns /np 
 
+SET tmp=%zip_file:.zip=%
+SET tmp=%tmp:\\=\%
 SET tmp=%tmp%\overview.html
 SET tmp=%tmp:\=/%
 START "" "file:///%tmp%"
