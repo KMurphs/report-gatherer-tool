@@ -137,13 +137,16 @@ SET copy_to=%copy_to:~0,-1%
 SET copy_to=%copy_to:\=\\%
 SET overview_file=%copy_to:reports=overview.html%
 SET zip_file=%copy_to:\\reports=.zip%
+CALL SET to_archive=%zip_file:.zip=%
 ECHO.
 ECHO 	Zip file will be at:
 ECHO		"%zip_file%"
 ECHO.
 ECHO 	Overview file will be at: 
 ECHO		"%overview_file%"
-
+ECHO.
+ECHO 	Folder to Archive will be at: 
+ECHO		"%to_archive%"
 
 
 
@@ -160,6 +163,7 @@ REM Create config.json file for later processing
 	ECHO.	"server_port": %server_port%,
 	ECHO.	"directories_to_look_for_reports": [%copy_from%],						
 	ECHO.	"directory_to_copy_reports_to": "%copy_to%",
+	ECHO.	"folder_to_archive": "%to_archive%",
 	ECHO.	"archive_file_path": "%zip_file%",
 	ECHO.	"overview_file_path": "%overview_file%",
 	ECHO.	"regex_template": "(report_file).*(!xxserial_numberxx!).*(.html)$",
