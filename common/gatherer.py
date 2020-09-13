@@ -198,8 +198,10 @@ if __name__ == "__main__":
   # sn = "serial_number_1"
 
 
-  # sn_regex =regex_template.replace(regex_template_placeholder, sn)
-  # sn_regex = re.compile(sn_regex)
+
+
+
+
   # sn_reports = find_files_by_regex(sn_regex, directories_to_look_for_reports)
 
   # sn_tested_reports = []

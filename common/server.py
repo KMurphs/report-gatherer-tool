@@ -12,116 +12,60 @@ import json
 import threading
 import time
 from queue import Queue
-
-import gatherer
-
+from gatherer.agents import GathererMaster
 
 
-def gather_report(q: Queue, notifier: Queue):
-    print(threading.current_thread().name)
-    print(threading.get_ident())
-    threadName = threading.current_thread().name
-    while True:
-        time.sleep(0.01)
-        sn = q.get()
-
-        if sn is None:
-            return
-
-        print(f"({threadName}) Processing Serial Number {sn}")
-        # process the serial number
-        time.sleep(0.1)
-        # notify that processing is complete
-        print(f"({threadName}) Notify Processing Complete for Serial Number {sn}")
-        notifier.put(sn)
-
-def freeze_html_file(html_filename, html_content):
-    html_content = html_content.replace('disable-on-frozen','disable-on-frozen--active')
-    html_content = html_content.replace('<script src="assets/scripts/websocket-client.js"></script>', '<!-- <script src="client.js"></script> -->')
-    with open(html_filename, "w") as f:
-        f.writelines(html_content)
+logging.basicConfig(level=logging.DEBUG, format='(%(threadName)-9s) %(message)s',)
 
 
 
 async def handle_connections(websocket, path):
     print("Serving Client at: ", path)
-
+     
     if path == "/":
-        global config
+        global config, gatherer
 
-        notifications_q = Queue()
-        data_q = Queue() 
-
-
-        # run my consumers
-        n_consumers = 3
-        print(f"(Producer) Spinning Consummers")
-        consumers = [threading.Thread(name=f'consumer-{index + 1}', target=gather_report, args=(data_q, notifications_q)) for index in range(n_consumers)]
-        for c in consumers:
-            c.start()
-
-
-        # enqueue my sns
-        sns = config["serial_numbers"]
-        for sn in sns:
-            data_q.put(sn)
-            print(f"(Producer) Serial Number '{sn}': Scheduled")
-
-        [data_q.put(None) for _ in range(n_consumers)] # One for each consumer
-
-        # serve notifications
-        while len(sns) > 0:
-            notification = notifications_q.get()
-            sns.remove(notification)
-            msg = f"(Producer) Serial Number '{notification}': Complete - ({len(sns)} remaining)"
-            print(msg)
-            # await websocket.send("hello")
-            await websocket.send(json.dumps({
-                "command": "status",
-                "data": msg
-            }))
-            
-
-        # Wait for producers to finish
-        for c in consumers:
-            c.join()
-
-        await websocket.send(json.dumps({
-            "command": "get_html_file",
-            "data": ""
-        }))
-        msg = await websocket.recv()
-        # print(msg)
-        freeze_html_file(config["overview_file_path"], msg)
-
-        # stop.set_result(0)
-        
-        
-
-
+        gatherer = GathererMaster(
+            serial_numbers = config["serial_numbers"],
+            regex_template = config["regex_template"], 
+            regex_placeholder = config["regex_template_placeholder"],
+            locations = config["directories_to_look_for_reports"], 
+            on_found_func, 
+            tests_object = config["tests_to_validate_reports"],
+            on_tested_func, 
+            target_directory = config["directory_to_copy_reports_to"],
+            on_moved_func, 
+            overview_file_path = config["overview_file_path"],
+            folder_to_archive = config["folder_to_archive"],
+            archive_path = config["archive_file_path"],
+            get_overview_html_content_func,
+            n_slaves = 3
+        )
         
     elif path == "/save":
         msg = await websocket.recv()
         freeze_html_file(config["overview_file_path"], msg)
-
-
-
 
     elif path == "/ping":
         await websocket.send("[Server]: PONG")
 
     elif path == "/zip_and_stop":
         print("Archiving reports")
-        gatherer.make_archive(str(config["archive_file_path"]).replace(".zip", ""), config["archive_file_path"])
+        gatherer.make_archive(config["folder_to_archive"], config["archive_file_path"])
         print("Stopping Server")
+        gatherer.stop_gathering()
         stop.set_result(0)
 
     elif path == "/stop":
         print("Stopping Server")
+        gatherer.stop_gathering()
         stop.set_result(0)
 
     else:
         print("Unsupported Path")
+
+
+
 
 def get_config_data():
     # config_file = os.environ['REPORT_GATHERER_CONFIG_FILE_PATH']
@@ -146,8 +90,9 @@ async def report_gatherer_server(stop):
 
 
 
-print("Starting server")
+logging.info("Starting server")
 config = get_config_data()
+gatherer = None
 
 loop = asyncio.get_event_loop()
 
