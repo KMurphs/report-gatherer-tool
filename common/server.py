@@ -13,34 +13,57 @@ import threading
 import time
 from queue import Queue
 from gatherer.agents import GathererMaster
+import logging
+import json 
 
 
-logging.basicConfig(level=logging.DEBUG, format='(%(threadName)-9s) %(message)s',)
+logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s][%(threadName)-9s][%(levelname)s]: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
 
 
 
 async def handle_connections(websocket, path):
-    print("Serving Client at: ", path)
+    async def notify_client(id, event, data):
+        # print(json.dumps(data))
+        print(data.toDict())
+        print(json.dumps(data.toDict()))
+        print("----------------")
+        msg =  json.dumps({
+            "command": "status",
+            "msg": {
+                "id": id,
+                "event": event,
+                "data": data.toDict()
+            }
+        })
+        print(msg)
+        await websocket.send(msg)
+
+    async def get_overview_html_content_func(): 
+        await websocket.send({
+            "command": "get_html_file",
+            "msg": ""
+        })
+        return await websocket.recv()
+
+    global config, gatherer
+    logging.info(f"Serving Client at: '{path}'")
      
     if path == "/":
-        global config, gatherer
-
+        
         gatherer = GathererMaster(
             serial_numbers = config["serial_numbers"],
             regex_template = config["regex_template"], 
             regex_placeholder = config["regex_template_placeholder"],
             locations = config["directories_to_look_for_reports"], 
-            on_found_func, 
             tests_object = config["tests_to_validate_reports"],
-            on_tested_func, 
             target_directory = config["directory_to_copy_reports_to"],
-            on_moved_func, 
             overview_file_path = config["overview_file_path"],
             folder_to_archive = config["folder_to_archive"],
             archive_path = config["archive_file_path"],
-            get_overview_html_content_func,
             n_slaves = 3
         )
+        await gatherer.run(notify_client)
         
     elif path == "/save":
         msg = await websocket.recv()
@@ -50,19 +73,22 @@ async def handle_connections(websocket, path):
         await websocket.send("[Server]: PONG")
 
     elif path == "/zip_and_stop":
-        print("Archiving reports")
+        logging.debug(f"Archiving reports")
         gatherer.make_archive(config["folder_to_archive"], config["archive_file_path"])
-        print("Stopping Server")
+        logging.debug(f"Stopping Server")
         gatherer.stop_gathering()
         stop.set_result(0)
 
     elif path == "/stop":
-        print("Stopping Server")
+        logging.debug(f"Stopping Server")
         gatherer.stop_gathering()
         stop.set_result(0)
 
     else:
-        print("Unsupported Path")
+        logging.warning("Unsupported Path")
+
+
+
 
 
 
@@ -71,12 +97,12 @@ def get_config_data():
     # config_file = os.environ['REPORT_GATHERER_CONFIG_FILE_PATH']
     if len(sys.argv) > 1:
         config_file = sys.argv[1]
-    print("Configuration File at: ", config_file)
+    logging.info(f"Configuration File at: '{config_file}'")
 
     with open(config_file, 'r') as f:
         config = json.load(f)
 
-    # print("Configuration Data Being Processed is: ", config)
+    # logging.info(f"Configuration Data Being Processed is: ", config)
     return config
 
 
@@ -90,7 +116,7 @@ async def report_gatherer_server(stop):
 
 
 
-logging.info("Starting server")
+logging.info(f"Starting server")
 config = get_config_data()
 gatherer = None
 

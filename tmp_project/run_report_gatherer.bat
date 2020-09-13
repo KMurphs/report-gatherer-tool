@@ -7,8 +7,8 @@ SET directories_to_look_for_reports[1]="c:\\reports\\folder_b"
 REM Setting Advanced Variables
 SET server_host=127.0.0.1
 SET server_port=5678
-
-
+SET regex_template=(report_file).*(!xxserial_numberxx!).*(.html)$
+SET regex_serial_number_placeholder=!xxserial_numberxx!
 
 
 
@@ -166,8 +166,8 @@ REM Create config.json file for later processing
 	ECHO.	"folder_to_archive": "%to_archive%",
 	ECHO.	"archive_file_path": "%zip_file%",
 	ECHO.	"overview_file_path": "%overview_file%",
-	ECHO.	"regex_template": "(report_file).*(!xxserial_numberxx!).*(.html)$",
-	ECHO.	"regex_template_placeholder": "!xxserial_numberxx!",
+	ECHO.	"regex_template": "%regex_template%",
+	ECHO.	"regex_template_placeholder": "%regex_serial_number_placeholder%",
 	ECHO.	"tests_to_validate_reports": [	
 	ECHO.		{ 
 	ECHO.			"test_friendly_name": "test 1",
