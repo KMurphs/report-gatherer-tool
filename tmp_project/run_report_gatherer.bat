@@ -181,7 +181,7 @@ REM Create config.json file for later processing
 	ECHO.		}, 
 	ECHO.		{ 
 	ECHO.			"test_friendly_name": "test 3",
-	ECHO.			"test_token_html_path": "span>span>span>span>span", 
+	ECHO.			"test_token_html_path": "span>span>span>span", 
 	ECHO.			"test_token_expected_value": "Awesome" 
 	ECHO.		}
 	ECHO.	]								
@@ -205,19 +205,24 @@ REM CREATE html client file
 	ECHO.^<!DOCTYPE html^>
 	ECHO.^<html^>
 	ECHO.    ^<head^>
-	ECHO.        ^<title^>[%order%] Serial Number Status^</title^>
-	ECHO.        ^<link rel="stylesheet" href="assets/styles/style.css"^>
+	ECHO.        ^<meta content="text/html; charset=utf-8" http-equiv="Content-Type"^>
+	ECHO.        ^<meta content="utf-8" http-equiv="encoding"^>
+	ECHO.        ^<link rel="stylesheet" href="assets/styles/all.min.css"^>
 	ECHO.        ^<link rel="stylesheet" href="assets/styles/bootstrap.min.css"^>
+	ECHO.        ^<link rel="stylesheet" href="assets/styles/style.css"^>
+	ECHO.        ^<title^>[%order%] Serial Number Status^</title^>
 	ECHO.    ^</head^>
 	ECHO.    ^<body^>
+ 	ECHO.        ^<nav^>^</nav^>
  	ECHO.        ^<div id="app-root"^>^</div^>
  	ECHO.        ^<script src="assets/scripts/jquery.js"^>^</script^>
  	ECHO.        ^<script src="assets/scripts/bootstrap.min.js"^>^</script^>
+ 	ECHO.        ^<script src="assets/scripts/templates.js"^>^</script^>
  	ECHO.        ^<script src="assets/scripts/dom.js"^>^</script^>
  	ECHO.        ^<script src="assets/scripts/websocket-client.js"^>^</script^>
  	ECHO.    ^</body^>
  	ECHO.^</html^>
-)>..\common\client\client2.html
+)>..\common\client\client.html
 
 
 REM Start HTML Client for websocket server

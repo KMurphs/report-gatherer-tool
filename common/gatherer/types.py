@@ -76,7 +76,7 @@ class TestResult():
     self.name = test_name
     self.actual_value = test_actual_value
     self.expected_value = test_expected_value
-    self.is_pass = self.actual_value == self.expected_value
+    self.is_pass = (self.actual_value == self.expected_value) and self.actual_value != "" and self.actual_value != None
 
   def __str__(self):
     return f"Test '{self.name}': {'PASS' if self.is_pass else 'FAIL'} - Expected '{self.expected_value}', Got '{self.actual_value}'"
@@ -174,9 +174,9 @@ class Report():
     for tester in self.testers:
       is_pass = is_pass and tester.result.is_pass
 
-    if(is_pass): self.has_passed_tests = True
+    if(is_pass and len(self.testers) > 0): self.has_passed_tests = True
 
-    return is_pass
+    return self.has_passed_tests
 
   def __str__(self):
     return f"Report Object for '{self.id}'"
@@ -186,6 +186,11 @@ class Report():
   def toDict(self):
     obj = vars(self)
     obj = {}
+    obj["id"] = self.id 
+    obj["was_copied"] = self.was_copied 
+    obj["copy_file_path"] = self.copy_file_path 
+    obj["has_passed_tests"] = self.has_passed_tests 
+    obj["was_processed"] = self.was_processed 
     obj["file"] = self.file.toDict()
     obj["testers"] = [ tester.toDict() for tester in self.testers ]
     return obj

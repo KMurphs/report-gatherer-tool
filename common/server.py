@@ -24,10 +24,6 @@ logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s][%(threadName)-9s]
 
 async def handle_connections(websocket, path):
     async def notify_client(id, event, data):
-        # print(json.dumps(data))
-        print(data.toDict())
-        print(json.dumps(data.toDict()))
-        print("----------------")
         msg =  json.dumps({
             "command": "status",
             "msg": {
@@ -50,6 +46,9 @@ async def handle_connections(websocket, path):
     logging.info(f"Serving Client at: '{path}'")
      
     if path == "/":
+
+        for sn in config["serial_numbers"]:
+            notify_client(sn, "onProcessing", {})
         
         gatherer = GathererMaster(
             serial_numbers = config["serial_numbers"],

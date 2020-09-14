@@ -1,139 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>[666] Serial Number Status</title>
-        <link rel="stylesheet" href="assets/styles/style.css">
-        <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
         <link rel="stylesheet" href="assets/styles/all.min.css">
+        <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/styles/style.css">
+        <title>[123456] Serial Number Status</title>
     </head>
     <body>
-        <div id="app-root">
-
-            <div class="container table-responsive sn-table">
-                <table class="table table-striped table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th class="row no-gutters text-center">
-                      <div class="col-6 text-left">Serial Number</div>
-                      <div class="col-2">Found</div>
-                      <div class="col-2">Test</div>
-                      <div class="col-2">Copy</div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                    <tr class="table-primary d-flex flex-column serial-number-N-row">
-                        <td>
-                            <label class="row no-gutters text-center toggler-label" for="toggle-serial-number-N">
-                                <div class="col-6 text-left">
-                                    <span class="btn btn-default btn-sm font-weight-bold">
-                                        <i class="fa fa-angle-right"></i>Serial Number
-                                    </span>
-                                </div>
-                                <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                                <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                                <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                              </label>
-                          </label>
-                    
-                        </td>
-                         <td class="toggling-content-container">
-                           <input type="checkbox" id="toggle-serial-number-N" class="toggler d-none">
-                            <div class="details">
-                              
-                    
-                             <ul class="list-unstyled pl-4 mb-2">
-                               <li class="details-section-header"><em>file</em></li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row"><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                  <li class="row"><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                 </ul>
-                               </li>
-                                <li class="details-section-header"><em>tests</em></li>
-                                <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline details-item-title">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline details-item-title">expected: </span><span class="d-inline d-md-none details-item-title">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline details-item-title">actual: </span><span class="d-inline d-md-none details-item-title">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline details-item-title">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline details-item-title">expected: </span><span class="d-inline d-md-none details-item-title">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline details-item-title">actual: </span><span class="d-inline d-md-none details-item-title">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                 </ul>
-                               </li>
-                               <li></li>
-                                <li class="details-section-header"><em>copy</em></li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row "><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                 </ul>
-                               </li>
-                             </ul>
-                    
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-primary d-flex flex-column">
-                        <td >
-                          <label class="row no-gutters text-center" for="toggle-serial-number-N">
-                            <div class="col-6 text-left"><span class="btn btn-default btn-sm font-weight-bold">Serial Number</span></div>
-                            <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                            <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                            <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
-                          </label>
-                    
-                        </td>
-                         <td class="toggling-content-container">
-                           <input type="checkbox" id="toggle-serial-number-N" class=" toggler d-none">
-                            <div class="details">
-                              
-                    
-                             <ul class="list-unstyled pl-4 mb-2">
-                               <li class="details-section-header"><em>file</em></li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row "><span class="col-2 details-item-title">path</span><span class="col-10">some path</span></li>
-                                  <li class="row"><span class="col-2">path</span><span class="col-10">some path</span></li>
-                                 </ul>
-                               </li>
-                                <li>tests</li>
-                                <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline">expected: </span><span class="d-inline d-md-none">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline">actual: </span><span class="d-inline d-md-none">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline">expected: </span><span class="d-inline d-md-none">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline">actual: </span><span class="d-inline d-md-none">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                 </ul>
-                               </li>
-                               <li></li>
-                                <li>copy</li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row "><span class="col-2">path</span><span class="col-10">some path</span></li>
-                                 </ul>
-                               </li>
-                             </ul>
-                    
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
+        <div id="app-root"></div>
         <script src="assets/scripts/jquery.js"></script>
         <script src="assets/scripts/bootstrap.min.js"></script>
+        <script src="assets/scripts/templates.js"></script>
         <script src="assets/scripts/dom.js"></script>
         <script src="assets/scripts/websocket-client.js"></script>
     </body>
