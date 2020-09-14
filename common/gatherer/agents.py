@@ -249,6 +249,7 @@ class GathererSlave(threading.Thread):
         self.copy_files([self.report.file.path], self.copy_report_config_data.target_directory)
         try:
           self.report.was_copied = self.copy_files([self.report.file.path], self.copy_report_config_data.target_directory)
+          self.report.copy_file_path = os.path.join(self.copy_report_config_data.target_directory, self.report.file.name)
           self.q.slave.put({
             "id": self.report.id,
             "event": "on_copied"

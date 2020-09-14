@@ -2,9 +2,9 @@
 <html>
     <head>
         <title>[666] Serial Number Status</title>
-        <link rel="stylesheet" href="assets/styles/style.css">
-        <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
         <link rel="stylesheet" href="assets/styles/all.min.css">
+        <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/styles/style.css">
     </head>
     <body>
         <div id="app-root">
@@ -21,7 +21,7 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="sn-entries-container">
 
                     <tr class="table-primary d-flex flex-column serial-number-N-row">
                         <td>
@@ -35,48 +35,9 @@
                                 <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
                                 <div class="col-2"><span class="btn btn-success btn-sm font-weight-bold">FAIL</span></div>
                               </label>
-                          </label>
                     
                         </td>
-                         <td class="toggling-content-container">
-                           <input type="checkbox" id="toggle-serial-number-N" class="toggler d-none">
-                            <div class="details">
-                              
-                    
-                             <ul class="list-unstyled pl-4 mb-2">
-                               <li class="details-section-header"><em>file</em></li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row"><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                  <li class="row"><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                 </ul>
-                               </li>
-                                <li class="details-section-header"><em>tests</em></li>
-                                <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline details-item-title">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline details-item-title">expected: </span><span class="d-inline d-md-none details-item-title">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline details-item-title">actual: </span><span class="d-inline d-md-none details-item-title">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                  <li class="row ">
-                                    <span class="col-1 d-none d-lg-inline details-item-title">name: </span><span class="col-3">some name</span>
-                                    <span class="col-1 col-md-2 col-lg-1"><span class="d-none d-md-inline details-item-title">expected: </span><span class="d-inline d-md-none details-item-title">exp: </span></span><span class="col-3">some name</span>
-                                    <span class="col-1"><span class="d-none d-md-inline details-item-title">actual: </span><span class="d-inline d-md-none details-item-title">act: </span></span><span class="col-3">some name</span>
-                                  </li>
-                                 </ul>
-                               </li>
-                               <li></li>
-                                <li class="details-section-header"><em>copy</em></li>
-                               <li>
-                                 <ul class="list-unstyled pl-4 mb-2">
-                                  <li class="row "><span class="col-1 details-item-title">path</span><span class="col-11">some path</span></li>
-                                 </ul>
-                               </li>
-                             </ul>
-                    
-                            </div>
-                        </td>
+
                     </tr>
                     <tr class="table-primary d-flex flex-column">
                         <td >
@@ -134,6 +95,7 @@
         </div>
         <script src="assets/scripts/jquery.js"></script>
         <script src="assets/scripts/bootstrap.min.js"></script>
+        <script src="assets/scripts/templates.js"></script>
         <script src="assets/scripts/dom.js"></script>
         <script src="assets/scripts/websocket-client.js"></script>
     </body>

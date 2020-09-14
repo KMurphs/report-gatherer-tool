@@ -154,6 +154,7 @@ class Report():
     self.file = None
     self.testers: List[ReportTester] = []
     self.was_copied = False
+    self.copy_file_path = ""
     self.has_passed_tests = False
     self.was_processed = False
 
