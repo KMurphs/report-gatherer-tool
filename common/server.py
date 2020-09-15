@@ -65,6 +65,7 @@ async def handle_connections(websocket, path):
             n_slaves = 3
         )
         await gatherer.run(notify_client)
+        print("============================================================")
         
     elif path == "/save":
         msg = await websocket.recv()

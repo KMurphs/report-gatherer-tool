@@ -31,7 +31,6 @@ class GathererMaster():
     for _ in range(n_slaves):
       self.q.master.put(None)
 
-    print(self.q.lengths())
 
 
     # run slaves
