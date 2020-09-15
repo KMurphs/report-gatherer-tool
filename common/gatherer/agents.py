@@ -65,10 +65,6 @@ class GathererMaster():
       try:
         notification = self.q.master.get(block = True, timeout = 1)
         logging.debug(f"Notification: {str(notification)}")
-        print(notification["id"])
-        print(notification["event"])
-        print(self.gatherer_db[notification["id"]])
-        print(self.gatherer_db[notification["id"]].file.toDict())
 
         await callback(notification["id"], notification["event"], self.gatherer_db[notification["id"]])
 
@@ -287,7 +283,7 @@ class GathererSlave(threading.Thread):
       for f in files:
         if sn_regex.search(f):
           path = os.path.join(dir_location, f)
-          try: result.append(ReportFile(f, path, os.path.getmtime(path)))
+          try: result.append(ReportFile(f, path, int(os.path.getmtime(path) * 1000)))
           except Exception as e: 
             logging.error(f"There was an issue retrieving nodified time for file at location '{path}':\n{str(e)}")
             pass

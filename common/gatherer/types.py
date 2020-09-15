@@ -21,7 +21,6 @@ class ReportFile():
     return vars(self)
 
   def toDict(self):
-    print("============")
     print(vars(self))
     obj = {}
     obj["name"] = self.name
@@ -107,7 +106,7 @@ class ReportTester():
 
     if report_file_path == "" or report_file_path == None:
       raise Exception("ReportTester instances require a valid path to execute the test")
-
+    
     try: 
 
       with open(report_file_path, "r") as f:
@@ -121,11 +120,12 @@ class ReportTester():
       else:
         res = html_elements[0].text
 
-      self.result = TestResult(self.definition.name, self.definition.expected_value, res)
-  
     except Exception as e: 
       logging.error(f"There was an issue testing html content of file '{report_file_path}':\n{str(e)}")
       pass
+
+    finally:
+      self.result = TestResult(self.definition.name, self.definition.expected_value, res)
 
   def __str__(self):
     timestamp = "None" if self.last_modified == 0 else (datetime.datetime.utcfromtimestamp(int(self.last_modified))).strftime('%m/%d/%Y, %H:%M:%S')
@@ -162,6 +162,7 @@ class Report():
     self.file = ReportFile(report_file_name, report_file_path, report_file_last_modified)
   def attach_report_file_fromObject(self, report_file: ReportFile):
     self.file = ReportFile(report_file.name, report_file.path, report_file.last_modified)
+
   def add_test(self, test_name: str, test_html_selector: str, test_expected_value: str):
     self.testers.append(ReportTester(test_name, test_html_selector, test_expected_value))
   def add_test_fromDefinition(self, definition: TestDefinition):

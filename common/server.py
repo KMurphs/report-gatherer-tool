@@ -46,6 +46,8 @@ async def handle_connections(websocket, path):
     logging.info(f"Serving Client at: '{path}'")
      
     if path == "/":
+        
+        sns = [sn for sn in config["serial_numbers"] if sn.replace(" ", "") != ""]
 
         for sn in config["serial_numbers"]:
             notify_client(sn, "onProcessing", {})
