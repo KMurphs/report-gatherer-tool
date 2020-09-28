@@ -1,8 +1,0 @@
-Get-Date : Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Format'. Specified method is 
-not supported.
-At line:1 char:18
-+ Get-Date -Format '[yyyy-MM-dd][HH:mm]' , dfsdf, dfsdf, dfsdf
-+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : InvalidArgument: (:) [Get-Date], ParameterBindingException
-    + FullyQualifiedErrorId : CannotConvertArgument,Microsoft.PowerShell.Commands.GetDateCommand
- 
