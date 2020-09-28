@@ -1,0 +1,29 @@
+{
+  "name": "report-gatherer",
+  "version": "1.0.0",
+  "description": "An app to gather reports from specified location whose content comply with html tests written with Typescript",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
+  },
+  "repository": "https://github.com/KMurphs/report-gatherer-tool.git",
+  "keywords": [
+    "report",
+    "html tests",
+    "gather",
+    "typescript"
+  ],
+  "author": "Stephan K.",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "electron": "^9.0.4",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.4.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.7"
+  }
+}
