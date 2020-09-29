@@ -1,8 +1,9 @@
+import { archiver } from './archiver';
 import { finder } from './finder';
 import { mover } from './mover';
 import { tester } from './tester';
 import { TConfig, TFindConfig, TFindResult, TTestConfig, TTestsResult } from './types';
-// import { finder } from './finder';
+
 import { createAppFolders } from './utils';
 
 
@@ -165,6 +166,7 @@ describe("Tester Module Functionality", ()=>{
   });
 
 
+
   it('Will gracefully handle invalid inputs', async () => {
 
     let testResults: TTestsResult;
@@ -188,7 +190,6 @@ describe("Tester Module Functionality", ()=>{
     expect(testResults.items[3].hasPassed).toBe(false);
     expect(testResults.items[4].hasPassed).toBe(false);
 
-    
   });
 
 })
@@ -229,6 +230,9 @@ describe("Mover Module Functionality", ()=>{
     let files = await fs.promises.readdir(projectFolder);
     console.log(files)
     expect(files.length).toBe(2);
+
+
+    await archiver(archivePath)
     
   })
 })

@@ -97,6 +97,7 @@ const cleanupProjectFolder = async (projectFolder: string)=>{
         if(r.test(filePath)){
           let newPath = path.join(oldFolder, file);
           await fs.promises.copyFile(filePath, path.join(projectFolder, newPath))
+          await fs.promises.unlink(filePath)
     
         // if .archive, skip
         } else if(file === oldFolder){
