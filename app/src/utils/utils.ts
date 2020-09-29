@@ -1,4 +1,4 @@
-export const createAppFolders = ()=>{
+export const createAppFolders = (): string => {
   const appFolder: string = `${process.env.USERPROFILE}\\Documents\\report-gatherer`;
   var fs = require('fs');
   
@@ -17,5 +17,7 @@ export const createAppFolders = ()=>{
   if (!fs.existsSync(`${appFolder}\\data`)){
       fs.mkdirSync(`${appFolder}\\data`);
   }
+
+  return appFolder;
 }
 

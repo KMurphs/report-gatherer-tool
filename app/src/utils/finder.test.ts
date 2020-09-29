@@ -8,9 +8,9 @@ let configFind: TFindConfig;
 let serialsToFind: string[];
 
 beforeAll(() => {
-  createAppFolders();
+  let appFolder = createAppFolders();
 
-  const testFolder: string = `${process.env.USERPROFILE}\\Documents\\report-gatherer\\tests`;
+  const testFolder: string = `${appFolder}\\tests`;
   var fs = require('fs');
 
   let fileCounter: number = 0;
@@ -33,11 +33,15 @@ beforeAll(() => {
     // Create so many test files per test locations
     for(let i = 0; i < filesPerLoc; i++){
       fileCounter++;
-      fs.writeFile(`${loc}\\Dummy_Test_File_[serial_number_${fileCounter}][02 04 43 PM][2020-09-03][Passed].html`, testFileHTML, function (err: any) {
-        if (err) throw err;
-      });  
-    }
 
+      let file = `${loc}\\Dummy_Test_File_[serial_number_${fileCounter}][02 04 43 PM][2020-09-03][Passed].html`;
+      fs.writeFileSync(file, testFileHTML, function (err: any) {
+          if (err) console.log(err);
+          console.log(`[Test]: Created File: '${file}'`)
+      })
+      
+
+    }
   })
 
 
@@ -61,11 +65,11 @@ test('Can Find Reports matching Given Serial Numbers', async () => {
   const now = new Date().getTime();
 
   for(let sn of serialsToFind){
-    let foundFile = finder(configFind, sn);
+    let foundFile = await finder(configFind, sn);
     expect(foundFile === null).toBe(false);
     expect(fs.existsSync(foundFile.path)).toBe(true);
     expect(foundFile.name.indexOf(sn)).toBeGreaterThan(0);
-    expect(foundFile.lastModified).toBeGreaterThan(now - 3600000);
+    expect(foundFile.lastModified).toBeGreaterThan(now - 60000);
     expect(foundFile.lastModified).toBeLessThan(now);
   }
   
