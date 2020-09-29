@@ -37,7 +37,7 @@ beforeAll(() => {
       let file = `${loc}\\Dummy_Test_File_[serial_number_${fileCounter}][02 04 43 PM][2020-09-03][Passed].html`;
       fs.writeFileSync(file, testFileHTML, function (err: any) {
           if (err) console.log(err);
-          console.log(`[Test]: Created File: '${file}'`)
+          // console.log(`[Test]: Created File: '${file}'`)
       })
       
 
@@ -59,12 +59,23 @@ beforeAll(() => {
 
 
 
+
+
+
+
+
+
+
+
+
+
 test('Can Find Reports matching Given Serial Numbers', async () => {
 
   const fs = require('fs');
   const now = new Date().getTime();
 
   for(let sn of serialsToFind){
+    console.log(`[Test]: Processing '${sn}'`)
     let foundFile = await finder(configFind, sn);
     expect(foundFile === null).toBe(false);
     expect(fs.existsSync(foundFile.path)).toBe(true);
@@ -74,6 +85,16 @@ test('Can Find Reports matching Given Serial Numbers', async () => {
   }
   
 });
+
+
+
+
+
+
+
+
+
+
 
 
 
