@@ -1,4 +1,5 @@
 import { finder } from './finder';
+import { mover } from './mover';
 import { tester } from './tester';
 import { TConfig, TFindConfig, TFindResult, TTestConfig, TTestsResult } from './types';
 // import { finder } from './finder';
@@ -7,15 +8,18 @@ import { createAppFolders } from './utils';
 
 let configFind: TFindConfig;
 let serialsToFind: string[];
+let appFolder: string;
 
 beforeAll(() => {
-  let appFolder = createAppFolders();
+  appFolder = createAppFolders();
   var fs = require('fs');
   var path = require('path');
 
 
   const testFolder: string = path.join(appFolder, "tests");
-
+  if (!fs.existsSync(testFolder)){
+      fs.mkdirSync(testFolder);
+  }
 
   let fileCounter: number = 0;
   let filesPerLoc: number = 3;
@@ -54,11 +58,13 @@ beforeAll(() => {
     regexExpression: "^((Dummy_Test_File_).*(\\[{{serial_number}}\\]).*(\.html))$",
     regexPlaceholder: "{{serial_number}}"
   }
+  console.log(configFind)
 
   serialsToFind = [];
-  for(let i = 0 ; i < 10 ; i = i + 2){
-    serialsToFind.push(`serial_number_${fileCounter}`);
+  for(let i = 1 ; i <= filesPerLoc * locs.length ; i = i + 2){
+    serialsToFind.push(`serial_number_${i}`);
   }
+  console.log(serialsToFind)
 });
 
 
@@ -126,7 +132,7 @@ describe("Finder Module Functionality", ()=>{
 
 describe("Tester Module Functionality", ()=>{
 
-  it('Can test html reports againt test items', async () => {
+  it('Will test html reports againt test items', async () => {
 
     let testResults: TTestsResult;
     let configTests: TTestConfig[] = [];
@@ -192,6 +198,40 @@ describe("Tester Module Functionality", ()=>{
 
 
 
+
+describe("Mover Module Functionality", ()=>{
+  it("Will move files to second location", async()=>{
+
+    var path = require("path");
+    var fs = require("fs");
+
+    const project = "test-project"
+    const order = "test-order"
+
+    let filePaths: string[] = []
+    for(let sn of serialsToFind){
+      let file = await finder(configFind, sn);
+      filePaths.push(file.path)
+    }
+    let archivePath = await mover(project, order, appFolder, filePaths);
+    
+
+    expect(archivePath === null).toBe(false);
+    expect(fs.existsSync(archivePath)).toBe(true);
+    filePaths.forEach(file => {
+      expect(fs.existsSync(path.join(archivePath, path.basename(file)))).toBe(true);
+    })
+
+    let projectFolder = path.join(appFolder, project)
+    expect(fs.existsSync(projectFolder)).toBe(true);
+    expect(fs.existsSync(path.join(projectFolder, ".archives"))).toBe(true);
+    
+    let files = await fs.promises.readdir(projectFolder);
+    console.log(files)
+    expect(files.length).toBe(2);
+    
+  })
+})
 
 
 

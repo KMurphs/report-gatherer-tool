@@ -1,6 +1,7 @@
 import { TFindConfig, TFindResult } from "./types";
 
 const fs = require('fs');
+const path = require('path');
 const moduleName = "[Finder]"
 
 
@@ -51,7 +52,7 @@ export const finder = (config: TFindConfig, serialNumber: string): Promise<TFind
 
           // Attempt to get its last modified parameter
           let stats: any 
-          try { stats = await fs.promises.stat(`${location}//${file}`) }
+          try { stats = await fs.promises.stat(path.join(location, file)) }
           catch(err) {
             // Could not read file last modified parameter, continue
             console.log(err);
@@ -62,7 +63,7 @@ export const finder = (config: TFindConfig, serialNumber: string): Promise<TFind
           // Everything is in order. Pack up and return file object
           res = {
             name: file,
-            path: `${location}//${file}`,
+            path: path.join(location, file),
             lastModified: new Date(stats.mtime).getTime()
           }
           resolve(res);

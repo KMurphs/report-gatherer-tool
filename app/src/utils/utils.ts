@@ -12,18 +12,18 @@ export const createAppFolders = (): string => {
   if (!fs.existsSync(appFolder)){
       fs.mkdirSync(appFolder);
   }
-  if (!fs.existsSync(path.join(appFolder, "tests"))){
-      fs.mkdirSync(path.join(appFolder, "tests"));
-  }
-  if (!fs.existsSync(path.join(appFolder, "archives"))){
-      fs.mkdirSync(path.join(appFolder, "archives"));
-  }
-  if (!fs.existsSync(path.join(appFolder, "current"))){
-      fs.mkdirSync(path.join(appFolder, "current"));
-  }
-  if (!fs.existsSync(path.join(appFolder, "data"))){
-      fs.mkdirSync(path.join(appFolder, "data"));
-  }
+  // if (!fs.existsSync(path.join(appFolder, "tests"))){
+  //     fs.mkdirSync(path.join(appFolder, "tests"));
+  // }
+  // if (!fs.existsSync(path.join(appFolder, "archives"))){
+  //     fs.mkdirSync(path.join(appFolder, "archives"));
+  // }
+  // if (!fs.existsSync(path.join(appFolder, "current"))){
+  //     fs.mkdirSync(path.join(appFolder, "current"));
+  // }
+  // if (!fs.existsSync(path.join(appFolder, "data"))){
+  //     fs.mkdirSync(path.join(appFolder, "data"));
+  // }
 
   return appFolder;
 }
