@@ -25,5 +25,9 @@
     "ts-jest": "^26.4.0",
     "tslint": "^6.1.2",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@types/cheerio": "^0.22.22",
+    "cheerio": "^1.0.0-rc.3"
   }
 }
