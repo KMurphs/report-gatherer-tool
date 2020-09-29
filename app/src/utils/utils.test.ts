@@ -10,13 +10,16 @@ let serialsToFind: string[];
 
 beforeAll(() => {
   let appFolder = createAppFolders();
-
-  const testFolder: string = `${appFolder}\\tests`;
   var fs = require('fs');
+  var path = require('path');
+
+
+  const testFolder: string = path.join(appFolder, "tests");
+
 
   let fileCounter: number = 0;
   let filesPerLoc: number = 3;
-  let locs = [1,2,3].map(i => `${testFolder}\\location_${i}`);
+  let locs = [1,2,3].map(i => path.join(testFolder, `location_${i}`));
   locs.forEach(loc => {
 
     // Create a test location
@@ -35,7 +38,7 @@ beforeAll(() => {
     for(let i = 0; i < filesPerLoc; i++){
       fileCounter++;
 
-      let file = `${loc}\\Dummy_Test_File_[serial_number_${fileCounter}][02 04 43 PM][2020-09-03][Passed].html`;
+      let file = path.join(loc, `Dummy_Test_File_[serial_number_${fileCounter}][02 04 43 PM][2020-09-03][Passed].html`);
       fs.writeFileSync(file, testFileHTML, function (err: any) {
           if (err) console.log(err);
           // console.log(`[Test]: Created File: '${file}'`)
@@ -198,5 +201,10 @@ describe("Tester Module Functionality", ()=>{
 
 afterAll(() => {
   var rimraf = require("rimraf");
-  rimraf(`${process.env.USERPROFILE}\\Documents\\report-gatherer\\tests`, function () { ; });
+  var path = require("path")
+  let tmp = process.env.USERPROFILE
+  tmp = path.join(tmp, "Documents");
+  tmp = path.join(tmp, "report-gatherer");
+  tmp = path.join(tmp, "tests");
+  rimraf(tmp, function () { ; });
 });

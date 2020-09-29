@@ -1,4 +1,4 @@
-import { TFindResult, TTestConfig, TTestsResult } from "./types";
+import { TTestConfig, TTestsResult } from "./types";
 
 const fs = require('fs');
 const $ = require('cheerio');
