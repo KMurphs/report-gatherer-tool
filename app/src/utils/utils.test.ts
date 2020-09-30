@@ -1,10 +1,9 @@
-import { archiver } from './archiver';
 import { Finder } from './finder';
-import { mover } from './mover';
-import { Tester, tester } from './tester';
+import { Mover } from './mover';
+import { Tester } from './tester';
 import { TConfig, TFindConfig, TFindResult, TTestConfig, TTestsResult } from './types';
 
-import { createAppFolders } from './utils';
+import { createAppFolders, finalizeArchiveFolder, prepareArchiveFolder } from './utils';
 
 
 let configFind: TFindConfig;
@@ -221,25 +220,29 @@ describe("Mover Module Functionality", ()=>{
       let file = await finder.process(sn);
       filePaths.push(file.path)
     }
-    let archivePath = await mover(project, order, appFolder, filePaths);
-    
 
-    expect(archivePath === null).toBe(false);
-    expect(fs.existsSync(archivePath)).toBe(true);
-    filePaths.forEach(file => {
-      expect(fs.existsSync(path.join(archivePath, path.basename(file)))).toBe(true);
-    })
 
+
+    // 1. Prepare Folder
+    const archiveFolder = await prepareArchiveFolder(appFolder, project, order);
+    expect(archiveFolder === null).toBe(false);
     let projectFolder = path.join(appFolder, project)
     expect(fs.existsSync(projectFolder)).toBe(true);
     expect(fs.existsSync(path.join(projectFolder, ".archives"))).toBe(true);
-    
     let files = await fs.promises.readdir(projectFolder);
     console.log(files)
     expect(files.length).toBe(2);
 
+    // 2. Move
+    let mover = new Mover(archiveFolder)
+    for(let filePath of filePaths){
+      let newFilePath = await mover.process(filePath)
+      expect(fs.existsSync(newFilePath)).toBe(true);
+      expect(path.basename(newFilePath)).toBe(path.basename(filePath));
+    }
 
-    await archiver(archivePath)
+    // 3. Zip folder
+    await finalizeArchiveFolder(archiveFolder)
     
   })
 })
