@@ -1,5 +1,5 @@
 import { archiver } from './archiver';
-import { finder } from './finder';
+import { Finder } from './finder';
 import { mover } from './mover';
 import { tester } from './tester';
 import { TConfig, TFindConfig, TFindResult, TTestConfig, TTestsResult } from './types';
@@ -84,7 +84,8 @@ describe("Finder Module Functionality", ()=>{
   
     for(let sn of serialsToFind){
       console.log(`[Test]: Processing '${sn}'`)
-      let foundFile = await finder(configFind, sn);
+      let finder = new Finder(configFind);
+      let foundFile = await finder.processSerialNumber(sn);
       expect(foundFile === null).toBe(false);
       expect(fs.existsSync(foundFile.path)).toBe(true);
       expect(foundFile.name.indexOf(sn)).toBeGreaterThan(0);
@@ -96,7 +97,8 @@ describe("Finder Module Functionality", ()=>{
 
   it('Will return null if report is not found', async () => {
     let sn = "serial_number_0";
-    let foundFile = await finder(configFind, sn);
+    let finder = new Finder(configFind);
+    let foundFile = await finder.processSerialNumber(sn);
     expect(foundFile === null).toBe(true);
   })
 
@@ -108,20 +110,19 @@ describe("Finder Module Functionality", ()=>{
 
     configInvalid = {...configFind}
     configInvalid.from = []
-    foundFile = await finder(configInvalid, sn);
-    expect(foundFile === null).toBe(true);
+    expect(()=>new Finder(configInvalid)).toThrow(RangeError);
+
 
     configInvalid = {...configFind}
     configInvalid.regexExpression = ""
-    foundFile = await finder(configInvalid, sn);
-    expect(foundFile === null).toBe(true);
+    expect(()=>new Finder(configInvalid)).toThrow(RangeError);
     
     configInvalid = {...configFind}
     configInvalid.regexPlaceholder = ""
-    foundFile = await finder(configInvalid, sn);
-    expect(foundFile === null).toBe(true);
+    expect(()=>new Finder(configInvalid)).toThrow(RangeError);
     
-    foundFile = await finder(configFind, "");
+    let finder = new Finder(configFind);
+    foundFile = await finder.processSerialNumber("");
     expect(foundFile === null).toBe(true);
   })
 
@@ -146,7 +147,8 @@ describe("Tester Module Functionality", ()=>{
     for(let sn of serialsToFind){
       console.log(`[Test]: Processing '${sn}'`);
   
-      let foundFile = await finder(configFind, sn);
+      let finder = new Finder(configFind);
+      let foundFile = await finder.processSerialNumber(sn);
       expect(foundFile === null).toBe(false);
   
       testResults = await tester(configTests, foundFile.path);
@@ -179,7 +181,8 @@ describe("Tester Module Functionality", ()=>{
     
 
     let sn = "serial_number_1";
-    let foundFile = await finder(configFind, sn);
+    let finder = new Finder(configFind);
+    let foundFile = await finder.processSerialNumber(sn);
     expect(foundFile === null).toBe(false);
 
     testResults = await tester(configTests, foundFile.path);
@@ -211,7 +214,8 @@ describe("Mover Module Functionality", ()=>{
 
     let filePaths: string[] = []
     for(let sn of serialsToFind){
-      let file = await finder(configFind, sn);
+      let finder = new Finder(configFind);
+      let file = await finder.processSerialNumber(sn);
       filePaths.push(file.path)
     }
     let archivePath = await mover(project, order, appFolder, filePaths);
