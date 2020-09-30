@@ -18,7 +18,7 @@ export class Finder{
 
 
 
-  processSerialNumber(serialNumber: string): Promise<TFindResult | null>{
+  process(serialNumber: string): Promise<TFindResult | null>{
     return new Promise(async(resolve, reject) => {
   
       // Setup default return object 
