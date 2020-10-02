@@ -1,49 +1,37 @@
-import {StateMachine} from "./machine"
+import { StateMachine } from "./machine"
 import { TMachineEvents, TMachineStates } from "./types"
 
 
-let machine: StateMachine<TMachineStates, TMachineEvents>
+let machine: StateMachine<TMachineStates, TMachineStates, TMachineEvents>
 beforeAll(()=>{
+  // let machine1 = new StateMachine(TMachineStates, { initialState: TMachineStates.SELECTING_PROJECT })
+  machine = new StateMachine(TMachineStates, {
+    initialState: TMachineStates.SELECTING_PROJECT,
+    transitions: [
+      { from: TMachineStates.SELECTING_PROJECT,       to: TMachineStates.CONFIGURING_PROCESS,         on: TMachineEvents.ON_PROJECT_SELECTED }, 
+      { from: TMachineStates.CONFIGURING_PROCESS,     to: TMachineStates.SELECTING_PROJECT,           on: TMachineEvents.ON_RESET }, 
+      { from: TMachineStates.CONFIGURING_PROCESS,     to: TMachineStates.EXECUTING_PROCESS,           on: TMachineEvents.ON_START }, 
+      { from: TMachineStates.EXECUTING_PROCESS,       to: TMachineStates.DISPLAYING,                  on: TMachineEvents.ON_VIEW }, 
+      { from: TMachineStates.EXECUTING_PROCESS,       to: TMachineStates.SELECTING_PROJECT,           on: TMachineEvents.ON_RESET }, 
+      { from: TMachineStates.EXECUTING_PROCESS,       to: TMachineStates.IDLING,                      on: TMachineEvents.ON_STOP }, 
+      { from: TMachineStates.DISPLAYING,              to: TMachineStates.EXECUTING_PROCESS,           on: TMachineEvents.ON_MONITOR }, 
+      { from: TMachineStates.IDLING,                  to: TMachineStates.COMPLETED,                   on: TMachineEvents.ON_ARCHIVED }, 
+      { from: TMachineStates.COMPLETED,               to: TMachineStates.SELECTING_PROJECT,           on: TMachineEvents.ON_RESET }, 
+    ]
+  });
 
-  machine = new StateMachine(TMachineStates.SELECTING_PROJECT);
+  // machine.state(TMachineStates.SELECTING_PROJECT).onEnter.registerAction(()=>void, handle)
+  // machine.state(TMachineStates.SELECTING_PROJECT).onExit.registerAction(()=>void, handle)
+  // machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_RESET).registerAction(()=>void, handle)
 
-  machine.addState(TMachineStates.IDLING);
-  machine.addState(TMachineStates.EXECUTING_PROCESS);
-  machine.addState(TMachineStates.CONFIGURING_PROCESS);
-  machine.addState(TMachineStates.COMPLETED);
-  machine.addState(TMachineStates.DISPLAYING);
+  machine.state(TMachineStates.SELECTING_PROJECT).onEnter.registerAction(()=>{}, null)
+  machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_PROJECT_SELECTED).registerAction(()=>{}, null)
 
-
-
-  machine.addTransition(TMachineStates.SELECTING_PROJECT,   TMachineStates.CONFIGURING_PROCESS,   TMachineEvents.ON_PROJECT_SELECTED);
-
-  machine.addTransition(TMachineStates.CONFIGURING_PROCESS, TMachineStates.SELECTING_PROJECT,     TMachineEvents.ON_RESET);
-  machine.addTransition(TMachineStates.CONFIGURING_PROCESS, TMachineStates.EXECUTING_PROCESS,     TMachineEvents.ON_START);
-
-  machine.addTransition(TMachineStates.EXECUTING_PROCESS,   TMachineStates.SELECTING_PROJECT,     TMachineEvents.ON_RESET);
-  machine.addTransition(TMachineStates.EXECUTING_PROCESS,   TMachineStates.IDLING,                TMachineEvents.ON_STOP);
-  machine.addTransition(TMachineStates.EXECUTING_PROCESS,   TMachineStates.DISPLAYING,            TMachineEvents.ON_VIEW);
-
-  machine.addTransition(TMachineStates.DISPLAYING,          TMachineStates.EXECUTING_PROCESS,     TMachineEvents.ON_MONITOR);
-
-  machine.addTransition(TMachineStates.IDLING,              TMachineStates.COMPLETED,             TMachineEvents.ON_ARCHIVED);
-
-  machine.addTransition(TMachineStates.COMPLETED,           TMachineStates.SELECTING_PROJECT,     TMachineEvents.ON_RESET);
-
-
-  machine.registerOnEnterAction(TMachineStates.SELECTING_PROJECT, ()=>{console.log("onEnter: SELECTING_PROJECT")})
-  machine.registerOnExitAction (TMachineStates.SELECTING_PROJECT, ()=>{console.log("onExit: SELECTING_PROJECT")})
-  machine.registerOnTransitionAction (TMachineStates.SELECTING_PROJECT, TMachineEvents.ON_PROJECT_SELECTED, ()=>{console.log("onTransition: from SELECTING_PROJECT on ON_PROJECT_SELECTED event ")})
-
-  machine.registerOnEnterAction(TMachineStates.CONFIGURING_PROCESS, ()=>{console.log("onEnter: CONFIGURING_PROCESS")})
-  machine.registerOnExitAction (TMachineStates.CONFIGURING_PROCESS, ()=>{console.log("onExit: CONFIGURING_PROCESS")})
-  machine.registerOnTransitionAction (TMachineStates.CONFIGURING_PROCESS, TMachineEvents.ON_PROJECT_SELECTED, ()=>{console.log("onTransition: from CONFIGURING_PROCESS on ON_RESET event ")})
-  machine.registerOnTransitionAction (TMachineStates.CONFIGURING_PROCESS, TMachineEvents.ON_PROJECT_SELECTED, ()=>{console.log("onTransition: from CONFIGURING_PROCESS on ON_RESET event ")})
+  machine.handleEvent(TMachineEvents.ON_PROJECT_SELECTED);
 
 
+  // console.log(machine);
 
-
-  console.log(machine);
 })
 
 

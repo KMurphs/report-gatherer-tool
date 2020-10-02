@@ -17,15 +17,25 @@ export enum TMachineEvents{
   ON_PROJECT_SELECTED = "Project was selected", 
 } 
 
-//Function or ()=>void
-export type TMachineStateData = {
-  transitions: { [key: string]: TMachineTransitionData },
-  onEnterActions: ((...args: any[]) => void)[],
-  onExitActions: ((...args: any[]) => void)[],
-} 
-export type TMachineTransitionData = {
-  destination: string,
-  actions: ((...args: any[]) => void)[],
-} 
 
-export type TMachineDefinition = { [key: string]: TMachineStateData }
+export type TAction = (...args: any[]) => void
+export type TActionReference = {
+  isOnEnterAction: boolean,
+  isOnExitAction: boolean,
+  fromState: string,
+  event: string | null,
+  index: number
+}
+export type TActionHandle = {
+  reference: TActionReference | null
+}
+export type TTransition<T, R> = {
+  from: T,
+  to: T,
+  on: R
+}
+export type TInitializer<T extends string, R extends string> = {
+  initialState: T,
+  transitions: TTransition<T, R>[]
+}
+

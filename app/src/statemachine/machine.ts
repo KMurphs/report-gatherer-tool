@@ -1,133 +1,363 @@
-import { TMachineDefinition, TMachineStates } from "./types";
+import { TAction, TActionHandle, TTransition, TInitializer } from "./types"
 
-// https://stackoverflow.com/questions/39372804/how-to-loop-through-enum-values-for-display-in-radio-buttons
-export class StateMachine<T, R>{
 
-  private currentState: T;
-  private definition: TMachineDefinition;
-  private handleSeparator: string = "::";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export class TIntTransition<T extends string> {
+  private to: T;
+  private from: string;
+  private on: string;
+  private actions: TAction[]
+  /**
+   *
+   */
+  constructor(fromState: string, toState: T, onEvent: string) {
+    
+    // Ensure that input params are valid
+    if(!fromState || fromState === "") throw new TypeError(`Provide Valid fromState '${fromState}' to create transition`);
+    if(!toState || toState === "") throw new TypeError(`Provide Valid toState '${toState}' to create transition`);
+    if(!onEvent || onEvent === "") throw new TypeError(`Provide Valid event '${onEvent}' to create transition`);
+
+    this.from = fromState;
+    this.to = toState;
+    this.on = onEvent;
+    
+    this.actions = [];
+  }
+
+
+  /** Add a function that will be called when a transition from
+   *  on state to another is made.
+   *
+   *  The handle is provided to be able to unregister the action 
+   *  later
+   * 
+   *  The Action is the function to be called
+   */
+  registerAction(action: TAction, handle?: TActionHandle){
+
+    if(typeof action !== 'function') throw new TypeError("Attempting to Register an Action that is not callable");
+    
+    // Add action to the action registry
+    this.actions.push(action);
+
+    // If handle is provided. Set it to the newly registered action
+    if(handle) handle.reference = { 
+      isOnEnterAction: false, 
+      isOnExitAction: false, 
+      fromState: this.from, 
+      event: this.on, 
+      index: this.actions.length - 1
+    }
+
+    // Transition Class Instance
+    return this;
+  }
+
+
+  /** Remove a function that was previously registered
+   */
+  unregisterAction(handle: TActionHandle): TIntTransition<T>{
+    if(!handle) throw new TypeError("Provide a valid handle to unregister 'onTransition' Action");
+    
+    this.actions[handle.reference.index] = ()=>{}
+    return this;
+  }
+
+  /** Get the target state of the transition
+   */
+  nextState(){ return this.to }
+
+
+  executeActions(){
+    this.actions.forEach(action => action())
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Type used internally in the TState Class. Tightly coupled with the class
+export type TActionNameSpace<T extends string, R extends string> = {
+  registerAction: (action: TAction, handle?: TActionHandle)=>TState<T, R>,
+  executeActions: () => void
+}
+
+
+export class TState<T extends string, R extends string> {
+
+  private transitions: {[key: string]: TIntTransition<T>};
+  private state: string;
+  private onEnterActions: TAction[];
+  private onExitActions: TAction[];
+  onEnter: TActionNameSpace<T, R>;
+  onExit: TActionNameSpace<T, R>;
   
 
-  constructor(initialState: T){
-    this.currentState = initialState;
-    this.definition = {};
+  constructor(state: string, transitions: TTransition<T, R>[]){
+    
+    this.transitions = {}
+    this.onEnterActions = []
+    this.onExitActions = []
 
-    const st = this.enumToString(this.currentState);
-    this.definition[st] = {
-      transitions: {},
-      onEnterActions: [],
-      onExitActions: [],
+    // Ensure that input params are valid
+    if(!state || state === "") throw new TypeError(`Provide Valid state '${state}' to create TState Instance`);
+
+    this.state = state;
+
+
+    // Handle transitions collection
+    transitions.forEach(transition => {
+      
+      const from = enumToString(transition.from)
+      const event = enumToString(transition.on)
+
+      // Ensure that input params are valid
+      if(!from || from === "") throw new TypeError(`Provide Valid state '${from}' to create Transition`);
+      if(!event || event === "") throw new TypeError(`Provide Valid event '${event}' to create Transition`);
+      if(!transition.to || transition.to === "") throw new TypeError(`Provide Valid target state '${transition.to}' to create Transition`);
+
+      this.transitions[event] = new TIntTransition(from, transition.to, event)
+    
+    })
+
+
+
+
+    // Namespace
+    this.onEnter = {
+      registerAction: (action: TAction, handle?: TActionHandle): TState<T, R> => {
+
+        if(typeof action !== 'function') throw new TypeError("Attempting to Register an Action that is not callable");
+        
+        // Add action to the action registry
+        this.onEnterActions.push(action);
+
+        // If handle is provided. Set it to the newly registered action
+        if(handle) handle.reference = { 
+          isOnEnterAction: true, 
+          isOnExitAction: false, 
+          fromState: this.state, 
+          event: null, 
+          index: this.onEnterActions.length - 1
+        }
+        
+        // TState Class Instance
+        return this;
+      },
+      executeActions: () => {
+        this.onEnterActions.forEach(action => action())
+      }
     }
-  }
 
 
+    // Namespace
+    this.onExit = {
+      registerAction: (action: TAction, handle?: TActionHandle): TState<T, R> => {
 
+        if(typeof action !== 'function') throw new TypeError("Attempting to Register an Action that is not callable");
 
-  addState(state: T){
-    const st = this.enumToString(state);
-    if(this.definition[st]) throw new TypeError(`machine state descriptions must to be unique: '${st}'`);
-    this.definition[st] = {
-      transitions: {},
-      onEnterActions: [],
-      onExitActions: [],
+        // Add action to the action registry
+        this.onExitActions.push(action);
+
+        // If handle is provided. Set it to the newly registered action
+        if(handle) handle.reference = { 
+          isOnEnterAction: false, 
+          isOnExitAction: true, 
+          fromState: this.state, 
+          event: null, 
+          index: this.onExitActions.length - 1
+        }
+    
+        // TState Class Instance
+        return this;
+      },
+      executeActions: () => {
+        this.onEnterActions.forEach(action => action())
+      }
     }
-  }
-  getCurrentState(): T{ return this.currentState; }
-
-
-
-
-  addTransition(fromState: T, toState: T, onEvent: R){
-
-    const evt = this.enumToString(onEvent)
-    const from = this.enumToString(fromState)
-    const to = this.enumToString(toState)
-
-    if(!this.definition[from]) throw new RangeError(`from-state '${from}' for transition is not recognized`);
-    if(!this.definition[to]) throw new RangeError(`to-state '${to}' for transition is not recognized`);
-    if(this.definition[from].transitions[evt]) throw new RangeError(`event '${evt}' is already registered for transition`);
-
-    this.definition[from].transitions[evt] = {
-      destination: (toState as unknown as string),
-      actions: []
-    };
+    
   }
 
 
+  // Namespace - sort of
+  onTransition(event: R){
+    let evt = enumToString(event)
+      
+    // Ensure that input params are valid
+    if(!evt || evt === "") throw new TypeError(`Failed to Access Transition On '${evt}' from state '${this.state}'. Event is invalid`);
+    if(!this.transitions[evt]) throw new TypeError(`Failed to Access Transition On '${evt}' from state '${this.state}'. Event is not supported`);
+    
+    // TintTransition Class Instance
+    return this.transitions[evt];
+  }
 
+  // Will unregister action in the TState or the subclass TIntTransition
+  unregisterAction(handle: TActionHandle): TState<T, R>{
+
+    if(!handle) throw new TypeError("Provide a valid handle to unregister Action")
+
+    // Deregister onEnter Action
+    if(handle.reference.isOnEnterAction){
+      this.onEnterActions[handle.reference.index] = ()=>{}
+    }
+    // Deregister onExit Action
+    else if(handle.reference.isOnExitAction){
+      this.onExitActions[handle.reference.index] = ()=>{}
+    }
+    // Deregister onTransition Action
+    else if(handle.reference.event !== null){
+      this.transitions[handle.reference.event].unregisterAction(handle)
+    }
+
+    // TState Class Instance
+    return this;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export class StateMachine<Td extends string, T extends string, R extends string>{
+
+  private definitions: {[key: string]: TState<T, R>};
+  private currentState: T;
+
+  constructor(tState: { [key in Td]: string }, initObj: TInitializer<T, R>){
+    
+    this.currentState = initObj.initialState
+
+    // The next lines uses some magic to load all the states directly from the
+    // provided state enum. These states are then used to create TState Objects
+    // https://github.com/microsoft/TypeScript/issues/30611
+    // https://github.com/microsoft/TypeScript/issues/30611
+    this.definitions = {}
+    Object.values(tState)
+          .map(state => enumToString(state))
+          .forEach((state: string) => {
+      
+      // Collect transitions from the current state
+      let stateTransitions = initObj.transitions.filter(tr => enumToString(tr.from) === state)
+      // Instantiate TState Object for current state
+      this.definitions[state] = new TState(state, [...stateTransitions]);
+    })
+
+  }
 
 
   handleEvent(onEvent: R){
 
-    const evt = this.enumToString(onEvent);
-    const state = this.enumToString(this.currentState);
-
-    if(!this.definition[state]) throw RangeError(`current state '${state}' is not recognized`);
-    if(!this.definition[state].transitions[evt]) throw RangeError(`Event '${evt}' is not supported from current state '${state}'`);
-
-
-    this.definition[state].onExitActions.forEach(action => action())
-    this.definition[state].transitions[evt].actions.forEach(action => action())
-    this.definition[state].onEnterActions.forEach(action => action())
+    
+    // Ensure Current State is valid
+    if(this.currentState == null) throw TypeError(`machine must be initialized with a valid state.`);
+    const state = enumToString(this.currentState);
+    if(!this.definitions[state]) throw TypeError(`current state '${state}' is not recognized`);
 
 
-    this.currentState = this.definition[state].transitions[evt].destination as unknown as T
+    // Ensure event can be processed from this state
+    const evt = enumToString(onEvent);
+    const transition = this.definitions[state].onTransition(onEvent)
+    if(!transition) throw TypeError(`Event '${evt}' is not supported from current state '${state}'`);
+    
+
+    // Ensure we can get to next state
+    const nextState = transition.nextState() as unknown as T;
+    const to = enumToString(nextState);
+    if(!to || to === "") throw new TypeError(`Failed to Access Next State '${to}'. State is invalid`);
+    if(!this.definitions[to]) throw new TypeError(`Failed to Access Next State '${to}' for transition. State is not recognized`);
+
+
+    // Execute Actions
+    this.definitions[state].onExit.executeActions();
+    transition.executeActions();
+    this.definitions[to].onEnter.executeActions();
+
+
+    this.currentState = nextState
 
   }
 
 
+  // Will unregister action in the TState or the subclass TIntTransition
+  unregisterAction(handle: TActionHandle): StateMachine<Td, T, R>{
 
+    if(!handle) throw new TypeError("Provide a valid handle to unregister Action");
 
-
-
-  registerOnTransitionAction(fromState: T, onEvent: R, action: (...args: any[]) => void): string{
-
-    const evt = this.enumToString(onEvent)
-    const from = this.enumToString(fromState)
-
-    if(!this.definition[from]) throw new RangeError(`from-state '${from}' for transition is not recognized`);
-    if(!this.definition[from].transitions[evt]) throw new RangeError(`Event '${evt}' for transition from state '${from}' is not recognized`);
-
-    this.definition[from].transitions[evt].actions.push(action)
-    return btoa(`${from}${this.handleSeparator}${evt}${this.handleSeparator}${this.definition[from].transitions[evt].actions.length}`);
-  }
-  registerOnEnterAction(state: T, action: (...args: any[]) => void): string{
-    let from = this.enumToString(state)
-    if(!this.definition[from]) throw new RangeError(`from-state '${from}' is not recognized`);
-
-    this.definition[from].onEnterActions.push(action);
-    return btoa(`${state}${this.handleSeparator}${this.definition[from].onEnterActions.length}`);
-  }
-  registerOnExitAction(state: T, action: (...args: any[]) => void): string{
-    let from = this.enumToString(state)
-    if(!this.definition[from]) throw new RangeError(`from-state '${from}' is not recognized`);
-
-    this.definition[from].onExitActions.push(action);
-    return btoa(`${state}${this.handleSeparator}${this.definition[from].onExitActions.length}`);
-  }
-  unregisterOnTransitionAction(actionHandle: string){
-    const [fromState, onEvent, index] = atob(actionHandle).split(this.handleSeparator);
-    this.definition[fromState].transitions[onEvent].actions[Number(index)] = ()=>{}
-  }
-  unregisterOnEnterAction(actionHandle: string){
-    const [state, index] = atob(actionHandle).split(this.handleSeparator);
-    this.definition[state].onEnterActions[Number(index)] = ()=>{}
-  }
-  unregisterOnExitAction(actionHandle: string){
-    const [state, index] = atob(actionHandle).split(this.handleSeparator);
-    this.definition[state].onExitActions[Number(index)] = ()=>{}
+    // Defer actually implementation to the TState unregisterAction method
+    this.definitions[handle.reference.fromState].unregisterAction(handle);
+    
+    // StateMachine Class Instance
+    return this;
   }
 
 
+  // Sort of namespace for external use
+  state(state: T){
 
-
-
-
-
-
-  private enumToString<T>(state: T): string{
-    return (state as unknown as string).toLowerCase().replace(/ /g, "-");
+    let from = enumToString(state)
+    
+    // Ensure that input params are valid
+    if(!from || from === "") throw new TypeError(`Failed to Access State '${from}'. State is invalid`);
+    if(!this.definitions[from]) throw new TypeError(`Failed to Access State '${from}'. State is not recognized`);
+    
+    // TState Class Instance
+    return this.definitions[from]
   }
 
+}
 
-} 
+
+// While converting enum to string, the string values are sent back
+// One needs to make sure that we key use those as keys
+function enumToString<T>(state: T): string{
+  return (state as unknown as string).toLowerCase()
+                                     .replace(/ /g, "-");
+}
