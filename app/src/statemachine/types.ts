@@ -18,7 +18,7 @@ export enum TMachineEvents{
 } 
 
 
-export type TAction = (...args: any[]) => void
+export type TAction = (...args: any[]) => string|void
 export type TActionReference = {
   isOnEnterAction: boolean,
   isOnExitAction: boolean,

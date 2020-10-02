@@ -1,10 +1,10 @@
 import { StateMachine } from "./machine"
 import { TMachineEvents, TMachineStates } from "./types"
 
+const getMachine = (): StateMachine<TMachineStates, TMachineStates, TMachineEvents> => {
+  
+  let machine: StateMachine<TMachineStates, TMachineStates, TMachineEvents>
 
-let machine: StateMachine<TMachineStates, TMachineStates, TMachineEvents>
-beforeAll(()=>{
-  // let machine1 = new StateMachine(TMachineStates, { initialState: TMachineStates.SELECTING_PROJECT })
   machine = new StateMachine(TMachineStates, {
     initialState: TMachineStates.SELECTING_PROJECT,
     transitions: [
@@ -20,24 +20,38 @@ beforeAll(()=>{
     ]
   });
 
-  // machine.state(TMachineStates.SELECTING_PROJECT).onEnter.registerAction(()=>void, handle)
-  // machine.state(TMachineStates.SELECTING_PROJECT).onExit.registerAction(()=>void, handle)
-  // machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_RESET).registerAction(()=>void, handle)
+  let counter: number = 0;
+    
+  machine.state(TMachineStates.SELECTING_PROJECT).onExit.registerAction(()=> `Action ${counter++}`)
+  machine.state(TMachineStates.SELECTING_PROJECT).onExit.registerAction(()=> `Action ${counter++}`)
+  machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_PROJECT_SELECTED).registerAction(()=> `Action ${counter++}`)
+  machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_PROJECT_SELECTED).registerAction(()=> `Action ${counter++}`)
+  machine.state(TMachineStates.CONFIGURING_PROCESS).onEnter.registerAction(()=> `Action ${counter++}`)
+  machine.state(TMachineStates.CONFIGURING_PROCESS).onEnter.registerAction(()=> {})
 
-  machine.state(TMachineStates.SELECTING_PROJECT).onEnter.registerAction(()=>{}, null)
-  machine.state(TMachineStates.SELECTING_PROJECT).onTransition(TMachineEvents.ON_PROJECT_SELECTED).registerAction(()=>{}, null)
 
-  machine.handleEvent(TMachineEvents.ON_PROJECT_SELECTED);
+  return machine;
+}
 
-
-  // console.log(machine);
-
+beforeAll(()=>{
+  // let machine1 = new StateMachine(TMachineStates, { initialState: TMachineStates.SELECTING_PROJECT })
 })
 
 
 
 describe("Machine State functionality", ()=>{
-  test("Dummy", ()=>{
-    expect(0).toBe(0);
+  test("Will execute actions from onEnter, onExit and Transition. Will update current state", ()=>{
+
+    let machine = getMachine();
+    let res = machine.handleEvent(TMachineEvents.ON_PROJECT_SELECTED);
+
+    expect(res.length).toBe(6);
+    expect(machine.getCurrentState()).toBe(TMachineStates.CONFIGURING_PROCESS);
+    res.forEach((r, i)=> expect(r).toBe(i < 5 ? `Action ${i}` : undefined));
+  })
+
+  test("Will not handle events not registered with current state", ()=>{
+    let machine = getMachine();
+    expect(()=>machine.handleEvent(TMachineEvents.ON_VIEW)).toThrowError(TypeError);
   })
 })

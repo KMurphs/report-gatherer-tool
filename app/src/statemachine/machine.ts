@@ -84,8 +84,8 @@ export class TIntTransition<T extends string> {
   nextState(){ return this.to }
 
 
-  executeActions(){
-    this.actions.forEach(action => action())
+  executeActions(): any[]{
+    return this.actions.map(action => action())
   }
 }
 
@@ -112,7 +112,7 @@ export class TIntTransition<T extends string> {
 // Type used internally in the TState Class. Tightly coupled with the class
 export type TActionNameSpace<T extends string, R extends string> = {
   registerAction: (action: TAction, handle?: TActionHandle)=>TState<T, R>,
-  executeActions: () => void
+  executeActions: () => any[]
 }
 
 
@@ -177,8 +177,8 @@ export class TState<T extends string, R extends string> {
         // TState Class Instance
         return this;
       },
-      executeActions: () => {
-        this.onEnterActions.forEach(action => action())
+      executeActions: (): any[] => {
+        return this.onEnterActions.map(action => action())
       }
     }
 
@@ -204,8 +204,8 @@ export class TState<T extends string, R extends string> {
         // TState Class Instance
         return this;
       },
-      executeActions: () => {
-        this.onEnterActions.forEach(action => action())
+      executeActions: (): any[] => {
+        return this.onExitActions.map(action => action())
       }
     }
     
@@ -219,7 +219,7 @@ export class TState<T extends string, R extends string> {
     // Ensure that input params are valid
     if(!evt || evt === "") throw new TypeError(`Failed to Access Transition On '${evt}' from state '${this.state}'. Event is invalid`);
     if(!this.transitions[evt]) throw new TypeError(`Failed to Access Transition On '${evt}' from state '${this.state}'. Event is not supported`);
-    
+
     // TintTransition Class Instance
     return this.transitions[evt];
   }
@@ -270,6 +270,7 @@ export class StateMachine<Td extends string, T extends string, R extends string>
 
   private definitions: {[key: string]: TState<T, R>};
   private currentState: T;
+  getCurrentState(): T { return this.currentState; }
 
   constructor(tState: { [key in Td]: string }, initObj: TInitializer<T, R>){
     
@@ -293,7 +294,7 @@ export class StateMachine<Td extends string, T extends string, R extends string>
   }
 
 
-  handleEvent(onEvent: R){
+  handleEvent(onEvent: R): any[]{
 
     
     // Ensure Current State is valid
@@ -316,13 +317,15 @@ export class StateMachine<Td extends string, T extends string, R extends string>
 
 
     // Execute Actions
-    this.definitions[state].onExit.executeActions();
-    transition.executeActions();
-    this.definitions[to].onEnter.executeActions();
+    let ret: any[] = []
+    ret = [...ret, ...this.definitions[state].onExit.executeActions()];
+    ret = [...ret, ...transition.executeActions()];
+    ret = [...ret, ...this.definitions[to].onEnter.executeActions()];
 
 
     this.currentState = nextState
 
+    return ret;
   }
 
 
