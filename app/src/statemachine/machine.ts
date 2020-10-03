@@ -57,13 +57,8 @@ export class TIntTransition<T extends string> {
     this.actions.push(action);
 
     // If handle is provided. Set it to the newly registered action
-    if(handle) handle.reference = { 
-      isOnEnterAction: false, 
-      isOnExitAction: false, 
-      fromState: this.from, 
-      event: this.on, 
-      index: this.actions.length - 1
-    }
+    if(handle) handle.setReference(this.actions.length - 1, this.from, false, false, this.on)
+
 
     // Transition Class Instance
     return this;
@@ -75,7 +70,7 @@ export class TIntTransition<T extends string> {
   unregisterAction(handle: TActionHandle): TIntTransition<T>{
     if(!handle) throw new TypeError("Provide a valid handle to unregister 'onTransition' Action");
     
-    this.actions[handle.reference.index] = ()=>{}
+    this.actions[handle.getReference().index] = ()=>{}
     return this;
   }
 
@@ -166,13 +161,8 @@ export class TState<T extends string, R extends string> {
         this.onEnterActions.push(action);
 
         // If handle is provided. Set it to the newly registered action
-        if(handle) handle.reference = { 
-          isOnEnterAction: true, 
-          isOnExitAction: false, 
-          fromState: this.state, 
-          event: null, 
-          index: this.onEnterActions.length - 1
-        }
+        if(handle) handle.setReference(this.onEnterActions.length - 1, this.state, true, false) 
+
         
         // TState Class Instance
         return this;
@@ -193,13 +183,7 @@ export class TState<T extends string, R extends string> {
         this.onExitActions.push(action);
 
         // If handle is provided. Set it to the newly registered action
-        if(handle) handle.reference = { 
-          isOnEnterAction: false, 
-          isOnExitAction: true, 
-          fromState: this.state, 
-          event: null, 
-          index: this.onExitActions.length - 1
-        }
+        if(handle) handle.setReference(this.onExitActions.length - 1, this.state, false, true) 
     
         // TState Class Instance
         return this;
@@ -230,16 +214,16 @@ export class TState<T extends string, R extends string> {
     if(!handle) throw new TypeError("Provide a valid handle to unregister Action")
 
     // Deregister onEnter Action
-    if(handle.reference.isOnEnterAction){
-      this.onEnterActions[handle.reference.index] = ()=>{}
+    if(handle.getReference().isOnEnterAction){
+      this.onEnterActions[handle.getReference().index] = ()=>{}
     }
     // Deregister onExit Action
-    else if(handle.reference.isOnExitAction){
-      this.onExitActions[handle.reference.index] = ()=>{}
+    else if(handle.getReference().isOnExitAction){
+      this.onExitActions[handle.getReference().index] = ()=>{}
     }
     // Deregister onTransition Action
-    else if(handle.reference.event !== null){
-      this.transitions[handle.reference.event].unregisterAction(handle)
+    else if(handle.getReference().event !== null){
+      this.transitions[handle.getReference().event].unregisterAction(handle)
     }
 
     // TState Class Instance
@@ -335,7 +319,7 @@ export class StateMachine<Td extends string, T extends string, R extends string>
     if(!handle) throw new TypeError("Provide a valid handle to unregister Action");
 
     // Defer actually implementation to the TState unregisterAction method
-    this.definitions[handle.reference.fromState].unregisterAction(handle);
+    this.definitions[handle.getReference().fromState].unregisterAction(handle);
     
     // StateMachine Class Instance
     return this;
