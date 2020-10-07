@@ -1,0 +1,55 @@
+.d-flex{
+  display: flex;
+}
+.flex-column{
+  flex-direction: column;
+}
+.align-items-stretch{
+  align-self: stretch;
+}
+.mr-2{
+  margin-right: 1rem;
+}
+.mt-1{ margin-top: .5rem; }
+.mb-1{ margin-bottom: .5rem; }
+.mb-2{ margin-bottom: 1rem; }
+
+
+
+
+*, *::before, *::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+
+
+body{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+.item{
+  margin: .5rem;
+  padding: .5rem;
+  /* max-width: 500px; */
+  min-width: 450px;
+  background-color: #eee;
+}
+.item-req{
+  /* margin: .5rem; */
+}
+
+.item-req input[type="text"]{
+  width: 100%;
+}
+.item-res{
+  /* margin: .5rem; */
+  min-height: 50px;
+  background-color: #e0e0e0;
+}
