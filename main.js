@@ -22,10 +22,15 @@ wsServer.on('request', function(request) {
 
     connection.on('message', function(message) {
       console.log('Received Message:', message.utf8Data);
-      
+
       let payload = WebSocketMessage.fromString(message.utf8Data)
       payload.data = "received"
       connection.sendUTF(payload.toMessage());
+
+      setTimeout(()=>{
+        let payload = WebSocketMessage("third-party-event", "some-data");
+        connection.sendUTF(payload.toMessage());
+      }, 1000)
 
     });
 
