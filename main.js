@@ -3,8 +3,8 @@ const http = require('http');
 const WebSocketServer = require('websocket').server;
 
 
-const { WebSocketMessage } = require("./ws-message")
-const { AppRequestContext } = require("./app.request.helpers")
+const { WebSocketMessage } = require("./helpers/ws.message.helper")
+const { AppRequestContext } = require("./helpers/app.request.helpers")
 const { greetings } = require("./event.handlers/greetings.handler")
 const { config } = require("./event.handlers/config.handler")
 

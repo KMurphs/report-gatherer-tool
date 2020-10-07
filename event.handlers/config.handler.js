@@ -1,5 +1,5 @@
 
-const { WebSocketMessage } = require("../ws-message")
+const { WebSocketMessage } = require("../helpers/ws.message.helper")
 
 const config = {
   data: null,

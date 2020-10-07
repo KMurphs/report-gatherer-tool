@@ -1,4 +1,4 @@
-const { WebSocketMessage } = require("./ws-message")
+const { WebSocketMessage } = require("./ws.message.helper")
 
 
 class AppRequestContext{
