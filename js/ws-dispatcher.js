@@ -32,6 +32,8 @@ socket.bind('some_event', function(data){
 socket.send( 'some_event', {name: 'ismael', message : 'Hello world'} );
 */
 
+const { WebSocketMessage } = require("../../backend/helpers/ws.message.helper");
+
 const DEBUG = 1
 
 
@@ -46,20 +48,18 @@ const DEBUG = 1
 
 
 function WebSocketWithDispatch(iWSMsg, url){
+
   
+  // we don't want to work directly with WebSocketMessage object. 
+  // expect an object 'iWSMsg' that behaves like WebSocketMessage (aka implement the same interface) then
+  // Simulate the compiler complaining when the object does not have expected properties and methods
   if(!iWSMsg) throw new TypeError("Please Provide Valid Message Class Object");
-  
-  // // This option is better. only assume a javascript obj. BUT This is not adequate
-  // The prototype funciton (accessible by all at any time), becomes linked to the _id of a specfic instance
-  // if(!iWSMsg.prototype) throw new TypeError("Please Provide Valid Message Class Object");
-  // if(typeof iWSMsg.prototype.toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
-  
-  // This option not so much. must know that the function can only be accessed from an instance  
-  if(typeof (new WebSocketMessage("from-any-valid-event")).toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
-  if(typeof new WebSocketMessage("from-any-valid-event").toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  if(typeof (new iWSMsg("from-any-valid-event")).toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  if(typeof new iWSMsg("from-any-valid-event").toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
   
 
   if(!url) throw new TypeError("Please Provide URL of server");
+
 
   this.conn = null;
   this.callbacks = {};
@@ -68,16 +68,19 @@ function WebSocketWithDispatch(iWSMsg, url){
 
 WebSocketWithDispatch.prototype.version = "1.0";
 WebSocketWithDispatch.prototype.bind = function(event_name, callback){
+  // Allows an app component to register for an event by passing 'callback'
   this.callbacks[event_name] = this.callbacks[event_name] || [];
   this.callbacks[event_name].push(callback);
   return this; // chainable
 };
 WebSocketWithDispatch.prototype.send = function(event_name, event_data){
-  const payload = new WebSocketMessage(event_name, event_data).toMessage();
+  // Allows an app component to send a message to the server
+  const payload = new iWSMsg(event_name, event_data).toMessage();
   this.conn.send( payload ); // <= send JSON data to socket server
   return this;
 };
 WebSocketWithDispatch.prototype.dispatch = function(event_name, message){
+  // When a message is received for an event, call all callbacks registered with the event
   var chain = this.callbacks[event_name];
   if(typeof chain == 'undefined') return; // no callbacks for this event
   for(var i = 0; i < chain.length; i++){
@@ -85,29 +88,32 @@ WebSocketWithDispatch.prototype.dispatch = function(event_name, message){
   }
 }
 WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onCloseCb, onErrorCb){
-
   return new Promise(function(resolve, reject){
+    
     
     this.conn = new WebSocket(this.url);
 
 
 		this.conn.onopen = function(evt) {
-
       // dispatch close connection event to anyone suscribed
       this.dispatch('close', null)
 
 			if(DEBUG === 1)console.debug('Socket is established with remote server');
 			if(onOpenCb) onOpenCb();
-			resolve();
+      resolve();
+      
     }.bind(this);
     
 
 
 		this.conn.onmessage = function(evt) {
-
       // dispatch to the right handlers
-      var json = JSON.parse(evt.data)
-      this.dispatch(json.event, json.data)
+      const json = JSON.parse(evt.data)
+      let { event, data } = json
+      
+      // if reply strip out anything else (related to the response being a reply). Send up only the data
+      if(data && data.reply) data = data.reply;
+      this.dispatch(event, data)
 
       if(onMessageCb) onMessageCb();
 			if(DEBUG === 1)console.debug('Remote Device sent: ', JSON.parse(evt.data));
@@ -117,14 +123,13 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
 
 
 		this.conn.onclose = function(evt) {
-      
       // dispatch close connection event to anyone suscribed
       this.dispatch('close', null)
 
       if(onCloseCb) onCloseCb();
       console.warn('Socket is closed: ', evt.reason || 'No Reason Provided');
-      
       reject();
+
 		}.bind(this);
 
 
@@ -136,7 +141,7 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
 			if(onErrorCb) onErrorCb(evt);
       console.error('Socket in error state: ', evt.reason || 'No Reason Provided', '\n Closing');
       this.conn.close();
-      
+
 		}).bind(this)
 
 
