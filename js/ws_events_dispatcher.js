@@ -36,38 +36,92 @@ socket.send( 'some_event', {name: 'ismael', message : 'Hello world'} );
 
 
 
-var FancyWebSocket = function(url){
-
-  var conn = new WebSocket(url);
-
-  var callbacks = {};
-
-  this.bind = function(event_name, callback){
-    callbacks[event_name] = callbacks[event_name] || [];
-    callbacks[event_name].push(callback);
-    return this;// chainable
-  };
-
-  this.send = function(event_name, event_data){
-    var payload = JSON.stringify({event:event_name, data: event_data});
-    conn.send( payload ); // <= send JSON data to socket server
-    return this;
-  };
-
-  // dispatch to the right handlers
-  conn.onmessage = function(evt){
-    var json = JSON.parse(evt.data)
-    dispatch(json.event, json.data)
-  };
-
-  conn.onclose = function(){dispatch('close',null)}
-  conn.onopen = function(){dispatch('open',null)}
-
-  var dispatch = function(event_name, message){
-    var chain = callbacks[event_name];
-    if(typeof chain == 'undefined') return; // no callbacks for this event
-    for(var i = 0; i < chain.length; i++){
-      chain[i]( message )
-    }
-  }
+function WebSocketWithDispatch(url){
+  
+  if(!url) throw new TypeError("Please Provide URL of server");
+  this.conn = null;
+  this.callbacks = {};
+  this.url = url;
 };
+
+WebSocketWithDispatch.prototype.version = "1.0";
+WebSocketWithDispatch.prototype.bind = function(event_name, callback){
+  this.callbacks[event_name] = callbacks[event_name] || [];
+  this.callbacks[event_name].push(callback);
+  return this; // chainable
+};
+WebSocketWithDispatch.prototype.send = function(event_name, event_data){
+  const payload = JSON.stringify({event: event_name, data: event_data, msg_id: new Date().getTime()});
+  this.conn.send( payload ); // <= send JSON data to socket server
+  return this;
+};
+WebSocketWithDispatch.prototype.dispatch = function(event_name, message){
+  var chain = this.callbacks[event_name];
+  if(typeof chain == 'undefined') return; // no callbacks for this event
+  for(var i = 0; i < chain.length; i++){
+    chain[i]( message )
+  }
+}
+WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onCloseCb, onErrorCb){
+
+  return new Promise(function(resolve, reject){
+    
+    this.conn = new WebSocket(this.url);
+
+
+		this.conn.onopen = function(evt) {
+
+      // dispatch close connection event to anyone suscribed
+      this.dispatch('close', null)
+
+			console.log('Socket is established with remote server');
+			if(onOpenCb) onOpenCb();
+			resolve();
+    }.bind(this);
+    
+
+
+		this.conn.onmessage = function(evt) {
+
+      // dispatch to the right handlers
+      var json = JSON.parse(evt.data)
+      this.dispatch(json.event, json.data)
+
+      if(onMessageCb) onMessageCb();
+			console.log('Remote Device sent: ', evt);
+    }.bind(this);  
+    
+
+
+
+		this.conn.onclose = function(evt) {
+      
+      // dispatch close connection event to anyone suscribed
+      this.dispatch('close', null)
+
+      if(onCloseCb) onCloseCb();
+      console.log('Socket is closed: ', evt.reason);
+      
+      reject();
+		}.bind(this);
+
+
+
+
+
+		this.conn.onerror = (function(evt) {
+
+			if(onErrorCb) onErrorCb(evt);
+      console.log('Socket in error state: ', evt.reason, '\n Closing');
+      this.conn.close();
+      
+		}).bind(this)
+
+
+
+  }.bind(this))
+
+};
+
+
+
