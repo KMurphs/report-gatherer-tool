@@ -20,7 +20,7 @@ function WebSocketMessage(eventName, eventData){
   // Which means that any function that needs to use it must be defined
   // here
   // Use the scope and closure principles to achieve this 
-  const _id = new Date().getTime()
+  let _id = new Date().getTime()
   this.message = {
     event: eventName, 
     data: eventData || "", 
@@ -28,10 +28,16 @@ function WebSocketMessage(eventName, eventData){
   }
 
 
-  // Construct to hide _id
+  // Construct to hide _id, event, data
   var messageObj = {}
   messageObj.toMessage = function(){
     return JSON.stringify({...this.message, _msgID: _id})
+  }.bind(this)
+  messageObj.getEvent = function(){
+    return this.message.event
+  }.bind(this)
+  messageObj.getData = function(){
+    return this.message.data
   }.bind(this)
   return messageObj;
 
@@ -53,26 +59,50 @@ function WebSocketMessage(eventName, eventData){
 //   // return null
 //   // return JSON.stringify({...this.message})
 // }
-WebSocketMessage.fromString = function(messageStr){
-  let messageObj = null;
-  try{
-    messageObj = JSON.parse(messageStr);
-  }
-  catch(err){
-    console.error(`Could not Parse Message: '${messageStr}': `, err);
-  }
+WebSocketMessage.buildReply = function(messageStr, replyObj = null){
 
 
-  let message = new WebSocketMessage(
-    messageObj && messageObj.event || null, 
-    messageObj && messageObj.data || null, 
+  let messagefromStr = null;
+  try{ messagefromStr = JSON.parse(messageStr); }
+  catch(err){ throw new Error(`Could not Parse Message: '${messageStr}': `, err); }
+
+
+  if(!messagefromStr || !messagefromStr.event || !messagefromStr._msgID) throw new Error('Received Invalid Message')
+
+  
+  let shadowMessage = new WebSocketMessage(
+    messagefromStr.event, 
+    {
+      isReply: true,
+      reply: replyObj || 'received'
+    }
   );
-  message._msgID = messageObj && messageObj._msgID || null
 
 
-  return message
+  // let userMessage = {}
+  // userMessage.toMessage = function(){
+  //   return shadowMessage.toMessage()
+  //                       .replace(/"_msgID":[0-9]*/, `"_msgID": ${messagefromStr._msgID}`)
+  // }
+
+  return shadowMessage.toMessage()
+                      .replace(/"_msgID":[0-9]*/, `"_msgID": ${messagefromStr._msgID}`)
+  // return userMessage
 }
 
 
+WebSocketMessage.fromString = function(messageStr){
+
+
+  let messagefromStr = null;
+  try{ messagefromStr = JSON.parse(messageStr); }
+  catch(err){ throw new Error(`Could not Parse Message: '${messageStr}': `, err); }
+
+
+  if(!messagefromStr || !messagefromStr.event || !messagefromStr._msgID) throw new Error('Received Invalid Message')
+  
+
+  return new WebSocketMessage(messagefromStr.event, messagefromStr.data)
+}
 
 module.exports = { WebSocketMessage }
