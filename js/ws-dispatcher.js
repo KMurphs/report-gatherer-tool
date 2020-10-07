@@ -32,13 +32,34 @@ socket.bind('some_event', function(data){
 socket.send( 'some_event', {name: 'ismael', message : 'Hello world'} );
 */
 
+const DEBUG = 0
 
 
 
 
-function WebSocketWithDispatch(url){
+
+
+
+
+
+
+
+
+function WebSocketWithDispatch(iWSMsg, url){
   
+  if(!iWSMsg) throw new TypeError("Please Provide Valid Message Class Object");
+  
+  // This option is better. only assume a javascript obj 
+  if(!iWSMsg.prototype) throw new TypeError("Please Provide Valid Message Class Object");
+  if(typeof iWSMsg.prototype.toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  
+  // This option not so much. must know that the function can only be accessed from an instance  
+  // if(typeof (new WebSocketMessage("from-any-valid-event")).toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  // if(typeof new WebSocketMessage("from-any-valid-event").toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  
+
   if(!url) throw new TypeError("Please Provide URL of server");
+
   this.conn = null;
   this.callbacks = {};
   this.url = url;
@@ -51,7 +72,7 @@ WebSocketWithDispatch.prototype.bind = function(event_name, callback){
   return this; // chainable
 };
 WebSocketWithDispatch.prototype.send = function(event_name, event_data){
-  const payload = JSON.stringify({event: event_name, data: event_data, msg_id: new Date().getTime()});
+  const payload = new WebSocketMessage(event_name, event_data).toMessage();
   this.conn.send( payload ); // <= send JSON data to socket server
   return this;
 };
@@ -74,7 +95,7 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
       // dispatch close connection event to anyone suscribed
       this.dispatch('close', null)
 
-			console.log('Socket is established with remote server');
+			if(DEBUG === 1)console.debug('Socket is established with remote server');
 			if(onOpenCb) onOpenCb();
 			resolve();
     }.bind(this);
@@ -88,7 +109,7 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
       this.dispatch(json.event, json.data)
 
       if(onMessageCb) onMessageCb();
-			console.log('Remote Device sent: ', evt);
+			if(DEBUG === 1)console.debug('Remote Device sent: ', JSON.parse(evt.data));
     }.bind(this);  
     
 
@@ -100,7 +121,7 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
       this.dispatch('close', null)
 
       if(onCloseCb) onCloseCb();
-      console.log('Socket is closed: ', evt.reason);
+      console.warn('Socket is closed: ', evt.reason || 'No Reason Provided');
       
       reject();
 		}.bind(this);
@@ -112,7 +133,7 @@ WebSocketWithDispatch.prototype.connect = function(onMessageCb, onOpenCb, onClos
 		this.conn.onerror = (function(evt) {
 
 			if(onErrorCb) onErrorCb(evt);
-      console.log('Socket in error state: ', evt.reason, '\n Closing');
+      console.error('Socket in error state: ', evt.reason || 'No Reason Provided', '\n Closing');
       this.conn.close();
       
 		}).bind(this)
