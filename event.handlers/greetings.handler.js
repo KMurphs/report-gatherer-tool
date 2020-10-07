@@ -2,10 +2,10 @@
 const greetings = {
   handle: function(appContext, data){
     
-    appContext.sendReply("received");
+    appContext.reply("received");
     
     setTimeout(()=>{
-      appContext.sendMessage("some-data", "third-party-event");
+      appContext.push("third-party-event", "some-data");
     }, 1000)
   }
 }

@@ -10,11 +10,11 @@ class AppRequestContext{
   }
 
 
-  sendReply(replyObj = "received"){ 
+  reply(replyObj = "received"){ 
     const payload = WebSocketMessage.buildReply(this.messageRef, replyObj); 
     this.connection.sendUTF(payload);
   };
-  sendMessage(data = null, event = null){ 
+  push(event = null, data = null){ 
     const payload = new WebSocketMessage(event || this.event, data); 
     this.connection.sendUTF(payload.toMessage());
   };
