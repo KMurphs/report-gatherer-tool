@@ -76,7 +76,7 @@ describe("Machine State functionality", ()=>{
     expect(res.length).toBe(6);
     res.forEach((r, i)=> expect(r).toBe(i < 5 ? `Action ${i}` : undefined));
   })
-  test("Will update current state", ()=>{
+  test("Will update current state on Valid Transition", ()=>{
 
     let machine = getMachine();
     machine.handleEvent(TMachineEvents.ON_PROJECT_SELECTED);
@@ -86,6 +86,7 @@ describe("Machine State functionality", ()=>{
 
     let machine = getMachine();
     expect(()=>machine.handleEvent(TMachineEvents.ON_VIEW)).toThrowError(TypeError);
+    expect(machine.getCurrentState()).toBe(TMachineStates.SELECTING_PROJECT);
   })
   test("Can Move back and forth between states on event", ()=>{
 
