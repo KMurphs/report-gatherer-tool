@@ -29,21 +29,29 @@ function WebSocketMessage(eventName, eventData){
 
 
   // Construct to hide _id
-  // var messageObj = {}
-  // messageObj.toMessage = function(){
-  //   return JSON.stringify({...this.message, _msgID: _id})
-  // }.bind(this)
-  // return messageObj;
+  var messageObj = {}
+  messageObj.toMessage = function(){
+    return JSON.stringify({...this.message, _msgID: _id})
+  }.bind(this)
+  return messageObj;
 
   // Construct to hide _id
-  WebSocketMessage.prototype.toMessage = function(){
-    // The id below will bind to the id of last elemt created
-    return JSON.stringify({...this.message, _msgID: _id}) 
-  }.bind(this)
+  // Current implementation of websocketmessage is not adequate. 
+  // the prototype funciton (accessible by all at any time), becomes 
+  // linked to the _id of a specfic instance
+  // WebSocketMessage.prototype.toMessage = function(){
+  //   // The id below will bind to the id of last elemt created
+  //   return JSON.stringify({...this.message, _msgID: _id}) 
+  // }.bind(this)
 
 }
+// can't use this: The implementation is not adequate. 
+// the prototype funciton (accessible by all at any time), becomes 
+// linked to the _id of a specfic instance
+// Predeclare prototype
 // WebSocketMessage.prototype.toMessage = function(){
-//   return JSON.stringify({...this.message})
+//   // return null
+//   // return JSON.stringify({...this.message})
 // }
 WebSocketMessage.fromString = function(messageStr){
   let messageObj = null;
