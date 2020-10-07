@@ -32,7 +32,7 @@ socket.bind('some_event', function(data){
 socket.send( 'some_event', {name: 'ismael', message : 'Hello world'} );
 */
 
-const DEBUG = 0
+const DEBUG = 1
 
 
 
