@@ -4,7 +4,9 @@ const WebSocketServer = require('websocket').server;
 
 
 const server = http.createServer();
-server.listen(9898);
+server.listen(9898, 'localhost', 0, ()=>{
+  console.log("Server Started at 'localhost:9898' ")
+});
 
 
 const wsServer = new WebSocketServer({
@@ -16,7 +18,13 @@ wsServer.on('request', function(request) {
     const connection = request.accept(null, request.origin);
     connection.on('message', function(message) {
       console.log('Received Message:', message.utf8Data);
-      connection.sendUTF('Hi this is WebSocket server!');
+      const payload = JSON.parse(message.utf8Data)
+      connection.sendUTF(JSON.stringify({
+        "event": payload.event,
+        "msg_id": payload.msg_id,
+        "data": "received",
+      }));
+      // connection.sendUTF('Hi this is WebSocket server!');
     });
     connection.on('close', function(reasonCode, description) {
         console.log('Client has disconnected.');
