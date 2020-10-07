@@ -49,13 +49,14 @@ function WebSocketWithDispatch(iWSMsg, url){
   
   if(!iWSMsg) throw new TypeError("Please Provide Valid Message Class Object");
   
-  // This option is better. only assume a javascript obj 
-  if(!iWSMsg.prototype) throw new TypeError("Please Provide Valid Message Class Object");
-  if(typeof iWSMsg.prototype.toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  // // This option is better. only assume a javascript obj. BUT This is not adequate
+  // The prototype funciton (accessible by all at any time), becomes linked to the _id of a specfic instance
+  // if(!iWSMsg.prototype) throw new TypeError("Please Provide Valid Message Class Object");
+  // if(typeof iWSMsg.prototype.toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
   
   // This option not so much. must know that the function can only be accessed from an instance  
-  // if(typeof (new WebSocketMessage("from-any-valid-event")).toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
-  // if(typeof new WebSocketMessage("from-any-valid-event").toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  if(typeof (new WebSocketMessage("from-any-valid-event")).toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
+  if(typeof new WebSocketMessage("from-any-valid-event").toMessage !== "function") throw new TypeError("Please Provide Valid Message Class Object - With toMessage Capability");
   
 
   if(!url) throw new TypeError("Please Provide URL of server");
