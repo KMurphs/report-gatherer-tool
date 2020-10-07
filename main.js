@@ -2,6 +2,8 @@
 const http = require('http');
 const WebSocketServer = require('websocket').server;
 
+const { WebSocketMessage } = require("./ws-message")
+
 
 const server = http.createServer();
 server.listen(9898, 'localhost', 0, ()=>{
@@ -15,17 +17,18 @@ const wsServer = new WebSocketServer({
 
 
 wsServer.on('request', function(request) {
+
     const connection = request.accept(null, request.origin);
+
     connection.on('message', function(message) {
       console.log('Received Message:', message.utf8Data);
-      const payload = JSON.parse(message.utf8Data)
-      connection.sendUTF(JSON.stringify({
-        "event": payload.event,
-        "msg_id": payload.msg_id,
-        "data": "received",
-      }));
-      // connection.sendUTF('Hi this is WebSocket server!');
+      
+      let payload = WebSocketMessage.fromString(message.utf8Data)
+      payload.data = "received"
+      connection.sendUTF(payload.toMessage());
+
     });
+
     connection.on('close', function(reasonCode, description) {
         console.log('Client has disconnected.');
     });
