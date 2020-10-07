@@ -68,7 +68,7 @@ function WebSocketWithDispatch(iWSMsg, url){
 
 WebSocketWithDispatch.prototype.version = "1.0";
 WebSocketWithDispatch.prototype.bind = function(event_name, callback){
-  this.callbacks[event_name] = callbacks[event_name] || [];
+  this.callbacks[event_name] = this.callbacks[event_name] || [];
   this.callbacks[event_name].push(callback);
   return this; // chainable
 };
