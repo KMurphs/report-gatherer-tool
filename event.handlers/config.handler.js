@@ -63,7 +63,7 @@ const config = {
 
     // it is mandatory that we know which project is of interest
     const project = data["project_name"];
-    if(!project || project == "") return sendMsgHelper.reply("'project_name' field is missing or empty");
+    if(typeof(project) !== 'string' || !project || project == "") return sendMsgHelper.reply("'project_name' field is missing or empty");
 
 
     // If unknown project name, create default
@@ -75,23 +75,52 @@ const config = {
 
 
     // merge with our copy of data
-    for(let key in data){
+    let key = null;
 
-
-      switch(key){
-        // Arrays
-        case "directories_to_look_for_reports":
-        case "tests_to_validate_reports":
-          config.data[project][key] = [...data[key]];
-          break;
-
-        // strings 
-        default:
-          config.data[project][key] = data[key];
-          break;
-      }
-
+    // Number
+    key = "order_number"
+    if(key in data){
+      if(typeof(data[key]) !== 'number' || !data[key] || data[key] == "") 
+        return sendMsgHelper.reply(`'${key}' field is invalid`);
+      config.data[project][key] = data[key];
     }
+
+    // String
+    key = "regex_template"
+    if(key in data){
+      if(typeof(data[key]) !== 'string' || !data[key] || data[key] == "") 
+        return sendMsgHelper.reply(`'${key}' field is invalid`);
+      config.data[project][key] = data[key];
+    }
+    key = "regex_template_placeholder"
+    if(key in data){
+      if(typeof(data[key]) !== 'string' || !data[key] || data[key] == "") 
+        return sendMsgHelper.reply(`'${key}' field is invalid`);
+      config.data[project][key] = data[key];
+    }
+
+    // Arrays
+    key = "directories_to_look_for_reports"
+    if(key in data){
+      if(typeof(data[key]) !== 'object' || !data[key] || !data[key].length || data[key].length == 0) 
+        return sendMsgHelper.reply(`'${key}' field is invalid`);
+      config.data[project][key] =[...data[key]];
+    }
+    key = "tests_to_validate_reports"
+    if(key in data){
+      if(typeof(data[key]) !== 'object' || !data[key] || !data[key].length || data[key].length == 0) 
+        return sendMsgHelper.reply(`'${key}' field is invalid`);
+      config.data[project][key] =[...data[key]];
+    }
+
+
+
+
+
+        
+
+
+    
 
     // Save updated data to file and send back new project data
     await fs.promises.writeFile(configFilePath, JSON.stringify(config.data))
@@ -177,7 +206,7 @@ const config = {
     regex_template_placeholder: "!xxserial_numberxx!",
     tests_to_validate_reports: [	
       { 
-        friendly_name: "test 1",
+        name: "test 1",
         css_selector: "button:nth-child(2)", 
         expected_value: "stop server" 
       }

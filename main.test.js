@@ -27,7 +27,9 @@ const sendMessageToServer = (msg, data, cb, closeCb, autoCloseConnection = true)
   return ws;
 }
 
-
+let configFind;
+let serialsToFind;
+let tests = [];
 beforeAll(() => {
   appFolder = createAppFolders();
   var fs = require('fs');
@@ -70,7 +72,7 @@ beforeAll(() => {
     }
   })
 
-
+  
   configFind = {
     from: [...locs],
     regexExpression: "^((Dummy_Test_File_).*(\\[{{serial_number}}\\]).*(\.html))$",
@@ -83,6 +85,10 @@ beforeAll(() => {
     serialsToFind.push(`serial_number_${i}`);
   }
   console.log(serialsToFind)
+
+
+  tests.push({css_selector: "div > div.class3", name: "Test 1", expected_value: "SOME Content"});
+  tests.push({css_selector: "div > div.class4", name: "Test 2", expected_value: "SOME Other Content"});
 });
 
 
@@ -190,89 +196,188 @@ describe('WebSocket Server Functionality', () => {
     }, done)
   
   })
+  test('Should handle update config with invalid regex template, placeholder, locations', async (done) => {
 
-
-
-  test('Should find report file for serial number', done => {
-
-    const event = 'find-sn'
+    const event = 'config'
     const project_name = 'test-project'
-    const serial_number = 123456789
-    let eventCounter = 0;
-    
-    const ws = sendMessageToServer(event, {project_name, serial_number}, (rEvent, rData) => {
-      console.log(rData, eventCounter);
+    const data = {
+      project_name: '',
+      order_number: null,
+      regex_template: "",
+      regex_template_placeholder: "",
+      directories_to_look_for_reports: [],
+      tests_to_validate_reports: []
 
-      if(eventCounter == 0){
-        eventCounter = eventCounter + 1;
+    }
 
+    await new Promise(resolve => {
+      sendMessageToServer(event, data, (rEvent, rData) => {
         expect(rEvent).toBe(event);
         expect(rData.isReply).toBe(true);
-        let r = new RegExp("^.*(processing){1}.*$")
+
+        let r = new RegExp("^.*(project_name){1}.*(missing){1}.*(empty){1}.*$")
         expect(r.test(rData.reply)).toBe(true);
-      }else{
+        resolve()
+      }, done)
+    })
 
+    await new Promise(resolve => {
+      data.project_name = project_name;
+      sendMessageToServer(event, data, (rEvent, rData) => {
         expect(rEvent).toBe(event);
         expect(rData.isReply).toBe(true);
-        console.log(rData.reply);
-        ws.close();
-        done();
-      }
 
-    }, done, false)
+        let r = new RegExp("^.*(order_number){1}.*(field){1}.*(invalid){1}.*$")
+        expect(r.test(rData.reply)).toBe(true);
+        resolve()
+      }, done)
+    })
 
-  })
+    await new Promise(resolve => {
+      data.order_number = 222222;
+      sendMessageToServer(event, data, (rEvent, rData) => {
+        expect(rEvent).toBe(event);
+        expect(rData.isReply).toBe(true);
 
+        let r = new RegExp("^.*(regex_template){1}.*(field){1}.*(invalid){1}.*$")
+        expect(r.test(rData.reply)).toBe(true);
+        resolve()
+      }, done)
+    })
 
-  test('Should handle invalid project name or serial number during request to find report file for serial number', done => {
+    await new Promise(resolve => {
+      data.regex_template = configFind.regexExpression;
+      sendMessageToServer(event, data, (rEvent, rData) => {
+        expect(rEvent).toBe(event);
+        expect(rData.isReply).toBe(true);
 
-    const event = 'find-sn'
-    const serial_number = 123456789
-    const project_name = 'test-project'
-    console.log(serial_number)
+        let r = new RegExp("^.*(regex_template_placeholder){1}.*(field){1}.*(invalid){1}.*$")
+        expect(r.test(rData.reply)).toBe(true);
+        resolve()
+      }, done)
+    })
     
-    sendMessageToServer(event, serial_number, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
+    await new Promise(resolve => {
+      data.regex_template_placeholder = configFind.regexPlaceholder;
+      sendMessageToServer(event, data, (rEvent, rData) => {
+        expect(rEvent).toBe(event);
+        expect(rData.isReply).toBe(true);
 
-      let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
-    sendMessageToServer(event, {project_name: "", serial_number: serial_number}, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
+        let r = new RegExp("^.*(directories_to_look_for_reports){1}.*(field){1}.*(invalid){1}.*$")
+        expect(r.test(rData.reply)).toBe(true);
+        resolve()
+      }, done)
+    })
+    
+    await new Promise(resolve => {
+      data.directories_to_look_for_reports = [...configFind.from];
+      sendMessageToServer(event, data, (rEvent, rData) => {
+        expect(rEvent).toBe(event);
+        expect(rData.isReply).toBe(true);
 
-      let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
-    sendMessageToServer(event, {project_name: project_name, serial_number: ""}, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
+        let r = new RegExp("^.*(tests_to_validate_reports){1}.*(field){1}.*(invalid){1}.*$")
+        expect(r.test(rData.reply)).toBe(true);
+        resolve()
+      }, done)
+    })
+        
+    await new Promise(resolve => {
+      data.tests_to_validate_reports = [...tests];
+      sendMessageToServer(event, data, (rEvent, rData) => {
+        expect(rEvent).toBe(event);
+        expect(rData.isReply).toBe(true);
 
-      let r = new RegExp("^.*(Serial){1}.*(Number){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
-    sendMessageToServer(event, {project_name: "", serial_number: ""}, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
 
-      let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
-    sendMessageToServer(event, {project_name: "", serial_number1: 123456789}, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
+        resolve()
+      }, done)
+    })
 
-      let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
-    sendMessageToServer(event, {project_name: project_name, serial_number1: 123456789}, (rEvent, rData) => {
-      expect(rEvent).toBe(event);
-      expect(rData.isReply).toBe(true);
+    
 
-      let r = new RegExp("^.*(Serial){1}.*(Number){1}.*(provided){1}.*(Invalid){1}.*$")
-      expect(r.test(rData.reply)).toBe(true);
-    }, done)
+
   })
 
+
+
+  // test('Should find report file for serial number', done => {
+
+  //   const event = 'find-sn'
+  //   const project_name = 'test-project'
+  //   const serial_number = 123456789
+  //   let eventCounter = 0;
+    
+  //   const ws = sendMessageToServer(event, {project_name, serial_number}, (rEvent, rData) => {
+  //     console.log(rData, eventCounter);
+
+  //     if(eventCounter == 0){
+  //       eventCounter = eventCounter + 1;
+
+  //       expect(rEvent).toBe(event);
+  //       expect(rData.isReply).toBe(true);
+  //       let r = new RegExp("^.*(processing){1}.*$")
+  //       expect(r.test(rData.reply)).toBe(true);
+  //     }else{
+
+  //       expect(rEvent).toBe(event);
+  //       expect(rData.isReply).toBe(true);
+  //       console.log(rData.reply);
+  //       ws.close();
+  //       done();
+  //     }
+
+  //   }, done, false)
+
+  // })
+
+
+  // test('Should handle invalid project name or serial number during request to find report file for serial number', done => {
+
+  //   const event = 'find-sn'
+  //   const serial_number = 123456789
+  //   const project_name = 'test-project'
+
+    
+  //   sendMessageToServer(event, serial_number, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  //   sendMessageToServer(event, {project_name: "", serial_number: serial_number}, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  //   sendMessageToServer(event, {project_name: project_name, serial_number: ""}, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Serial){1}.*(Number){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  //   sendMessageToServer(event, {project_name: "", serial_number: ""}, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  //   sendMessageToServer(event, {project_name: "", serial_number1: 123456789}, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Project){1}.*(Name){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  //   sendMessageToServer(event, {project_name: project_name, serial_number1: 123456789}, (rEvent, rData) => {
+  //     expect(rEvent).toBe(event);
+  //     expect(rData.isReply).toBe(true);
+
+  //     let r = new RegExp("^.*(Serial){1}.*(Number){1}.*(provided){1}.*(Invalid){1}.*$")
+  //     expect(r.test(rData.reply)).toBe(true);
+  //   }, done)
+  // })
 });
