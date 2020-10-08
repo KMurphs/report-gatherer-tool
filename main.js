@@ -5,7 +5,7 @@ const WebSocketServer = require('websocket').server;
 
 const { WebSocketMessage } = require("./helpers/ws.message.helper")
 const { AppSendMessageHelper } = require("./helpers/app.request.helpers")
-const { greetings } = require("./event.handlers/greetings.handler")
+const { ping } = require("./event.handlers/ping.handler")
 const { config } = require("./event.handlers/config.handler")
 
 
@@ -41,6 +41,7 @@ wsServer.on('request', function(request) {
       console.log('Received Message:', message.utf8Data);
       const payload = WebSocketMessage.fromString(message.utf8Data)
 
+
       const event = payload.getEvent();
       const data = payload.getData();
       const sendMsgHelper = new AppSendMessageHelper(connection, message.utf8Data, event);
@@ -48,7 +49,7 @@ wsServer.on('request', function(request) {
 
 
 
-      if(event === 'greetings') greetings.handle(sendMsgHelper, data)
+      if(event === 'ping') ping.handle(sendMsgHelper, data)
       else if(event === 'config') config.handle(sendMsgHelper, data)
       else console.warn(`Server received message with unknown event: '${event}'`);
   

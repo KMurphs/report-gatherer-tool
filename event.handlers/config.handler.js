@@ -19,7 +19,7 @@ const config = {
 
 
       // File does not exists, write defaults
-      if(!(await fs.promises.lstat(configFilePath)).isFile()){
+      if(!fs.existsSync(configFilePath) || !(await fs.promises.lstat(configFilePath)).isFile()){
         config.writeToFile(); 
       }
 
@@ -27,7 +27,7 @@ const config = {
       await fs.promises.readFile(configFilePath, { encoding: 'utf-8' })
 
       // cannot read file, backup existing file, write defaults
-      .catch(err => { 
+      .catch(async err => { 
         console.error(`Could not read file '${config.file}': `, err); 
 
         // backup existing file
@@ -61,16 +61,19 @@ const config = {
 
 
     // service current event data
-    if(typeof(data) === "string") {
+    if(typeof(data) !== "object") {
+
+      // If not valid string, return error message
+      const project = data;
+      if(typeof(project) !== "string" || !project || project == "") return sendMsgHelper.reply("'project_name' field is invalid");
 
       // If string in data, send our config data for the project in string
-      const project = data;
-
       if(!config.data[project]){ 
         // we don't know about this project, create it with defaults
         config.data[project] = config.defaults;
         config.data[project]["project_name"] = project;
       }
+
 
       // Save current data to file and send back new project data
       await fs.promises.writeFile(configFilePath, JSON.stringify(config.data))
@@ -85,7 +88,16 @@ const config = {
 
     // it is mandatory that we know which project is of interest
     const project = data["project_name"];
-    if(!project) sendMsgHelper.reply("'project_name' field is missing");
+    if(!project || project == "") return sendMsgHelper.reply("'project_name' field is missing or empty");
+
+
+    // If unknown project name, create default
+    if(!config.data[project]){ 
+      // we don't know about this project, create it with defaults
+      config.data[project] = config.defaults;
+      config.data[project]["project_name"] = project;
+    }
+
 
     // merge with our copy of data
     for(let key in data){
@@ -134,16 +146,16 @@ const config = {
   // defaults
   file: "config.model.json",
   defaults: {
-    "project_name": "tmp_project",
-    "order_number": "12",
-    "directories_to_look_for_reports": ["c:\\reports\\folder_a", "c:\\reports\\folder_b"],						
-    "regex_template": "(report_file).*(!xxserial_numberxx!).*(.html)$",
-    "regex_template_placeholder": "!xxserial_numberxx!",
-    "tests_to_validate_reports": [	
+    project_name: "tmp_project",
+    order_number: 12,
+    directories_to_look_for_reports: ["c:\\reports\\folder_a", "c:\\reports\\folder_b"],						
+    regex_template: "(report_file).*(!xxserial_numberxx!).*(.html)$",
+    regex_template_placeholder: "!xxserial_numberxx!",
+    tests_to_validate_reports: [	
       { 
-        "friendly_name": "test 1",
-        "css_selector": "button:nth-child(2)", 
-        "expected_value": "stop server" 
+        friendly_name: "test 1",
+        css_selector: "button:nth-child(2)", 
+        expected_value: "stop server" 
       }
     ]								
   }

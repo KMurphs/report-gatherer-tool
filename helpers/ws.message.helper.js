@@ -22,7 +22,7 @@ function WebSocketMessage(eventName, eventData){
   // here. Use the scope and closure principles to achieve this 
   let _id = new Date().getTime()
   this.message = {
-    event: eventName, 
+    event: eventName.toLowerCase(), 
     data: eventData || "", 
   }
 
