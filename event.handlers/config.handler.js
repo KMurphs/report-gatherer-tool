@@ -8,71 +8,46 @@ const config = {
 
   data: null,
 
+  getFindFileConfig: async function(project_name){
+    if(!config.data) await config.intializeData();
+    const {regex_template, regex_template_placeholder, directories_to_look_for_reports} = config.data[project_name]
+    return {regex_template, regex_template_placeholder, directories_to_look_for_reports}
+  },
+
+
+
+
+
+
+
+
+
   // Handle all incoming messages
   handle: async function(sendMsgHelper, data){
 
-    // absolute path of config file
+
+    // absolute path of config file.
+    // Ensure that config data is initialized
     const configFilePath = path.join(__dirname, config.file);
+    if(!config.data) await config.intializeData();
 
-    // if data is null, populate data from file or defaults
-    if(!config.data){
+    
 
-
-      // File does not exists, write defaults
-      if(!fs.existsSync(configFilePath) || !(await fs.promises.lstat(configFilePath)).isFile()){
-        config.writeToFile(); 
-      }
-
-      // Read config file
-      await fs.promises.readFile(configFilePath, { encoding: 'utf-8' })
-
-      // cannot read file, backup existing file, write defaults
-      .catch(async err => { 
-        console.error(`Could not read file '${config.file}': `, err); 
-
-        // backup existing file
-        try { await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json')) }
-        catch(err) { console.error(`Could not make a copy of '${config.file}': `, err) }
-        
-        // write defaults
-        config.writeToFile(); 
-      })
-
-      // Successfully read file. Convert content to json.
-      .then(data => config.data = data ? JSON.parse(data) : config.defaults)
-
-      // Could not convert to json, backup existing file, write defaults 
-      .catch(async err => { 
-        console.error(`Could not convert content of file '${config.file}' to json: `, err); 
-
-        // backup existing file
-        await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json'))
-
-        // write defaults
-        config.writeToFile(); 
-        config.data = config.defaults;
-      })
-
-
-      // data field is populated
-      console.log(config.data)
-    }
-
-
-
-    // service current event data
+    // Respond to get config command
+    // service current event data. 
     if(typeof(data) !== "object") {
 
       // If not valid string, return error message
       const project = data;
       if(typeof(project) !== "string" || !project || project == "") return sendMsgHelper.reply("'project_name' field is invalid");
-
+      
       // If string in data, send our config data for the project in string
       if(!config.data[project]){ 
         // we don't know about this project, create it with defaults
-        config.data[project] = config.defaults;
+        config.data[project] = {...config.defaults};
         config.data[project]["project_name"] = project;
       }
+
 
 
       // Save current data to file and send back new project data
@@ -82,7 +57,7 @@ const config = {
     
 
     
-
+    // Respond to update config command
     // Assume that data is an object
     // therefore merge it with our copy of config data
 
@@ -94,7 +69,7 @@ const config = {
     // If unknown project name, create default
     if(!config.data[project]){ 
       // we don't know about this project, create it with defaults
-      config.data[project] = config.defaults;
+      config.data[project] = {...config.defaults};
       config.data[project]["project_name"] = project;
     }
 
@@ -140,6 +115,55 @@ const config = {
     return fs.promises.writeFile(path.join(__dirname, config.file), JSON.stringify(data || defaultObj))
              .catch(err => console.error(err))
   },
+  intializeData: async function(){
+    // if data is null, populate data from file or defaults
+
+
+    // absolute path of config file
+    const configFilePath = path.join(__dirname, config.file);
+
+    // File does not exists, write defaults
+    if(!fs.existsSync(configFilePath) || !(await fs.promises.lstat(configFilePath)).isFile()){
+      config.writeToFile(); 
+    }
+
+    // Read config file
+    await fs.promises.readFile(configFilePath, { encoding: 'utf-8' })
+
+    // cannot read file, backup existing file, write defaults
+    .catch(async err => { 
+      console.error(`Could not read file '${config.file}': `, err); 
+
+      // backup existing file
+      try { await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json')) }
+      catch(err) { console.error(`Could not make a copy of '${config.file}': `, err) }
+        
+      // write defaults
+      config.writeToFile(); 
+    })
+
+    // Successfully read file. Convert content to json.
+    .then(data => config.data = data ? JSON.parse(data) : config.defaults)
+
+    // Could not convert to json, backup existing file, write defaults 
+    .catch(async err => { 
+      console.error(`Could not convert content of file '${config.file}' to json: `, err); 
+
+      // backup existing file
+      await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json'))
+
+      // write defaults
+      config.writeToFile(); 
+      config.data = config.defaults;
+    })
+
+
+    // data field is populated
+    console.log(config.data)
+  },
+
+
+
 
 
 

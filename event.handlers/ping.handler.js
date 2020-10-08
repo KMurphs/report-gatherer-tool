@@ -1,11 +1,11 @@
 
 const ping = {
-  handle: function(appContext, data){
+  handle: function(sendMsgHelper, data){
     
-    appContext.reply("PONG");
+    sendMsgHelper.reply("PONG");
     
     // setTimeout(()=>{
-    //   appContext.push("third-party-event", "some-data");
+    //   sendMsgHelper.push("third-party-event", "some-data");
     // }, 1000)
   }
 }

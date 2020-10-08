@@ -4,9 +4,10 @@ const WebSocketServer = require('websocket').server;
 
 
 const { WebSocketMessage } = require("./helpers/ws.message.helper")
-const { AppSendMessageHelper } = require("./helpers/app.request.helpers")
+const { AppSendMessageHelper } = require("./helpers/app.request.helper")
 const { ping } = require("./event.handlers/ping.handler")
 const { config } = require("./event.handlers/config.handler")
+const { findFile } = require("./event.handlers/find.sn.file.handler")
 
 
 
@@ -51,6 +52,7 @@ wsServer.on('request', function(request) {
 
       if(event === 'ping') ping.handle(sendMsgHelper, data)
       else if(event === 'config') config.handle(sendMsgHelper, data)
+      else if(event === 'find-sn') findFile.handle(sendMsgHelper, data)
       else console.warn(`Server received message with unknown event: '${event}'`);
   
       

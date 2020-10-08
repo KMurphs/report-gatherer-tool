@@ -18,6 +18,7 @@ class AppSendMessageHelper{
   };
   push(event = null, data = null){ 
     const payload = new WebSocketMessage(event || this.event, data); 
+    console.log(payload.toMessage())
     this.connection.sendUTF(payload.toMessage());
   };
 
