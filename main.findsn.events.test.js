@@ -44,40 +44,45 @@ describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
 
 
     let ws = null
+    const r1 = new RegExp("^.*(processing){1}.*$");
+    const r2 = new RegExp(
+      configFind.regexExpression.replace(
+        configFind.regexPlaceholder, 
+        serial_number
+      )
+    );
+
+
+
+
     ws = sendMessageToServer(event, {project_name: project_name, serial_number: serial_number}, (rEvent, rData) => {
+
       eventCounter = eventCounter + 1;
+
       if(eventCounter === 0){
 
         expect(rEvent).toBe(event);
         expect(rData.isReply).toBe(true);
-        const r = new RegExp("^.*(processing){1}.*$")
-        expect(r.test(rData.reply)).toBe(true);
-        // console.log(eventCounter)
-      }else{
-        // console.log(rEvent, rData);
-        
-        expect(rEvent).toBe(event);
+        expect(r1.test(rData.reply)).toBe(true);
 
-        const r = new RegExp(
-          configFind.regexExpression.replace(
-            configFind.regexPlaceholder, 
-            serial_number
-          )
-        );
-        expect(r.test(rData.name)).toBe(true);
+      }else{
+
+        expect(rEvent).toBe(event);
+        expect(r2.test(rData.name)).toBe(true);
         expect(fs.existsSync(rData.path)).toBe(true);
 
-        // console.log(eventCounter);
         eventCounter = eventCounter + 1;
       }
+    }, null, false)
 
 
-    }, false)
 
 
+    // Wait for both the reply and the subsequent 
+    // push message when serial number is found
     await new Promise((resolve)=>{
       setTimeout(()=>{
-        if(eventCounter >= 2){/*console.log("++++++", eventCounter);*/resolve();}
+        if(eventCounter >= 2){ resolve(); }
       }, 1000)
     })
 
@@ -87,6 +92,28 @@ describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
     
 
   })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   test('Should handle invalid project name or serial number during request to find report file for serial number', done => {

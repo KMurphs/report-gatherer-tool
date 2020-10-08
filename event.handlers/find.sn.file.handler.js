@@ -48,7 +48,9 @@ const findFile = {
 
     // Notify the client that server is processing request
     sendMsgHelper.reply("processing");
-
+    await new Promise(resolve => {
+      setTimeout(()=>resolve())
+    }, 200)
 
 
 
