@@ -8,66 +8,107 @@ const config = {
 
   data: null,
 
+  // Handle all incoming messages
+  handle: async function(sendMsgHelper, data){
 
-  handle: async function(appContext, data){
-
-
+    // absolute path of config file
     const configFilePath = path.join(__dirname, config.file);
 
-
-    // if data is null read config file
+    // if data is null, populate data from file or defaults
     if(!config.data){
 
+
+      // File does not exists, write defaults
+      if(!(await fs.promises.lstat(configFilePath)).isFile()){
+        config.writeToFile(); 
+      }
+
+      // Read config file
       await fs.promises.readFile(configFilePath, { encoding: 'utf-8' })
-      .catch(err => { console.error(`Could not read file '${config.file}': `, err); config.writeToFile(); })
+
+      // cannot read file, backup existing file, write defaults
+      .catch(err => { 
+        console.error(`Could not read file '${config.file}': `, err); 
+
+        // backup existing file
+        try { await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json')) }
+        catch(err) { console.error(`Could not make a copy of '${config.file}': `, err) }
+        
+        // write defaults
+        config.writeToFile(); 
+      })
+
+      // Successfully read file. Convert content to json.
       .then(data => config.data = data ? JSON.parse(data) : config.defaults)
+
+      // Could not convert to json, backup existing file, write defaults 
       .catch(async err => { 
         console.error(`Could not convert content of file '${config.file}' to json: `, err); 
+
+        // backup existing file
         await fs.promises.copyFile(configFilePath, configFilePath.replace(/json$/, 'backup.json'))
+
+        // write defaults
         config.writeToFile(); 
         config.data = config.defaults;
       })
 
+
+      // data field is populated
+      console.log(config.data)
     }
-    console.log(config.data)
 
 
-    // If string in data, send our config data for the project in string
+
+    // service current event data
     if(typeof(data) === "string") {
+
+      // If string in data, send our config data for the project in string
       const project = data;
+
       if(!config.data[project]){ 
+        // we don't know about this project, create it with defaults
         config.data[project] = config.defaults;
         config.data[project]["project_name"] = project;
       }
+
+      // Save current data to file and send back new project data
       await fs.promises.writeFile(configFilePath, JSON.stringify(config.data))
-      return appContext.reply(config.data[project]); 
+      return sendMsgHelper.reply(config.data[project]); 
     }
     
 
+    
 
+    // Assume that data is an object
+    // therefore merge it with our copy of config data
 
-    // else merge with our copy of config data
+    // it is mandatory that we know which project is of interest
     const project = data["project_name"];
-    if(!project) appContext.reply("'project_name' field is missing");
+    if(!project) sendMsgHelper.reply("'project_name' field is missing");
 
+    // merge with our copy of data
     for(let key in data){
 
-      console.log(key);
 
       switch(key){
+        // Arrays
         case "directories_to_look_for_reports":
         case "tests_to_validate_reports":
           config.data[project][key] = [...data[key]];
           break;
 
+        // strings 
         default:
           config.data[project][key] = data[key];
           break;
       }
 
     }
+
+    // Save updated data to file and send back new project data
     await fs.promises.writeFile(configFilePath, JSON.stringify(config.data))
-    return appContext.reply(config.data[project]); 
+    return sendMsgHelper.reply(config.data[project]); 
 
   },
 
@@ -77,13 +118,20 @@ const config = {
 
 
 
-  writeToFile: function( data = null ){
+  writeToFile: function( data ){
+
+    // In case data is null, prepare the object with default values
     let defaultObj = {}
     !data && (defaultObj[config.defaults.project_name] = config.defaults)
 
+    // write
     return fs.promises.writeFile(path.join(__dirname, config.file), JSON.stringify(data || defaultObj))
              .catch(err => console.error(err))
   },
+
+
+
+  // defaults
   file: "config.model.json",
   defaults: {
     "project_name": "tmp_project",
@@ -93,12 +141,14 @@ const config = {
     "regex_template_placeholder": "!xxserial_numberxx!",
     "tests_to_validate_reports": [	
       { 
-        "test_friendly_name": "test 1",
-        "test_token_html_path": "button:nth-child(2)", 
-        "test_token_expected_value": "stop server" 
+        "friendly_name": "test 1",
+        "css_selector": "button:nth-child(2)", 
+        "expected_value": "stop server" 
       }
     ]								
   }
+
+
 }
 
 module.exports = { config }

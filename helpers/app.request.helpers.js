@@ -1,7 +1,9 @@
 const { WebSocketMessage } = require("./ws.message.helper")
 
-
-class AppRequestContext{
+// Encapsulate the mechanics and knowledge of message sending
+// to allow the handlers not to concern themselves with knowledge
+// they have no business having
+class AppSendMessageHelper{
 
   constructor(connection, messageRef, event){
     this.connection = connection;
@@ -21,4 +23,4 @@ class AppRequestContext{
 
 }
 
-module.exports = { AppRequestContext }
+module.exports = { AppSendMessageHelper }
