@@ -12,7 +12,7 @@ const findFile = {
     if(typeof(project_name) !== "string" || !project_name || project_name == "") 
       return sendMsgHelper.reply("No Project Name was provided. Project Name Invalid");
 
-    if(typeof(serial_number) !== "number" || !serial_number || serial_number == "") 
+    if(typeof(serial_number) !== "string" || !serial_number || serial_number == "") 
       return sendMsgHelper.reply("No Serial Number provided. Serial Number Invalid");
  
     // Ensure we have config data for current project of interest
@@ -91,6 +91,7 @@ const findFile = {
               path: path.join(location, file),
               lastModified: new Date(stats.mtime).getTime()
             }
+            console.log("\n\n**************", data)
             return sendMsgHelper.push(null, data);
 
           }

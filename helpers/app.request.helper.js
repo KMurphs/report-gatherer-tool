@@ -12,16 +12,17 @@ class AppSendMessageHelper{
   }
 
 
-  reply(replyObj = "received"){ 
-    const payload = WebSocketMessage.buildReply(this.messageRef, replyObj); 
+  reply(replyObj){ 
+    const payload = WebSocketMessage.buildReply(this.messageRef, replyObj || "received"); 
     this.connection.sendUTF(payload);
   };
-  push(event = null, data = null){ 
+  push(event, data){ 
     const payload = new WebSocketMessage(event || this.event, data); 
-    console.log(payload.toMessage())
     this.connection.sendUTF(payload.toMessage());
   };
 
 }
+
+
 
 module.exports = { AppSendMessageHelper }
