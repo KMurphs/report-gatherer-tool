@@ -15,7 +15,7 @@ const testFile = {
       return sendMsgHelper.reply("No Project Name was provided. Project Name Invalid");
 
     if(typeof(file_path) !== "string" || !file_path || file_path == "") 
-      return sendMsgHelper.reply("No File Path provided. File Path  Invalid");
+      return sendMsgHelper.reply("No File Path provided. File Path Invalid");
     
     if( !fs.existsSync(file_path) || !(await fs.promises.stat(file_path)).isFile() )
       return sendMsgHelper.reply("No File Path provided. File Path Invalid");
@@ -25,11 +25,15 @@ const testFile = {
     if(!testFile.config[project_name]){
 
       // Get data
-      const { tests_to_validate_reports } = await config.gettestFileConfig(project_name);
+      const { tests_to_validate_reports } = await config.getTestFileConfig(project_name);
+      
+      if(!tests_to_validate_reports || tests_to_validate_reports.length == 0)
+        return sendMsgHelper.reply("No Tests provided. Tests are Invalid");
+
 
       // Cache data
       testFile.config[project_name] = {
-        test: JSON.parse(JSON.stringify(tests_to_validate_reports))
+        tests: JSON.parse(JSON.stringify(tests_to_validate_reports))
       };
 
     }
@@ -82,7 +86,7 @@ const testFile = {
 
     let results = {
       items: [],
-      hasPassed: false
+      hasPassed: true
     }
 
 
@@ -92,8 +96,8 @@ const testFile = {
       // Is test pass/fail?
       let hasPassed;
       try { 
-        const actual_value = $(test.cssSelector, html)[0].children[0].data.toLowerCase();
-        const expected_value = test.expected.toLowerCase();
+        const actual_value = $(test.css_selector, html)[0].children[0].data.toLowerCase();
+        const expected_value = test.expected_value.toLowerCase();
         hasPassed = (actual_value === expected_value);
         test.actual_value = actual_value;
       } catch(err) {

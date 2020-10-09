@@ -12,9 +12,15 @@ const config = {
     if(!config.data) await config.intializeData();
     const {regex_template, regex_template_placeholder, directories_to_look_for_reports} = config.data[project_name]
     return {regex_template, regex_template_placeholder, directories_to_look_for_reports}
+    // return {...regex_template, ...regex_template_placeholder, ...directories_to_look_for_reports}
   },
 
 
+  getTestFileConfig: async function(project_name){
+    if(!config.data) await config.intializeData();
+    const {tests_to_validate_reports} = config.data[project_name]
+    return {tests_to_validate_reports}
+  },
 
 
 
@@ -33,7 +39,7 @@ const config = {
 
     
 
-    // Respond to get config command
+    // RESPOND TO GET CONFIG COMMAND
     // service current event data. 
     if(typeof(data) !== "object") {
 
@@ -57,7 +63,7 @@ const config = {
     
 
     
-    // Respond to update config command
+    // RESPOND TO UPDATE CONFIG COMMAND
     // Assume that data is an object
     // therefore merge it with our copy of config data
 
