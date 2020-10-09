@@ -3,11 +3,12 @@ const http = require('http');
 const WebSocketServer = require('websocket').server;
 
 
-const { WebSocketMessage } = require("./helpers/ws.message.helper")
-const { AppSendMessageHelper } = require("./helpers/app.request.helper")
-const { ping } = require("./event.handlers/ping.handler")
-const { config } = require("./event.handlers/config.handler")
-const { findFile } = require("./event.handlers/find.sn.file.handler")
+const { WebSocketMessage } = require("./helpers/ws.message.helper");
+const { AppSendMessageHelper } = require("./helpers/app.request.helper");
+const { ping } = require("./event.handlers/ping.handler");
+const { config } = require("./event.handlers/config.handler");
+const { findFile } = require("./event.handlers/find.sn.file.handler");
+const { testFile } = require("./event.handlers/test.sn.file.handler");
 
 
 
@@ -40,19 +41,20 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
 
       console.log('Received Message:', message.utf8Data);
-      const payload = WebSocketMessage.fromString(message.utf8Data)
+      const payload = WebSocketMessage.fromString(message.utf8Data);
 
-
+      // Prepare data for routes
       const event = payload.getEvent();
       const data = payload.getData();
       const sendMsgHelper = new AppSendMessageHelper(connection, message.utf8Data, event);
 
 
 
-
-      if(event === 'ping') ping.handle(sendMsgHelper, data)
-      else if(event === 'config') config.handle(sendMsgHelper, data)
-      else if(event === 'find-sn') findFile.handle(sendMsgHelper, data)
+      // Routes: Events Handlers
+      if(event === 'ping') ping.handle(sendMsgHelper, data);
+      else if(event === 'config') config.handle(sendMsgHelper, data);
+      else if(event === 'find-sn') findFile.handle(sendMsgHelper, data);
+      else if(event === 'test-sn-file') testFile.handle(sendMsgHelper, data);
       else console.warn(`Server received message with unknown event: '${event}'`);
   
       

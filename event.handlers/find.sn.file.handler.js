@@ -93,7 +93,7 @@ const findFile = {
               path: path.join(location, file),
               lastModified: new Date(stats.mtime).getTime()
             }
-            console.log("\n\n**************", data)
+            
             return sendMsgHelper.push(null, data);
 
           }
