@@ -5,12 +5,15 @@ const WebSocketServer = require('websocket').server;
 
 const { WebSocketMessage } = require("./helpers/ws.message.helper");
 const { AppSendMessageHelper } = require("./helpers/app.request.helper");
+const { createAppFolders } = require("./helpers/app.file.system.helper");
 const { ping } = require("./event.handlers/ping.handler");
 const { config } = require("./event.handlers/config.handler");
 const { findFile } = require("./event.handlers/find.sn.file.handler");
 const { testFile } = require("./event.handlers/test.sn.file.handler");
+const { archiver } = require("./event.handlers/archive.handler");
 
 
+const appFolder = createAppFolders();
 
 const server = http.createServer();
 server.listen(9898, 'localhost', 0, ()=>{
@@ -51,11 +54,25 @@ wsServer.on('request', function(request) {
 
 
       // Routes: Events Handlers
-      if(event === 'ping') ping.handle(sendMsgHelper, data);
-      else if(event === 'config') config.handle(sendMsgHelper, data);
-      else if(event === 'find-sn') findFile.handle(sendMsgHelper, data);
-      else if(event === 'test-sn-file') testFile.handle(sendMsgHelper, data);
-      else console.warn(`Server received message with unknown event: '${event}'`);
+      if(event === 'ping') {
+        ping.handle(sendMsgHelper, data);
+
+      } else if(event === 'config'){
+        config.handle(sendMsgHelper, data);
+
+      } else if(event === 'order-number') {
+        config.handle(sendMsgHelper, data); 
+        archiver.prepare(sendMsgHelper, appFolder, data); 
+
+      } else if(event === 'find-sn') {
+        findFile.handle(sendMsgHelper, data);
+      
+      } else if(event === 'test-sn-file') { 
+        testFile.handle(sendMsgHelper, data);
+
+      }else {
+        console.warn(`Server received message with unknown event: '${event}'`);
+      }
   
       
     });
