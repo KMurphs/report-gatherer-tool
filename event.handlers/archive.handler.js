@@ -116,7 +116,7 @@ const archiver = {
 
     await finalizeArchiveFolder(configData.destination_folder);
 
-    return sendMsgHelper.reply("Repository Archived");
+    return sendMsgHelper.reply({message: "Repository Archived", zip_file_path: `${configData.destination_folder}.zip`});
   },
 
 
