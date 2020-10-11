@@ -119,7 +119,7 @@ class QueuedWebSocket{
         setTimeout(()=>{
           tickCounter = tickCounter + 1;
     
-          if(this.items.length !== 0) return resolve(this.items[0]);
+          if(this.items.length !== 0) return resolve(this.items.shift());
           if(tickCounter === (timeoutMs/tickMs)) return reject("timeout while waiting on websocket");
     
           tick();

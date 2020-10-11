@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "startnwatch": "nodemon main.js",
+    "startnwatch": "nodemon main.js --ignore *.json",
     "test": "jest",
     "testnwatch": "jest --watch"
   },
