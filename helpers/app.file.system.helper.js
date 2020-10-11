@@ -38,19 +38,19 @@ const createAppFolders = () => {
 
 
 const oldFolder = ".archives"
-const prepareArchiveFolder = async (appFolder, projectName, orderName) => {
+const prepareArchiveFolder = (appFolder, projectName, orderName) => {
   
   return new Promise(async(resolve, reject)=>{
 
     let projectFolder = path.join(appFolder, projectName);
     let isValidRepo = false;
-
+    
 
     // Ensure App Folder exists
     isValidRepo = await fs.existsSync(appFolder);
     if(!isValidRepo){ reject(new ReferenceError(`Reference Folder does not exists: '${appFolder}'`)); }
 
-
+    
 
     // Ensure project folder is created
     try{
@@ -62,7 +62,7 @@ const prepareArchiveFolder = async (appFolder, projectName, orderName) => {
       reject(err)
     }
 
-
+    
 
     // Ensure old archive folder is created
     try{
@@ -75,11 +75,11 @@ const prepareArchiveFolder = async (appFolder, projectName, orderName) => {
       reject(err)
     }
 
-
+    
     // Move everything to old archive dir
     await cleanupProjectFolder(projectFolder);
 
-
+    
 
     // Ensure new archive folder is created
     let timestamp = `[${(new Date()).toISOString().split(".")[0].replace(/[\-:]/g, "_").replace("T", "][")}]`;
@@ -92,7 +92,7 @@ const prepareArchiveFolder = async (appFolder, projectName, orderName) => {
     } catch(err) {
       reject(err)
     }
-
+    
     // Return where to copy files to 
     resolve(archiveFolder);
   })

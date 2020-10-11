@@ -23,7 +23,7 @@ describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
 
   test('Should find report file for serial number', async (done) => {
 
-    const event = 'find-sn'
+    const event = 'find-sn-file'
     const project_name = 'test-project'
     const serial_number = serialsToFind[0]
     let eventCounter = -1;
@@ -118,7 +118,7 @@ describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
 
   test('Should handle invalid project name or serial number during request to find report file for serial number', done => {
 
-    const event = 'find-sn'
+    const event = 'find-sn-file'
     const serial_number = "123456789"
     const project_name = 'test-project'
 

@@ -4,7 +4,8 @@ const $ = require('cheerio');
 
 
 const { config } = require("./config.handler")
-const { prepareArchiveFolder, finalizeArchiveFolder } = require("../helpers/app.file.system.helper")
+const { prepareArchiveFolder, finalizeArchiveFolder } = require("../helpers/app.file.system.helper");
+const { resolve } = require("path");
 
 const archiver = {
   config: {},
@@ -14,7 +15,7 @@ const archiver = {
 
     // Ensure inputs are okay
     if(typeof(project_name) !== "string" || !project_name || project_name == "") 
-      return sendMsgHelper.reply("No Project Name was provided. Project Name Invalid");
+      return sendMsgHelper.push(null, "No Project Name was provided. Project Name Invalid");
 
     // Ensure we have config data for current project of interest
     if(!archiver.config[project_name]){
@@ -23,7 +24,7 @@ const archiver = {
       const { order_number } = await config.getArchiverConfig(project_name);
       
       if(typeof(order_number) !== "number" || !order_number || order_number <= 0)
-        return sendMsgHelper.reply("No Order Number was provided. Order Number Invalid");
+        return sendMsgHelper.push(null, "No Order Number was provided. Order Number Invalid");
 
 
       // Cache data
@@ -33,16 +34,20 @@ const archiver = {
       };
 
     }
+    await new Promise(resolve => {
+      setTimeout(resolve, 200);
+    })
 
     const configData = archiver.config[project_name];
     try{
-      configData.destination_folder = await prepareArchiveFolder(appFolder, project_name, order_number)
+      configData.destination_folder = await prepareArchiveFolder(appFolder, project_name, configData.order_number);
     }catch(err){
-      return sendMsgHelper.reply({message: `Project '${project_name}' was not configured successfully for Archiving.`, error: err});
+      return sendMsgHelper.push(null, {message: `Project '${project_name}' was not configured successfully for Archiving.`, error: err.message});
     }
+
     
     
-    return sendMsgHelper.reply("Repository Prepared");
+    return sendMsgHelper.push(null, {destination: configData.destination_folder});
 
   },
 

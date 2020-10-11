@@ -22,6 +22,13 @@ const config = {
   },
 
 
+  getArchiverConfig: async function(project_name){
+    if(!config.data) await config.intializeData();
+    const {order_number} = config.data[project_name]
+    return {order_number}
+  },
+
+
 
 
 
@@ -205,7 +212,7 @@ const config = {
   file: "config.model.json",
   defaults: {
     project_name: "tmp_project",
-    order_number: 12,
+    order_number: 0,
     directories_to_look_for_reports: ["c:\\reports\\folder_a", "c:\\reports\\folder_b"],						
     regex_template: "(report_file).*(!xxserial_numberxx!).*(.html)$",
     regex_template_placeholder: "!xxserial_numberxx!",

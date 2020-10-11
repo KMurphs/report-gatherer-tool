@@ -50,6 +50,7 @@ describe('WebSocket Server Functionality: Config Data Endpoint for CRUD Operatio
     const project = ''
 
     sendMessageToServer(event, project, (rEvent, rData) => {
+      console.log(rEvent, rData)
       expect(rEvent).toBe(event);
       expect(rData.isReply).toBe(true);
 

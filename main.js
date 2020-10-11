@@ -59,16 +59,20 @@ wsServer.on('request', function(request) {
 
       } else if(event === 'config'){
         config.handle(sendMsgHelper, data);
+        const {project_name, order_number} = data;
+        if(order_number) archiver.prepare(sendMsgHelper, appFolder, {project_name}); 
 
-      } else if(event === 'order-number') {
-        config.handle(sendMsgHelper, data); 
-        archiver.prepare(sendMsgHelper, appFolder, data); 
-
-      } else if(event === 'find-sn') {
+      } else if(event === 'find-sn-file') {
         findFile.handle(sendMsgHelper, data);
       
       } else if(event === 'test-sn-file') { 
-        testFile.handle(sendMsgHelper, data);
+        testFile.handle(sendMsgHelper, data);   
+
+      } else if(event === 'move-sn-file') { 
+        archiver.move(sendMsgHelper, data);
+
+      } else if(event === 'archive-sn-files') { 
+        archiver.finalize(sendMsgHelper, data);
 
       }else {
         console.warn(`Server received message with unknown event: '${event}'`);

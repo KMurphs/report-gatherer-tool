@@ -19,7 +19,7 @@ beforeAll(() => {
 
 
 
-describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
+describe('WebSocket Server Functionality: Test-SN Endpoint', () => {
 
   test('Should test report file of serial number', async (done) => {
 
@@ -57,19 +57,19 @@ describe('WebSocket Server Functionality: Find-SN Endpoint', () => {
 
 
 
-    ws = sendMessageToServer('find-sn', {project_name, serial_number}, (rEvent, rData) => {
+    ws = sendMessageToServer('find-sn-file', {project_name, serial_number}, (rEvent, rData) => {
 
       eventCounter = eventCounter + 1;
 
       if(eventCounter === 0){
 
-        expect(rEvent).toBe('find-sn');
+        expect(rEvent).toBe('find-sn-file');
         expect(rData.isReply).toBe(true);
         expect(r1.test(rData.reply)).toBe(true);
 
       }else{
 
-        expect(rEvent).toBe('find-sn');
+        expect(rEvent).toBe('find-sn-file');
         expect(r2.test(rData.name)).toBe(true);
         expect(fs.existsSync(rData.path)).toBe(true);
         file_path = rData.path;

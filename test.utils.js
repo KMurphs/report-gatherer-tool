@@ -3,7 +3,8 @@ const fs = require("fs")
 const path = require("path")
 
 const { WebSocketMessage } = require("./helpers/ws.message.helper")
-const { createAppFolders, prepareArchiveFolder, finalizeArchiveFolder } = require("./helpers/app.file.system.helper")
+const { createAppFolders, prepareArchiveFolder, finalizeArchiveFolder } = require("./helpers/app.file.system.helper");
+const { rejects } = require('assert');
 
 
 const serverURL = "ws://localhost:9898/"
@@ -31,6 +32,109 @@ const sendMessageToServer = (msg, data, cb, closeCb, autoCloseConnection = true)
 
   return ws;
 }
+
+
+const setupWBConnection = (msg, data, cb, closeCb, autoCloseConnection = true)=>{
+  
+  const ws = new WebSocket(serverURL);
+
+
+  // ws.on('error', err => { console.error(err); expect(1).toBe(2); terminate(); });
+  ws.on('close', (evt) => {});
+  ws.on('open', async () => { ws.send(new WebSocketMessage(msg, data).toMessage()); })
+
+  ws.on('message', res => {
+    const payload = WebSocketMessage.fromString(res);
+    const event = payload.getEvent();
+    const data = payload.getData();
+
+    cb && cb(event, data);
+    if(autoCloseConnection) ws.close();
+
+    
+    
+  });
+
+  return ws;
+}
+
+
+
+class QueuedWebSocket{
+  
+  constructor(url = serverURL){
+    this.serverURL = url;
+    this.ws = new WebSocket(this.serverURL);
+    this.isWSopened = false;
+    this.items = [];
+
+
+    this.ws.on('close', (evt) => {});
+    this.ws.on('open', () => { this.isWSopened = true; })
+    this.ws.on('message', res => {
+      const payload = WebSocketMessage.fromString(res);
+      const event = payload.getEvent();
+      const data = payload.getData();
+      
+      this.items.push({ event, data })
+    });
+  }
+
+
+  close(){
+    this.ws.close();
+  }
+
+
+  send(event, data, timeoutMs = 1000){
+
+    let tickCounter = 0;
+    let tickMs = 100;
+    timeoutMs = (typeof(timeoutMs) === 'number' && timeoutMs > tickMs) ? timeoutMs: 1000;
+
+    const tick = ()=>{
+      setTimeout(()=>{
+        tickCounter = tickCounter + 1;
+  
+        if(this.isWSopened) return this.ws.send(new WebSocketMessage(event, data).toMessage());
+        if(tickCounter === (timeoutMs/tickMs)) throw new Error("Unable to open Websocket to remote device");
+  
+        tick();
+      }, tickMs)
+    }
+    tick();
+
+  }
+
+
+  receive(timeoutMs = 1000){
+    return new Promise((resolve, reject) => {
+
+      let tickCounter = 0;
+      let tickMs = 100;
+      timeoutMs = (typeof(timeoutMs) === 'number' && timeoutMs > tickMs) ? timeoutMs: 1000;
+
+      
+      const tick = ()=>{
+        setTimeout(()=>{
+          tickCounter = tickCounter + 1;
+    
+          if(this.items.length !== 0) return resolve(this.items[0]);
+          if(tickCounter === (timeoutMs/tickMs)) return reject("timeout while waiting on websocket");
+    
+          tick();
+        }, tickMs)
+      }
+      tick();
+
+
+
+    })
+  }
+
+}
+
+
 
 
 
@@ -110,7 +214,7 @@ const beforeAllTestUtil = function(){
 
 
 
-  return { configFind, serialsToFind, tests }
+  return { configFind, serialsToFind, tests, appFolder }
 }
 
-module.exports = { serverURL, sendMessageToServer, beforeAllTestUtil }
+module.exports = { serverURL, sendMessageToServer, beforeAllTestUtil, QueuedWebSocket }
