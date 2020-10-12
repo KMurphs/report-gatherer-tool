@@ -4,170 +4,140 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Report Gatherer Test UI</title>
-  <link rel="stylesheet" href="./index.css">
+  
+  <style> 
+  /* https://loading.io/css/ */
+  .lds-facebook {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-top: 20%;
+  }
+  .lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: #fff;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    background-color: #555;
+  }
+  .lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+  }
+  .lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+  }
+  .lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+  }
+  @keyframes lds-facebook {
+    0% {
+      top: 8px;
+      height: 64px;
+    }
+    50%, 100% {
+      top: 24px;
+      height: 32px;
+    }
+  }
+  .app-loader{
+    text-align: center;
+  }
+  .app-loader__text{
+    color: #777;
+  }
+  .app-loader__text > div{
+    padding-top: .5rem;
+  }
+  </style>
+
+
+	<!-- UIkit CSS -->
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.8/dist/css/uikit.min.css" /> -->
+
+	<link rel="stylesheet" href="./css/all.min.css" />
+	<link rel="stylesheet" href="./css/utils.css">
+	<link rel="stylesheet" href="./css/index.css">
+	<!-- <link rel="shortcut icon" href="./favicon.ico"> -->
 </head>
 <body>
+  <section class="app-root">
 
 
-  <div class="item update-config">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Update Config </p>
-        <button>submit</button>
+		<div id="app-loader" class="app-loader d-none">
+			<div class="lds-facebook"><div></div><div></div><div></div></div>
+			<div class="app-loader__text">
+				<div>Loading App...</div>
+			</div> 
+    </div>
+    
+
+    <div class="config-section">
+      <div class="config-section__title-icon-container"><i class="fas fa-stream"></i></div>
+      <div class="config-section__title-text-container"><h1>Select a Project</h1></div>
+      <div class="config-content-container">
+        <ul class="dropdown">
+          <li>
+            <input class="dropdown_close" type="radio" name="dropdown-item" id="dropdown-item-close" value=""/>
+            <span class="dropdown_label dropdown_label-placeholder">Select a Project</span>
+          </li>
+          
+          <li class="dropdown_items">
+            <input class="dropdown_expand" type="radio" name="dropdown-item" id="dropdown-item-opener"/>
+            <label class="dropdown_closeLabel" for="dropdown-item-close"></label>
+            
+            <ul class="dropdown_options">
+              <li class="dropdown_option">
+                <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-project-1"/>
+                <label class="dropdown_label" for="dropdown-item-project-1"><span>project-1</span></label>
+              </li>
+      
+              <li class="dropdown_option">
+                <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-project-2"/>
+                <label class="dropdown_label" for="dropdown-item-project-2"><span>project-2</span></label>
+              </li>
+      
+              <li class="dropdown_option">
+                <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-project-3"/>
+                <label class="dropdown_label" for="dropdown-item-project-3"><span>project-3</span></label>
+              </li>
+            </ul>
+            
+            <label class="dropdown_expandLabel" for="dropdown-item-opener"></label>
+          </li>
+        </ul>
       </div>
-      <input type="text">
     </div>
-    <div class="item-res mt-1">
+
+
+
     </div>
-  </div>
+  </section>
 
 
-
-  <div class="item get-config">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Get Config </p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
+	<!-- UIkit JS -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.8/dist/js/uikit.min.js"></script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.8/dist/js/uikit-icons.min.js"></script> -->
 
 
-
-  <div class="item find-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Find sn </p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-  <div class="item found-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Found sn </p>
-        <!-- <button>submit</button> -->
-      </div>
-      <!-- <input type="text"> -->
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
+  <script>
 
 
-
-  <div class="item test-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Test sn </p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-  <div class="item tested-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Tested sn </p>
-        <!-- <button>submit</button> -->
-      </div>
-      <!-- <input type="text"> -->
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-
-
-  <div class="item move-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Move sn </p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-  <div class="item moved-sn">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Moved sn </p>
-        <!-- <button>submit</button> -->
-      </div>
-      <!-- <input type="text"> -->
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-
-
-
-  <div class="item archive-sns">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Archive SNs</p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-  <div class="item archived-sns">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">SNs Archived </p>
-        <!-- <button>submit</button> -->
-      </div>
-      <!-- <input type="text"> -->
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-
-
-
-
-
-
-  <div class="item stop">
-    <div class="item-req d-flex align-items-stretch">
-      <div class="mr-2">
-        <p class="mb-2">Stop </p>
-        <button>submit</button>
-      </div>
-      <input type="text">
-    </div>
-    <div class="item-res mt-1">
-    </div>
-  </div>
-
-
-
-
-
-
-  <script src="./js/html-elements.js"></script>
-  <script src="./js/ws-message.js"></script>
-  <script src="./js/ws-dispatcher.js"></script>
-  <script src="./js/index.js"></script>
-
-
+    // Handle modal programatically 
+    // const modal = document.querySelector("#select-project");
+    // // UIkit.modal(element, options);
+    // UIkit.modal(modal).show();
+    // let state;
+    // setInterval(()=>{
+    //   state && UIkit.modal(modal).show();
+    //   !state && UIkit.modal(modal).hide();
+    //   state = !state;
+    // }, 1000)
+  </script>
 </body>
 </html>
