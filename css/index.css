@@ -19,28 +19,79 @@ body *{
 .app-root{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 95vh;
+  /* overflow-y: auto; */
+  /* overflow-x: hidden; */
+  position: relative;
+  padding-bottom: 3rem;
+}
+.app-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: calc(95vh - 3rem);
+}
+
+
+.navigator{
+  position: fixed;
+  bottom: 0;
+  height: 3rem;
+  background-color: rgba(0,0,0,0.1);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+.navigator span{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.1);
 }
 
 .config-section{
-  margin: 0 auto;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  min-width: 300px;
-  padding: 2rem;
+  min-width: 230px;
+  /* padding: 2rem;*/
+  
+}
+.config-section-group{
+  opacity: .4;
+  transition: all .3s;
+}
+.config-section-group:first-of-type{
+  opacity: 1;
+  transition: all .3s;
+}
+.config-section-group:hover{
+  opacity: 1;
+  transition: all .3s;
 }
 
 
 .config-section__title{
   display: flex;
   align-items: center;
-  padding: 1rem 0.5rem;
+  padding: 2rem 0.5rem;
 }
 
 .config-section__title-icon-container{
   margin-right: 1rem;
+  font-size: 1.5rem;
 }
 .config-content-container{
   display: flex;
