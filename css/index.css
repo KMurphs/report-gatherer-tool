@@ -117,10 +117,7 @@ body *{
 
 
 
-.config-section-container--settings .config-section{
-  /* height: 100%;
-  justify-content: space-around; */
-}
+
 .config-section-container--settings input.config-section-group-opener{
   position: absolute;
   display: none;
@@ -146,5 +143,14 @@ body *{
   padding-top: 1rem;
   padding-bottom: 3rem;
   height: 300px;
+  transition: all .3s;
+}
+.config-section-container--settings .opened-state{
+  margin-right: 2rem;
+  font-size: 2rem;
+  transition: all .3s;
+}
+.config-section-container--settings input.config-section-group-opener:checked + .config-section__title .opened-state{
+  transform: rotate(90deg);
   transition: all .3s;
 }
