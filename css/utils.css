@@ -80,7 +80,7 @@ input::placeholder{
 	--selected-bg:  rgb(0 39 101);
 	--hovered-bg: rgba(0,0,0,0.04);
 	--text-color: white;
-	width: 225px;
+	min-width: 225px;
 	min-height: 40px;
 	min-height: var(--height);
 	cursor: pointer;
@@ -223,16 +223,20 @@ input::placeholder{
 
 
 
-.input-with-icon{
+.input-with-icon,
+.input-with-icon-and-moving-label{
   display: flex;
   align-items: stretch;
   flex-direction: column;
   position: relative;
+  margin-top: 1rem;
 }
-.input-with-icon input{
+.input-with-icon input,
+.input-with-icon-and-moving-label input{
   padding-right: 2rem;
 }
-.input-with-icon span{
+.input-with-icon span,
+.input-with-icon-and-moving-label span{
   position: absolute;
   right: 0.5rem;
   top: 0;
@@ -241,9 +245,21 @@ input::placeholder{
   align-items: center;
 }
 
+.input-with-icon-and-moving-label label{
+  position: absolute;
+  top: 0.7rem;
+  left: 0.5rem;
+  font-size: 1rem;
+  transition: all .2s ease;
+  opacity: .6;
+  z-index: -1;
+}
 
-
-
+.input-with-icon-and-moving-label input:focus ~ label{
+  top: -.5rem;
+  font-size: .7rem;
+  opacity: .8;
+}
 
 
 
@@ -275,11 +291,11 @@ input::placeholder{
   opacity: 0;
   transition: all .3s;
 }
-.modal-outer-container input[type="checkbox"]{
+.modal-outer-container input[type="radio"]{
   z-index: 10;
   position: absolute;
 }
-.modal-outer-container input[type="checkbox"]:checked + .modal-inner-container{
+.modal-outer-container input[type="radio"]:checked + .modal-inner-container{
   height: 100vh;
   opacity: 1;
   transition: all .3s;
