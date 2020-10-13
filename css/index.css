@@ -27,20 +27,14 @@ body *{
   position: relative;
   padding-bottom: 3rem;
 }
-.app-content{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  min-height: calc(95vh - 3rem);
-}
+
+
+
 
 
 .navigator{
-  position: fixed;
+  /*position: fixed; */
+  position: absolute;
   bottom: 0;
   height: 3rem;
   background-color: rgba(0,0,0,0.1);
@@ -61,14 +55,42 @@ body *{
   background-color: rgba(0,0,0,0.1);
 }
 
+
+
+
+
+
+
+
+
+.config-section-container{
+  /*display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: flex-start; */
+  /* align-items: center; */
+  overflow-y: auto;
+  /* overflow-y: hidden; */
+  overflow-x: hidden;
+  width: 100%;
+  min-height: calc(95vh - 3rem);
+  /* padding-bottom: 3rem; */
+  /* position: relative; */
+  /* display: grid; */
+  /* grid-template-columns: 1fr; */
+  /* flex-grow: 1; */
+  /* grid-template-rows: 1fr 3rem;*/
+}
 .config-section{
   margin: auto;
   display: flex;
   flex-direction: column;
   min-width: 230px;
-  /* padding: 2rem;*/
+  padding: 0.5rem 1rem;
+  padding-bottom: 3rem;
+  /* height: 100%;*/
   
 }
+
 .config-section-group{
   opacity: .4;
   transition: all .3s;

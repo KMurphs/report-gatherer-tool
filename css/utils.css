@@ -240,3 +240,63 @@ input::placeholder{
   display: flex;
   align-items: center;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.modal-outer-container{
+  position: fixed;
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+}
+.modal-outer-container .modal-inner-container{
+  position: relative;
+  height: 0;
+  width: 0;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all .3s;
+}
+.modal-outer-container input[type="checkbox"]{
+  z-index: 10;
+  position: absolute;
+}
+.modal-outer-container input[type="checkbox"]:checked + .modal-inner-container{
+  height: 100vh;
+  opacity: 1;
+  transition: all .3s;
+}
+.modal{
+  min-width: 200px;
+  min-height: 200px;
+  background-color: rgba(0,0,0,0.1);
+  /* display: grid; */
+  /* grid-template-columns: 1fr; */
+  /* grid-template-rows: 1fr; */
+  overflow-y: scroll;
+  max-height: 90vh;
+  display: flex;
+  /* display: table; */
+  /* margin: auto; */
+  padding-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
