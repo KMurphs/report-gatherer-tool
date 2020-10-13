@@ -143,6 +143,7 @@ body *{
   padding-top: 1rem;
   padding-bottom: 3rem;
   height: 300px;
+  height: auto;
   transition: all .3s;
 }
 .config-section-container--settings .opened-state{
@@ -152,5 +153,63 @@ body *{
 }
 .config-section-container--settings input.config-section-group-opener:checked + .config-section__title .opened-state{
   transform: rotate(90deg);
+  transition: all .3s;
+}
+
+
+
+
+
+
+.config-section-container--settings .config-content-container > div{
+  margin-top: 4rem;
+}
+.config-section-container--settings h2{
+  margin-bottom: 1.5rem;
+}
+.locations-container .locations > .location{
+  display: grid;
+  grid-template-columns: 1fr 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  margin-top: 1rem;
+}
+.locations-container .location-text{
+  word-break: break-all;
+  /* padding-bottom: .5rem; */
+  padding-left: .5rem;
+  padding-right: .5rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+}
+.locations-container .location-control{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.05);
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  transition: all .3s;
+}
+.locations-container .location:hover .location-control{
+  background: rgba(0,0,0,0.2);
+  transition: all .3s;
+}
+.locations-container .input-with-icon-and-moving-label span{
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  right: 0;
+  transition: all .3s;
+}
+.locations-container .input-with-icon-and-moving-label:hover span{
+  background: rgba(0,0,0,0.2);
   transition: all .3s;
 }
