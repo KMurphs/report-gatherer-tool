@@ -28,9 +28,26 @@ body *{
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  
+  min-width: 300px;
+  padding: 2rem;
 }
 
 
+.config-section__title{
+  display: flex;
+  align-items: center;
+  padding: 1rem 0.5rem;
+}
 
-
+.config-section__title-icon-container{
+  margin-right: 1rem;
+}
+.config-content-container{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+.config-section__separator{
+  margin: 3rem 0;
+}
