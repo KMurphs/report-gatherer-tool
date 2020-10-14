@@ -328,8 +328,8 @@
                       </div>
                     </div>
                     <button class="location-new">
-                      <span class="location-text">Add New Entry</span>
-                      <span class="location-control"><i class="fas fa-folder-plus"></i></span>
+                      <span class="button-text">Add New Entry</span>
+                      <span class="button-icon"><i class="fas fa-folder-plus"></i></span>
                     </button>
                   </div>
                   <div class="serial-numbers-container">
@@ -357,17 +357,32 @@
                             <label for="serial-numbers-from-text">Enter New Location</label>
                           </div>
                         </div>
-                        <div class="serial-numbers-add-controls__inputs-from-file"><textarea name="" id="" cols="30" rows="5"></textarea></div>
+                        <div class="serial-numbers-add-controls__inputs-from-file">
+                          <!-- https://stackoverflow.com/a/28244177/9034699 -->
+                          <!-- https://www.quirksmode.org/dom/inputfile.html -->
+                          <!-- https://stackoverflow.com/a/714626/9034699 -->
+                          <input type="file">
+                        </div>
                       </div>
                     </div>
+                    <button class="process-serial-numbers">
+                      <span class="button-text">Process Serial Numbers</span>
+                      <span class="button-icon"><i class="fas fa-columns"></i></span>
+                    </button>
                     <div class="serial-numbers-list">
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
+                      <span>123456789 <span><i class="fas fa-times"></i></span> </span>
                     </div>
                   </div>
                 </div>
               </div>
       
       
-              <div class="config-section-group">
+              <div class="config-section-group config-section-group--advanced-settings">
                 <input type="checkbox" class="config-section-group-opener" id="advanced-settings">
                 <label for="advanced-settings" class="config-section__title">
                   <span class="config-section__title-icon-container opened-state"><i class="fas fa-caret-right"></i></span>
@@ -375,21 +390,78 @@
                   <span class="config-section__title-text-container"><h1>Advanced Settings</h1></span>
                 </label>
                 <div class="config-content-container">
+                  <h2>Serial Numbers</h2>
                   <div class="input-with-icon-and-moving-label">
                     <input type="text" required placeholder="" id="test">
-                    <span><i class="fas fa-plus"></i></span>
-                    <label for="test">Enter New Project Name</label>
+                    <span><i class="fas fa-code"></i></span>
+                    <label for="test">Enter Regex Template</label>
                   </div>
+                  <h2>Serial Numbers</h2>
                   <div class="input-with-icon-and-moving-label">
                     <input type="text" required placeholder="" id="test">
-                    <span><i class="fas fa-plus"></i></span>
-                    <label for="test">Enter New Project Name</label>
+                    <span><i class="fas fa-quote-left"></i></span>
+                    <label for="test">Enter Regex Placeholder</label>
                   </div>
-                  <div class="input-with-icon-and-moving-label">
-                    <input type="text" required placeholder="" id="test">
-                    <span><i class="fas fa-plus"></i></span>
-                    <label for="test">Enter New Project Name</label>
+                  <h2>Serial Numbers</h2>
+
+                  <div class="test-item">
+                    <h3>Test Item 1 <span><i class="fas fa-minus"></i></span> </h3>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
                   </div>
+                  <div class="test-item">
+                    <h3>Test Item 1 <span><i class="fas fa-minus"></i></span> </h3>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                  </div>
+                  <div class="test-item">
+                    <h3>Test Item 1 <span><i class="fas fa-minus"></i></span> </h3>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                    <div class="input-with-icon-and-moving-label">
+                      <input type="text" required placeholder="" id="test">
+                      <span><i class="fas fa-plus"></i></span>
+                      <label for="test">Enter New Project Name</label>
+                    </div>
+                  </div>
+                  <button class="test-item-new">
+                    <span class="button-text">Add New Entry</span>
+                    <span class="button-icon"><i class="fas fa-folder-plus"></i></span>
+                  </button>
                 </div>
               </div>
         

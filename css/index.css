@@ -168,7 +168,7 @@ body *{
   margin-bottom: 1.5rem;
 }
 .locations-container .location-new{
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1fr 2.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.2);
   margin-top: 1rem;
@@ -179,38 +179,15 @@ body *{
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
   transition: all .3s;
-  cursor: pointer;
+  cursor: pointer; */
 }
 .locations-container .location-new:hover{
-  background-color: rgba(0,0,0,0.2);
+  /* background-color: rgba(0,0,0,0.2);
   box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.2);
-  transition: all .3s;
+  transition: all .3s; */
 }
-.locations-container .location-text{
-  word-break: break-all;
-  /* padding-bottom: .5rem; */
-  padding-left: .5rem;
-  padding-right: .5rem;
-  line-height: 1.5;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-.locations-container .location-control{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.05);
-  width: 2.5rem;
-  height: 2.5rem;
-  cursor: pointer;
-  transition: all .3s;
-}
-.locations-container .location:hover .location-control{
-  background: rgba(0,0,0,0.2);
-  transition: all .3s;
-}
+
+
 .locations-container .input-with-icon-and-moving-label span{
   width: 2.5rem;
   height: 2.5rem;
@@ -245,8 +222,11 @@ body *{
 .serial-numbers-add-controls{
   display: grid;
   /* grid-template-rows: 1fr; */
-  grid-template-columns: 3rem 1fr;
+  grid-template-columns: 2rem 1fr;
   min-height: 200px;
+}
+.serial-numbers-add-controls input[type="radio"]{
+  display: none;
 }
 .serial-numbers-add-controls__icon-container{
   height: 3rem;
@@ -263,7 +243,7 @@ body *{
   transition: all .3s;
 }
 .serial-numbers-add-controls__icons{
-  display: flex;;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
@@ -288,7 +268,7 @@ body *{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
 }
 .serial-numbers-add-controls__inputs > div{
   display: none;
@@ -303,10 +283,81 @@ body *{
 }
 .serial-numbers-add-controls__inputs textarea{
   background-color: rgba(0,0,0,0.1);
+  width: 100%;
+}
+.serial-numbers-add-controls__inputs input[type="file"]{
+  width: 100%;
 }
 .serial-numbers-add-controls__inputs .serial-numbers-add-controls__inputs-from-text{
   width: 100%;
 }
 .serial-numbers-add-controls__inputs .input-with-icon-and-moving-label{
   width: 100%;
+}
+
+.serial-numbers-list{
+  margin-top: 1.5rem;
+}
+.serial-numbers-list > span{
+  display: inline-block;
+  background: #0d8f5d;
+  padding: .2rem .5rem;
+  color: #e0e0e0 !important;
+  border-radius: 7px;
+  font-size: .8rem;
+  font-weight: bold;
+  margin-top: .1rem;
+  margin-right: -0.2rem;
+}
+.serial-numbers-list i{
+  color: #971212 !important;
+  margin-left: .3rem;
+}
+
+
+
+
+
+
+
+
+
+.config-section-group--advanced-settings .config-content-container > div{
+  margin-top: 0;
+}
+.config-section-group--advanced-settings .input-with-icon-and-moving-label{
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+.config-section-group--advanced-settings .test-item{
+  margin-bottom: 2rem;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding: .5rem;
+  padding-right: 0;
+  margin-top: 1rem !important;
+}
+.config-section-group--advanced-settings .test-item .input-with-icon-and-moving-label{
+  margin-bottom: 0;
+}
+
+.config-section-group--advanced-settings h3{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.config-section-group--advanced-settings .test-item h3 > span{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,.1);
+  transition: all .3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+.config-section-group--advanced-settings .test-item:hover h3 > span{
+  background-color: rgba(0,0,0,0.2);
+  transition: all .3s;
 }
