@@ -167,11 +167,24 @@ body *{
 .config-section-container--settings h2{
   margin-bottom: 1.5rem;
 }
-.locations-container .locations > .location{
+.locations-container .location-new{
   display: grid;
   grid-template-columns: 1fr 2.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.2);
   margin-top: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  background-color: rgba(0,0,0,0.1);
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
+  transition: all .3s;
+  cursor: pointer;
+}
+.locations-container .location-new:hover{
+  background-color: rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.2);
+  transition: all .3s;
 }
 .locations-container .location-text{
   word-break: break-all;
@@ -181,6 +194,7 @@ body *{
   line-height: 1.5;
   display: flex;
   align-items: center;
+  height: 100%;
 }
 .locations-container .location-control{
   display: flex;
