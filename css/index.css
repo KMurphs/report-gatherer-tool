@@ -227,3 +227,86 @@ body *{
   background: rgba(0,0,0,0.2);
   transition: all .3s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.serial-numbers-add-controls{
+  display: grid;
+  /* grid-template-rows: 1fr; */
+  grid-template-columns: 3rem 1fr;
+  min-height: 200px;
+}
+.serial-numbers-add-controls__icon-container{
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: rgba(0,0,0,0.01);
+  border-right-width: 0;
+  transition: all .3s;
+}
+.serial-numbers-add-controls__icon-container:hover{
+  background-color: rgba(0,0,0,0.2);
+  transition: all .3s;
+}
+.serial-numbers-add-controls__icons{
+  display: flex;;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.serial-numbers-add-controls__icon-text{
+  display: none;
+}
+
+.serial-numbers-add-controls__inputs{
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.serial-numbers-add-controls input#serial-numbers-add-from-text:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-text-label{
+  background-color: rgba(0,0,0,0.1);
+}
+.serial-numbers-add-controls input#serial-numbers-add-from-file:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-file-label{
+  background-color: rgba(0,0,0,0.1);
+}
+.serial-numbers-add-controls__inputs{
+  background-color: rgba(0,0,0,0.1);
+  border-left-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.serial-numbers-add-controls__inputs > div{
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.serial-numbers-add-controls input#serial-numbers-add-from-text:checked ~ .serial-numbers-add-controls__inputs .serial-numbers-add-controls__inputs-from-text{
+  display: flex;
+}
+.serial-numbers-add-controls input#serial-numbers-add-from-file:checked ~ .serial-numbers-add-controls__inputs .serial-numbers-add-controls__inputs-from-file{
+  display: flex;
+}
+.serial-numbers-add-controls__inputs textarea{
+  background-color: rgba(0,0,0,0.1);
+}
+.serial-numbers-add-controls__inputs .serial-numbers-add-controls__inputs-from-text{
+  width: 100%;
+}
+.serial-numbers-add-controls__inputs .input-with-icon-and-moving-label{
+  width: 100%;
+}

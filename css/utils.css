@@ -25,7 +25,7 @@ body {
 ul{
   list-style: none;
 }
-input{
+input, textarea{
   background: none;
   border: none;
   outline: none;
@@ -38,8 +38,9 @@ input::placeholder{
   opacity: 0.5;
   color: white;
 }
-
-
+textarea{
+  padding: 1rem 1rem;
+}
 
 /* Utils */
 
@@ -232,6 +233,7 @@ input::placeholder{
   margin-top: 1rem;
 }
 .input-with-icon input,
+.input-with-icon-and-moving-label textarea,
 .input-with-icon-and-moving-label input{
   padding-right: 2rem;
 }
@@ -254,14 +256,19 @@ input::placeholder{
   opacity: .6;
   z-index: -1;
 }
-
+.input-with-icon-and-moving-label textarea:valid ~ label,
+.input-with-icon-and-moving-label input:valid ~ label,
+.input-with-icon-and-moving-label textarea:focus ~ label,
 .input-with-icon-and-moving-label input:focus ~ label{
   top: -.5rem;
   font-size: .7rem;
   opacity: .8;
 }
 
-
+.input-with-icon-and-moving-label textarea:valid ~ label,
+.input-with-icon-and-moving-label textarea:focus ~ label{
+  top: -1rem;
+}
 
 
 

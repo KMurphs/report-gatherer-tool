@@ -149,7 +149,7 @@
           </div>
           <div class="config-content-container">
             <div class="input-with-icon">
-              <input type="text" placeholder="Enter New Project Name">
+              <input type="text" required placeholder="Enter New Project Name">
               <span><i class="fas fa-plus"></i></span>
             </div>
   
@@ -254,7 +254,7 @@
                 </div>
                 <div class="config-content-container">
                   <div class="input-with-icon">
-                    <input type="text" placeholder="Enter New Project Name">
+                    <input type="text" required placeholder="Enter New Project Name">
                     <span><i class="fas fa-plus"></i></span>
                   </div>
         
@@ -297,7 +297,7 @@
                   <div>
                     <h2>Order Number</h2>
                     <div class="input-with-icon-and-moving-label">
-                      <input type="text" placeholder="" id="order-number">
+                      <input type="text" required placeholder="" id="order-number">
                       <span><i class="fas fa-cubes"></i></span>
                       <label for="order-number">Enter Order Number</label>
                     </div>
@@ -307,22 +307,22 @@
                     <h2>Locations</h2>
                     <div class="locations">
                       <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
+                        <input type="text" required placeholder="" id="new-location">
                         <span><i class="fas fa-folder-minus"></i></span>
                         <label for="new-location">Enter New Location</label>
                       </div>
                       <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
+                        <input type="text" required placeholder="" id="new-location">
                         <span><i class="fas fa-folder-minus"></i></span>
                         <label for="new-location">Enter New Location</label>
                       </div>
                       <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
+                        <input type="text" required placeholder="" id="new-location">
                         <span><i class="fas fa-folder-minus"></i></span>
                         <label for="new-location">Enter New Location</label>
                       </div>
                       <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
+                        <input type="text" required placeholder="" id="new-location">
                         <span><i class="fas fa-folder-minus"></i></span>
                         <label for="new-location">Enter New Location</label>
                       </div>
@@ -332,34 +332,35 @@
                       <span class="location-control"><i class="fas fa-folder-plus"></i></span>
                     </button>
                   </div>
-                  <div class="serialnumbers-container">
+                  <div class="serial-numbers-container">
                     <h2>Serial Numbers</h2>
-                    <div class="locations">
-                      <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
-                        <span><i class="fas fa-folder-minus"></i></span>
-                        <label for="new-location">Add New Location</label>
+                    <div class="serial-numbers-add-controls">
+
+                      <input type="radio" name="serial-number-input" id="serial-numbers-add-from-text">
+                      <input type="radio" name="serial-number-input" id="serial-numbers-add-from-file">
+
+                      <div class="serial-numbers-add-controls__icons">
+                        <label class="serial-numbers-add-controls__icon-container" for="serial-numbers-add-from-text" id="serial-numbers-add-from-text-label">
+                          <span class="serial-numbers-add-controls__icon"><i class="fas fa-text-height"></i></span>
+                          <span class="serial-numbers-add-controls__icon-text">From Text</span>
+                        </label>
+                        <label class="serial-numbers-add-controls__icon-container" for="serial-numbers-add-from-file" id="serial-numbers-add-from-file-label">
+                          <span class="serial-numbers-add-controls__icon"><i class="fas fa-folder-open"></i></span>
+                          <span class="serial-numbers-add-controls__icon-text">From File</span>
+                        </label>
                       </div>
-                      <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
-                        <span><i class="fas fa-folder-minus"></i></span>
-                        <label for="new-location">Add New Location</label>
-                      </div>
-                      <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
-                        <span><i class="fas fa-folder-minus"></i></span>
-                        <label for="new-location">Add New Location</label>
-                      </div>
-                      <div class="input-with-icon-and-moving-label">
-                        <input type="text" placeholder="" id="new-location">
-                        <span><i class="fas fa-folder-minus"></i></span>
-                        <label for="new-location">Add New Location</label>
+
+                      <div class="serial-numbers-add-controls__inputs">
+                        <div class="serial-numbers-add-controls__inputs-from-text">
+                          <div class="input-with-icon-and-moving-label">
+                            <textarea required name="" id="" cols="30" rows="5" id="serial-numbers-from-text"></textarea>
+                            <label for="serial-numbers-from-text">Enter New Location</label>
+                          </div>
+                        </div>
+                        <div class="serial-numbers-add-controls__inputs-from-file"><textarea name="" id="" cols="30" rows="5"></textarea></div>
                       </div>
                     </div>
-                    <div class="input-with-icon-and-moving-label">
-                      <input type="text" placeholder="" id="new-location">
-                      <span><i class="fas fa-folder-plus"></i></span>
-                      <label for="new-location">Add New Location</label>
+                    <div class="serial-numbers-list">
                     </div>
                   </div>
                 </div>
@@ -375,17 +376,17 @@
                 </label>
                 <div class="config-content-container">
                   <div class="input-with-icon-and-moving-label">
-                    <input type="text" placeholder="" id="test">
+                    <input type="text" required placeholder="" id="test">
                     <span><i class="fas fa-plus"></i></span>
                     <label for="test">Enter New Project Name</label>
                   </div>
                   <div class="input-with-icon-and-moving-label">
-                    <input type="text" placeholder="" id="test">
+                    <input type="text" required placeholder="" id="test">
                     <span><i class="fas fa-plus"></i></span>
                     <label for="test">Enter New Project Name</label>
                   </div>
                   <div class="input-with-icon-and-moving-label">
-                    <input type="text" placeholder="" id="test">
+                    <input type="text" required placeholder="" id="test">
                     <span><i class="fas fa-plus"></i></span>
                     <label for="test">Enter New Project Name</label>
                   </div>
