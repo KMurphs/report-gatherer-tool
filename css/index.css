@@ -361,3 +361,44 @@ body *{
   background-color: rgba(0,0,0,0.2);
   transition: all .3s;
 }
+
+
+
+
+
+
+
+
+
+.serial-number-modal .container{
+  padding: 1rem 1rem;
+  overflow-y: auto;
+}
+.serial-number-modal .container__header{
+  height: 6rem;
+}
+.serial-number-modal .container__body > div{
+  margin-bottom: 3rem;
+}
+.serial-number-modal .group-header{
+  display: grid;
+  grid-template-columns: 1fr 2rem;
+  margin-bottom: 2rem;
+}
+.serial-number-modal .group-header span{
+  display: flex;
+  justify-content: flex-end;
+}
+.serial-number-modal .sn-data-section__copy-result .group-item{
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding: .5rem;
+
+
+}
+.serial-number-modal .sn-data-section__copy-result .group-item span{
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+
+

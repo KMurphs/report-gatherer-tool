@@ -180,7 +180,7 @@
 
     <!-- Select a Project -->
     <div class="modal-outer-container">
-      <input type="radio" name="config" id="config-modal--project">
+      <input type="radio" name="modal" id="config-modal--project">
       <div class="modal-inner-container">
         <div class="modal">
 
@@ -276,9 +276,9 @@
       </div>
     </div>
 
-    <!-- General Settings -->
+    <!-- Settings -->
     <div class="modal-outer-container">
-      <input type="radio" name="config" id="config-modal--settings">
+      <input type="radio" name="modal" id="config-modal--settings">
       <div class="modal-inner-container">
         <div class="modal">
 
@@ -480,7 +480,71 @@
       </div>
     </div>
 
+    <!-- Serial Number Data -->
+    <div class="modal-outer-container">
+      <input type="radio" name="modal" id="serial-number-modal">
+      <div class="modal-inner-container ">
+        <div class="modal serial-number-modal">
 
+          <div class="container">
+            <div class="container__header">
+              <h2>SN: 1234567890</h2>
+            </div>
+            <div class="container__body sn-data-section">
+
+              <div class="sn-data-section__source-path">
+                <div class="group-header">
+                  <h3>Original Path</h3>
+                  <span><i class="fas fa-cubes"></i></span>
+                </div>
+                
+                <div class="input-with-icon-and-moving-label">
+                  <input type="text" required placeholder="" id="order-number">
+                  <span><i class="fas fa-cubes"></i></span>
+                  <label for="order-number">Enter Order Number</label>
+                </div>
+              </div>
+
+              <div class="sn-data-section__test-results">
+                
+                <div class="group-header">
+                  <h3>Test Results</h3>
+                </div>
+
+                <div class="test-item">
+                  <span>Test 1</span>
+                  <span>some vluae</span>
+                  <span>some vluae</span>
+                  <span><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="test-item">
+                  <span>Test 1</span>
+                  <span>some vluae</span>
+                  <span>some vluae</span>
+                  <span><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="test-item">
+                  <span>Test 1</span>
+                  <span>some vluae</span>
+                  <span>some vluae</span>
+                  <span><i class="fas fa-plus"></i></span>
+                </div>
+              </div>
+
+              <div class="sn-data-section__copy-result">
+                <div class="group-header">
+                  <h3>Copy Path</h3>
+                  <span><i class="fas fa-cubes"></i></span>
+                </div>
+                <div class="group-item"><span>some/other/path/to/archive/forlder/other/path/to/archive/forlder/other/path/to/archive/forlder</span></div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
     
   </section>
