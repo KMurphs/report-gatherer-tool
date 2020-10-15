@@ -373,6 +373,12 @@ body *{
 .serial-number-modal .container{
   padding: 1rem 1rem;
   overflow-y: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  /* min-height: calc(95vh - 3rem); */
+  width: 95vw;
+  max-width: 500px;
 }
 .serial-number-modal .container__header{
   height: 6rem;
@@ -389,16 +395,28 @@ body *{
   display: flex;
   justify-content: flex-end;
 }
+.serial-number-modal .sn-data-section__copy-result{
+  margin-top: 5rem;
+}
 .serial-number-modal .sn-data-section__copy-result .group-item{
   border-bottom: 1px solid rgba(255,255,255,0.3);
   padding: .5rem;
-
-
 }
 .serial-number-modal .sn-data-section__copy-result .group-item span{
   word-break: break-all;
   line-height: 1.5;
 }
+.serial-number-modal .sn-data-section__test-results .group-item{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2rem;
+  grid-gap: .25rem;
+  padding-left: .5rem;
+  margin-bottom: 1rem;
+}
 
 
-
+.serial-number-modal .sn-data-section__test-results .test-item__icon{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
