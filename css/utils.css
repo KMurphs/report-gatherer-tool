@@ -367,3 +367,227 @@ button:hover{
   position: relative;
   overflow: hidden;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.page{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+}
+
+
+
+
+
+.bar-chart-2-categories-percents{
+  display: flex;
+  align-items: flex-end;
+  --category-1-color: #0ea50e;
+  --category-2-color: #923c3c;
+}
+.bar-chart-2-categories-percents > div{
+  --max-height: 50px;
+  height: 50px;
+  height: var(--max-height);
+  width: 3px;
+  background-color: rgba(0, 0, 0, 0.2);
+  margin: 0 .3rem;
+  position: relative;
+}
+.bar-chart-2-categories-percents > div::after,
+.bar-chart-2-categories-percents > div::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc( var(--category-1) * var(--max-height) / 100 );
+  background-color: #0ea50e;
+  background-color: var(--category-1-color);
+}
+.bar-chart-2-categories-percents > div::before{
+  bottom: calc( 1px + var(--category-1) * var(--max-height) / 100 );;
+  height: calc( var(--category-2) * var(--max-height) / 100 );
+  background-color: #923c3c;
+  background-color: var(--category-2-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.progress-stats-3-categories {
+  --category-1-color: #00c000;
+  --category-2-color: #c14040;
+  --category-3-color: rgba(159, 159, 159, 0.20);
+  position: relative;
+  margin: 1.2rem 0;
+  display: grid;
+  grid-template-columns: 1fr 4rem 4rem;
+  gap: .5rem 0;
+}
+.progress-stats-3-categories__item{
+  margin-right: .5rem;
+  /* min-width: 3rem; */
+  display: inline-block;
+  text-align: right;
+  font-weight: bold;
+}
+.progress-stats-3-categories__item:nth-child(2){
+  color: green !important;
+  color: var(--category-1-color) !important;
+}
+.progress-stats-3-categories__item:nth-child(3){
+  color: red !important;
+  color: var(--category-2-color) !important;
+}
+.progress-stats-3-categories__item:nth-child(4){
+  position: relative;
+  right: -8rem;
+  color: rgba(0, 0, 0, 0.2) !important;
+  color: var(--category-3-color) !important;
+}
+.progress-stats-3-categories__item:hover{
+  transition: all .3s;
+}
+.progress-stats-3-categories__item::before,
+.progress-stats-3-categories__item::after{
+  position: absolute;
+  content: "";
+  left: 0;
+  /* right: 0; */
+  width: 100%;
+  bottom: -.4rem;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.2);
+  /* background-color: var(--category-3-color); */
+  z-index: 2;
+  transition: all .3s;
+}
+.progress-stats-3-categories__item:not(:nth-child(1)):not(:nth-child(2))::before{
+  width: 0;
+  /* content: " - ";
+  position: relative;
+  left: -0.3rem;
+  top: 0;
+  background-color: transparent; */
+}
+.progress-stats-3-categories__item:nth-child(1)::after{
+  z-index: 1;
+}
+.progress-stats-3-categories__item:nth-child(2)::after{
+  background-color: green;
+  background-color: var(--category-1-color);
+  left: 0;
+  width: 33%;
+  width: calc(var(--category-1));
+}
+.progress-stats-3-categories__item:nth-child(3)::after{
+  background-color: red;
+  background-color: var(--category-2-color);
+  left: 33.7%;
+  left: calc(var(--category-1) + 1px);
+  width: 33%;
+  width: calc(var(--category-2));
+}
+.progress-stats-3-categories__item:nth-child(4)::after{
+  background-color: red;
+  background-color: transparent;
+  /* Not needed - 3rd category will default to default after  */
+  /* left: calc(40% + 30% + 1px); */
+  /* width: calc(30%);  */
+}
+.progress-stats-3-categories__item:not(:nth-child(1)):hover::after{
+  height: 5px;
+  transition: all .3s;
+}
+.progress-stats-3-categories__item--invisible{
+  display: none;
+}
+
+
+
+
+
+
+
+.expandable-buttons{
+  width: 100%; 
+  background: rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+.expandable-buttons__item{
+  min-height: 3rem;
+  background: rgba(0,0,0,0.2);
+  width: 3rem;
+  min-width: 3rem;
+  display: inline-block;
+  transition: all .3s;
+  margin-left: 1px;
+  
+  display: flex;
+  justify-content: flex-end;
+}
+.expandable-buttons__item:not(.expandable-buttons__item--empty):hover{
+  width: 100%;
+  transition: all .3s;
+}
+
+.expandable-buttons__item__button-slot{
+  min-width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+.expandable-buttons__item__content-slot{
+  background: rgba(0,0,0,0.2);
+  transition: all .3s;
+  width: 0;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  opacity: 0;
+  padding: .3rem .5rem;
+  overflow-x: auto;
+}
+.expandable-buttons__item--empty .expandable-buttons__item__content-slot{
+  padding: 0;
+}
+.expandable-buttons__item:not(.expandable-buttons__item--empty):hover .expandable-buttons__item__content-slot{
+  width: 100%;
+  transition: all .3s;
+  opacity: 1;
+}
+.expandable-buttons__item--empty .expandable-buttons__item__button-slot{
+  width: 100%;
+}
+

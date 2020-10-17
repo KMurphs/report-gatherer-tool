@@ -76,95 +76,91 @@
 			</div> 
     </div>
     
-    <div class="app-content">
+    <div class="app-content page main-page">
 
-
-
-      <!-- <div class="config-section">
-
-        <div class="config-section-group">
-          <div class="config-section__title">
-            <span class="config-section__title-icon-container"><i class="fas fa-stream"></i></span>
-            <span class="config-section__title-text-container"><h1>Select a Project</h1></span>
+      <header class="page__header">
+        <div class="group">
+          <h1>Summary</h1>
+          <div class="bar-chart-2-categories-percents"><div style="--category-1: 20; --category-2: 30" ></div><div style="--category-1: 50; --category-2: 50" ></div><div style="--category-1: 40" ></div><div style="--category-1: 15" ></div></div>
+        </div>
+        <div class="group">
+          <div class="progress-stats-3-categories" style="--category-1: 50%; --category-2: 15%;">
+            <span class="">Found: </span> <span class="progress-stats-3-categories__item">34124</span><span class="progress-stats-3-categories__item">34124</span><span class="progress-stats-3-categories__item progress-stats-3-categories__item--invisible">34</span>
           </div>
-          <div class="config-content-container">
-            <ul class="dropdown">
-              <li>
-                <input class="dropdown_close" type="radio" name="dropdown-item" id="dropdown-item-close" value=""/>
-                <span class="dropdown_label dropdown_label-placeholder">Empty Text</span>
-              </li>
-              
-              <li class="dropdown_items">
-                <input class="dropdown_expand" type="radio" name="dropdown-item" id="dropdown-item-opener"/>
-                <label class="dropdown_closeLabel" for="dropdown-item-close"></label>
-                
-                <ul class="dropdown_options">
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-ridiculous"/>
-                    <label class="dropdown_label" for="dropdown-item-ridiculous">ridiculous</label>
-                  </li>
-          
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-reasonable"/>
-                    <label class="dropdown_label" for="dropdown-item-reasonable">reasonable</label>
-                  </li>
-          
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-lacking"/>
-                    <label class="dropdown_label" for="dropdown-item-lacking">lacking</label>
-                  </li>
-          
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-lacking"/>
-                    <label class="dropdown_label" for="dropdown-item-lacking">lacking</label>
-                  </li>
-           
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-lacking"/>
-                    <label class="dropdown_label" for="dropdown-item-lacking">lacking</label>
-                  </li>
-                  
-                  <li class="dropdown_option">
-                    <input class="dropdown_input" type="radio" name="dropdown-item" id="dropdown-item-awesomeless"/>
-                    <label class="dropdown_label" for="dropdown-item-awesomeless">awesomeless</label>
-                  </li>
-          
-                </ul>
-                
-                <label class="dropdown_expandLabel" for="dropdown-item-opener"></label>
-              </li>
-            </ul>
-            
+          <div class="progress-stats-3-categories" style="--category-1: 40%; --category-2: 30%;">
+            <span class="">Tested: </span> <span class="progress-stats-3-categories__item">34</span><span class="progress-stats-3-categories__item">34</span><span class="progress-stats-3-categories__item progress-stats-3-categories__item--invisible">34</span>
+          </div>
+          <div class="progress-stats-3-categories" style="--category-1: 20%; --category-2: 20%;">
+            <span class="">Copied: </span> <span class="progress-stats-3-categories__item">34</span><span class="progress-stats-3-categories__item">34</span><span class="progress-stats-3-categories__item progress-stats-3-categories__item--invisible">34</span>
           </div>
         </div>
+      </header>
 
-  
-        <div class="config-section-group d-flex-centered config-section__separator">Or</div>
+      <div class="page__body">
 
 
-        <div class="config-section-group">
-          <div class="config-section__title">
-            <span class="config-section__title-icon-container"><i class="fas fa-plus"></i></span>
-            <span class="config-section__title-text-container"><h1>Create a Project</h1></span>
-          </div>
-          <div class="config-content-container">
-            <div class="input-with-icon">
-              <input type="text" required placeholder="Enter New Project Name">
-              <span><i class="fas fa-plus"></i></span>
+        <div class="expandable-buttons" id="filter-controls">
+          <div class="expandable-buttons__item">
+            <div class="expandable-buttons__item__content-slot search-serial-number">
+              <input type="text">
             </div>
-  
+            <div class="expandable-buttons__item__button-slot">
+              <button class="">
+                <span class=""><i class="fas fa-folder-plus"></i></span>
+              </button>
+            </div>
+          </div>
+          <div class="expandable-buttons__item expandable-buttons__item--empty">
+            <div class="expandable-buttons__item__content-slot">fdgdfg</div>
+            <div class="expandable-buttons__item__button-slot">
+              <button class="">
+                <span class=""><i class="fas fa-folder-plus"></i></span>
+                <span class=""><i class="fas fa-folder-plus"></i></span>
+              </button>
+            </div>
+          </div>
+          <div class="expandable-buttons__item expandable-buttons__item--empty">
+            <div class="expandable-buttons__item__content-slot">fdgdfg</div>
+            <div class="expandable-buttons__item__button-slot">
+              <button class="">
+                <span class=""><i class="fas fa-folder-plus"></i></span>
+                <span class=""><i class="fas fa-folder-plus"></i></span>
+              </button>
+            </div>
           </div>
         </div>
-  
 
-  
-  
+
+
+        <!-- <label class="expandable-buttons" for="expandable-buttons-item-0">
+          <input type="radio" name="expandable-buttons" id="expandable-buttons-item-0">
+          <div class="expandable-buttons__item">
+            <input type="radio" name="expandable-buttons" id="expandable-buttons-item-1">
+            <div class="expandable-buttons__expansion-slot"><input type="text"></div>
+            <label for="expandable-buttons-item-1" class="expandable-buttons__button-slot"><i class="fas fa-filter"></i><i class="fas fa-filter"></i></label>
+          </div>
+          <div class="expandable-buttons__item">
+            <input type="radio" name="expandable-buttons" id="expandable-buttons-item-2">
+            <div class="expandable-buttons__expansion-slot"><input type="text"></div>
+            <label for="expandable-buttons-item-2" class="expandable-buttons__button-slot"><i class="fas fa-filter"></i><i class="fas fa-filter"></i></label>
+          </div>
+          <div class="expandable-buttons__item">
+            <input type="radio" name="expandable-buttons" id="expandable-buttons-item-3">
+            <div class="expandable-buttons__expansion-slot"><input type="text"></div>
+            <label for="expandable-buttons-item-3" class="expandable-buttons__button-slot"><i class="fas fa-filter"></i><i class="fas fa-filter"></i></label>
+          </div>
+        </label> -->
+
+
+        <div class="3-steps-trackable-item">
+          <div class="3-steps-trackable-item__item-slot"><input type="text"></div>
+          <button class="3-steps-trackable-item__tracker"><span></span><span></span><span></span></button>
+        </div>
+
+
       </div>
 
-      <div class="navigator">
-        <span><i class="fas fa-arrow-left"></i></span>
-        <span><i class="fas fa-arrow-right"></i></span>
-      </div> -->
+
 
 
 

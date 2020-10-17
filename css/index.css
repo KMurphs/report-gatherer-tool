@@ -420,3 +420,43 @@ body *{
   justify-content: flex-end;
   align-items: center;
 }
+
+
+
+
+.main-page .page__header{
+  padding-top: .5rem;
+}
+.main-page .page__header > .group:first-of-type{
+  display: grid;
+  grid-template-columns: 1fr 50px;
+}
+.main-page .page__header h1{
+  align-self: center;
+}
+
+
+
+
+.search-serial-number > input{
+  width: 100%;
+}
+#filter-controls .expandable-buttons__item button{
+  margin-top: 0;
+  grid-template-columns: 1fr;
+}
+#filter-controls .expandable-buttons__item:not(:first-of-type){
+  width: 5rem;
+}
+#filter-controls .expandable-buttons__item:not(:first-of-type) button{
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem 0;
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+#filter-controls button span{
+  align-self: center;
+}
+#filter-controls .expandable-buttons__item{
+  margin-left: 2px;
+} 
