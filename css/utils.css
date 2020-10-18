@@ -389,9 +389,17 @@ button:hover{
   top: 0;
   left: 0;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
-
-
+.page__body{
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+.page__header{
+  flex: 0 0 auto;
+}
 
 
 
@@ -591,3 +599,59 @@ button:hover{
   width: 100%;
 }
 
+
+
+
+
+
+
+
+
+.four-step-trackable-item{
+  --success-track-color: green;
+  --failure-track-color: red;
+  transition: all .3s;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.four-step-trackable-item:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+  
+}
+.four-step-trackable-item__content{
+  display: flex;
+  padding: .5rem .5rem 0.1rem .5rem;
+  margin-top: .7rem;
+}
+.four-step-trackable-item__content__text{
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.four-step-trackable-item__content__icon{
+    /* flex-basis: 2rem; */
+    /* flex-grow: 0; */
+    background: rgba(0,0,0,0.1);
+    text-align: center;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.four-step-trackable-item__tracks{
+  display: flex;
+  justify-content: space-between;
+}
+.four-step-trackable-item__tracks span{
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 2px;
+    width: 24%;
+}
+.four-step-trackable-item__tracks span.success{
+  background-color: var(--success-track-color);
+}
+.four-step-trackable-item__tracks span.failure{
+  background-color: var(--failure-track-color);
+}
