@@ -9,11 +9,11 @@ body *{
   color: white !important;
 }
 
-*, *::before, *::after{
+/* *, *::before, *::after{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
+} */
 
 
 .app-root{
@@ -84,7 +84,9 @@ body *{
   align-items: center;
   padding: 2rem 0.5rem;
 }
-
+.config-section__title-text-container h1{
+  line-height: 1.5;
+}
 .config-section__title-icon-container{
   margin-right: 1rem;
   font-size: 1.5rem;
@@ -124,8 +126,14 @@ body *{
 }
 .config-section-container--settings .config-section__title{
   background: rgba(0,0,0,0.2);
+  background: #a65620;
+  background: var(--accent-color-dark);
+  background: white;
   padding-left: 1rem;
   cursor: pointer;
+}
+.config-section-container--settings .config-section__title *{
+  color: var(--accent-color-dark) !important;
 }
 .config-section-container--settings .config-content-container{
   background: rgba(0,0,0,0.1);
@@ -189,8 +197,8 @@ body *{
 
 
 .locations-container .input-with-icon-and-moving-label span{
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   background-color: rgba(0,0,0,0.1);
   display: flex;
@@ -213,7 +221,11 @@ body *{
 
 
 
-
+.serial-numbers-add-controls__inputs .input-with-icon-and-moving-label label{
+  opacity: .8;
+  z-index: 0;
+  font-weight: bold;
+}
 
 
 
@@ -255,20 +267,31 @@ body *{
 .serial-numbers-add-controls__inputs{
   border: 1px solid rgba(0,0,0,0.1);
 }
-
+.serial-numbers-add-controls input#serial-numbers-add-from-text:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-text-label *{
+  color: #333 !important;
+}
 .serial-numbers-add-controls input#serial-numbers-add-from-text:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-text-label{
   background-color: rgba(0,0,0,0.1);
+  background-color: white;
+}
+.serial-numbers-add-controls input#serial-numbers-add-from-file:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-file-label *{
+  color: #333 !important;
 }
 .serial-numbers-add-controls input#serial-numbers-add-from-file:checked ~ .serial-numbers-add-controls__icons #serial-numbers-add-from-file-label{
   background-color: rgba(0,0,0,0.1);
+  background-color: white;
 }
 .serial-numbers-add-controls__inputs{
   background-color: rgba(0,0,0,0.1);
+  background-color: white;
   border-left-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem 1rem;
+}
+.serial-numbers-add-controls__inputs * {
+  color: #333 !important;
 }
 .serial-numbers-add-controls__inputs > div{
   display: none;
@@ -283,6 +306,7 @@ body *{
 }
 .serial-numbers-add-controls__inputs textarea{
   background-color: rgba(0,0,0,0.1);
+  background-color: #eee;
   width: 100%;
 }
 .serial-numbers-add-controls__inputs input[type="file"]{
@@ -300,7 +324,8 @@ body *{
 }
 .serial-numbers-list > span{
   display: inline-block;
-  background: #0d8f5d;
+  background: #863703;
+  background: var(--accent-color-dark);
   padding: .2rem .5rem;
   color: #e0e0e0 !important;
   border-radius: 7px;
@@ -359,6 +384,8 @@ body *{
 }
 .config-section-group--advanced-settings .test-item:hover h3 > span{
   background-color: rgba(0,0,0,0.2);
+  background-color: #863703;
+  background-color: var(--accent-color-darker);
   transition: all .3s;
 }
 
@@ -422,10 +449,15 @@ body *{
 }
 
 
+#config-modal--main-ui{
+  display: none;
+}
+#config-modal--main-ui:not(:checked) + .main-page {
+  opacity: 0;
+}
 
 .main-page {
   padding: 0rem;
-  
 }
 .main-page .group{
   max-width: 400px;
@@ -537,3 +569,12 @@ body *{
 #filter-controls .expandable-buttons__item{
   margin-left: 2px;
 } 
+
+
+.navigator span{
+  background-color: transparent;
+}
+.navigator span *{
+  color: #ff6600 !important;
+  color: var(--accent-color-light) !important;
+}

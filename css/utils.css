@@ -7,6 +7,11 @@
 }
 *{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --accent-color-darker: #863703;
+  --accent-color-dark: #a65620;;
+  --accent-color: #ff6600;
+  --accent-color-light: #ff7d27;
+  --accent-color-lighter: #ffa163 ;
 }
 body {
   width: 100vw;
@@ -31,6 +36,8 @@ input, textarea{
   outline: none;
   padding: 0.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.3);
+  border-bottom: 1px solid #8f410d;
+  border-bottom: 1px solid var(--accent-color);
   color: white;
   font-size: 100%;
 }
@@ -54,6 +61,18 @@ button{
   box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
   transition: all .3s;
   cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 2rem;
+  margin-top: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #863703;
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
+  transition: all .3s;
+  cursor: pointer;
+  padding: .1rem 0 .1rem .3rem;
 }
 button:hover{
   background-color: rgba(0,0,0,0.2);
@@ -66,8 +85,8 @@ button:hover{
   justify-content: center;
   border-radius: 50%;
   background: rgba(0,0,0,0.05);
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   cursor: pointer;
   transition: all .3s;
 }
@@ -121,8 +140,10 @@ button:hover{
 .dropdown {
 	--height: 2.3rem;
 	--outline-color: rgba(255,255,255,0.5);
+	--outline-color: var(--accent-color);
 	--border-color: rgba(255,255,255,0.05);
 	--selected-bg:  rgb(0 39 101);
+	--selected-bg:  var(--accent-color);
 	--hovered-bg: rgba(0,0,0,0.04);
 	--text-color: white;
 	min-width: 225px;
@@ -133,7 +154,8 @@ button:hover{
 	border-radius: 2px;
 	position: relative;
 	border-color: rgba(0,0,0,0.1);
-	/* border: 1px solid var(--border-color); */
+  /* border: 1px solid var(--border-color); */
+  border-bottom: 1px solid #8f410d;
 	border-bottom: 1px solid var(--outline-color);
 	color: white;
 	color: var(--text-color);
@@ -199,6 +221,7 @@ button:hover{
 	transition: all 250ms cubic-bezier(.4,.25,.3,1);
 	opacity: 1;
 	background: #eee;
+	background: #8f410d;
 	background: var(--selected-bg);
 }
 .dropdown_label-placeholder {
@@ -345,6 +368,7 @@ button:hover{
 .modal-outer-container input[type="radio"]{
   z-index: 10;
   position: absolute;
+  display: none;
 }
 .modal-outer-container input[type="radio"]:checked + .modal-inner-container{
   height: 100vh;

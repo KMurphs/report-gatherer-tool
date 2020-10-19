@@ -75,7 +75,9 @@
 				<div>Loading App...</div>
 			</div> 
     </div>
-    
+
+
+    <input type="radio" name="modal" id="config-modal--main-ui">
     <div class="app-content page main-page">
 
       <header class="page__header">
@@ -290,12 +292,12 @@
 
     </div>
 
-    <div class="modal-outer-container">
+    <!-- <div class="modal-outer-container">
       <input type="checkbox">
       <div class="modal-inner-container">
         <div class="modal">some text</div>
       </div>
-    </div>
+    </div> -->
 
 
     <!-- Select a Project -->
@@ -685,6 +687,13 @@
 
   <script>
 
+    const projectModal = document.querySelector("#config-modal--project")
+    const settingsModal = document.querySelector("#config-modal--settings")
+    const serialNoModal = document.querySelector("#serial-number-modal")
+
+    setTimeout(()=>{
+      serialNoModal.checked = true;
+    }, 200)
 
     // Handle modal programatically 
     // const modal = document.querySelector("#select-project");
