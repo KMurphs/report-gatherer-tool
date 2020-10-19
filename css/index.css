@@ -434,7 +434,7 @@ body *{
 .main-page .page__header{
   padding: 1rem;
   position: relative;
-  padding-bottom: 1.5rem;
+  /* padding-bottom: 1.5rem; */
   background: rgb(48,27,146);
   background: linear-gradient(31deg, rgba(48,27,146,1) 0%, rgba(14,71,160,1) 100%);
 }
@@ -445,8 +445,24 @@ body *{
 .main-page .page__header h1{
   align-self: center;
   text-align: center;
-  margin-top: .5rem;
+  /* margin-top: .5rem; */
   margin-bottom: 1.5rem;
+}
+.main-page .page__header .filter{
+  margin-right: .5rem;
+  display: inline-flex;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+  width: 1.5rem;
+  height: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  transition: all .3s;
+  cursor: pointer;
+}
+.main-page .page__header .progress-stats-3-categories:hover .filter{
+  background: rgba(0,0,0,0.3);
+  transition: all .3s;
 }
 .main-page .page__header .progress-stats-3-categories{
   transform: scale(.9);
