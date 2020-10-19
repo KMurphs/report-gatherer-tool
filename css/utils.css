@@ -391,6 +391,15 @@ button:hover{
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  transform: translate(-50%, 0);
 }
 .page__body{
   flex: 1 1 auto;
