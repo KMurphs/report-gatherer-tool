@@ -175,7 +175,7 @@ body *{
 .config-section-container--settings h2{
   margin-bottom: 1.5rem;
 }
-.locations-container .location-new{
+/* .locations-container .location-new{ */
   /* display: grid;
   grid-template-columns: 1fr 2.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -188,12 +188,12 @@ body *{
   box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
   transition: all .3s;
   cursor: pointer; */
-}
-.locations-container .location-new:hover{
+/* } */
+/* .locations-container .location-new:hover{ */
   /* background-color: rgba(0,0,0,0.2);
   box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.2);
   transition: all .3s; */
-}
+/* } */
 
 
 .locations-container .input-with-icon-and-moving-label span{
